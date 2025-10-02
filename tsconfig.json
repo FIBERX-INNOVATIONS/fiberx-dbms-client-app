@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "module": "ESNext", // safer than ES2022 for Vite + Vue
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true, // often needed with Vue + Vite
+    "lib": ["ESNext", "DOM"],
+    "skipLibCheck": true,
+    "outDir": "./dist",
+    // "rootDir": "./src",
+    "allowJs": true,
+    "types": ["Node", "vite/client", "vue"],
+    "baseUrl": ".", // important for aliases
+    "paths": {
+      "@/*": ["src/*"],
+      "@ui/*": ["../fi-ui-toolkit/*"]
+    },
+    "experimentalDecorators": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "../fi-ui-toolkit/**/*.ts",
+    "../fi-ui-toolkit/**/*.d.ts",
+    "../fi-ui-toolkit/**/*.vue"
+  ],
+  "exclude": ["node_modules", "dist", "test"]
+}
