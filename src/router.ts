@@ -46,7 +46,7 @@ class RouterManager {
 
             if (!route) {
                 console.warn("Route not found, redirecting back...");
-                return next(from.fullPath); // fallback
+                return next(from.fullPath);
             }
 
             const {
