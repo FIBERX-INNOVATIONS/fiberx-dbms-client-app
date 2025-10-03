@@ -1,3 +1,20 @@
 <template>
-    <h1>Hello World</h1>
+    <template v-if="true">
+        <!-- loader -->
+        <ScreenLoaderUI v-bind="state_refs.screen_loader_props" @isLoading="event_handler.handleLoading" />
+        <!-- alert -->
+        <StatusAlertUI v-bind="state_refs.status_alert_props" @statusChanged="event_handler.handleStatusChanged" />
+
+
+    </template>
 </template>
+
+<script setup lang="ts">
+import AppRootController from "./app_root_controller";
+
+const props                             = defineProps({});
+const controller                        = new AppRootController(props)
+const event_handler                     = controller.event_handler;
+const { state_refs, components }        = controller.getComponentDefinition();
+const { ScreenLoaderUI, StatusAlertUI } = components;
+</script>

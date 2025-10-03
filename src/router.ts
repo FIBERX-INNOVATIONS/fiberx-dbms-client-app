@@ -91,18 +91,18 @@ class RouterManager {
     }
 
     // Method to get routes array
-    private getRoutes (): [] {
+    private getRoutes (): RouteRecordRaw[] {
         return [
-        //     { 
-        //         path: "/", 
-        //         name: "Home", 
-        //         component: LoginView,
-        //         meta: {
-        //             title_key: "home-page",
-        //             permission_name: "", 
-        //             requires_no_auth: true
-        //         }
-        //     },
+            // { 
+            //     path: "/", 
+            //     name: "Home", 
+            //     component: LoginView,
+            //     meta: {
+            //         title_key: "home-page",
+            //         permission_name: "", 
+            //         requires_no_auth: true
+            //     }
+            // },
 
         //     { 
         //         path: "/login", 

@@ -28,7 +28,7 @@ class FiberxDbmsClientApp {
         this.vue_app            = createApp(this.app_component);
 
         this.global_vars        = GlobalVariableManager.getInstance();
-        this.content_manager    = new ContentManagerUtil();
+        this.content_manager    = ContentManagerUtil.getInstance();
         this.router             = new RouterManager().getRouter();
         this.logger             = new LoggerUtil({ prefix: this.name, show_timestamp: false })
         this.ENV                = new ENVManagerUtil().env_data;
@@ -51,7 +51,7 @@ class FiberxDbmsClientApp {
         this.logger.error("[Error Info]:", info);
 
         if (instance) {
-            this.logger.error("Component:", instance.$options?.name || instance.type?.name || "Anonymous");
+            this.logger.error("Component:", instance.$options?.__name || instance?.type?.name || "Anonymous");
         }
     }
 
@@ -60,7 +60,7 @@ class FiberxDbmsClientApp {
         this.vue_app.config.globalProperties.$ENV = this.ENV;
         
         // 🔥 Add error handler immediately after app is created
-        this.vue_app.config.errorHandler = this.handleAppError
+        this.vue_app.config.errorHandler = this.handleAppError.bind(this)
     }
 
     // Method to mount root app component
@@ -69,7 +69,7 @@ class FiberxDbmsClientApp {
 
         this.initializeAppGlobalProperties();
 
-        this.vue_app.use(this.router);
+        // this.vue_app.use(this.router);
         this.vue_app.mount(selector);
     }
 }

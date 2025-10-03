@@ -23,6 +23,9 @@
     },
     "experimentalDecorators": true
   },
+  "vueCompilerOptions": {
+    "globalTypesPath": "./src/types/shims-vue.d.ts"
+  },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
