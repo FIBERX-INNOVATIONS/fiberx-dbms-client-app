@@ -7,6 +7,7 @@ import LoginViewPropsBuilder    from "./login_view_props_builder";
 import BaseController           from "@ui/version_2/base_classes/base_controller";
 import InputGroupUI             from "@ui/version_2/components/InputGroupUI/input_group_ui.vue";
 import ToastAlertUI             from "@ui/version_2/components/AlertUI/ToastAlertUI/toast_alert_ui.vue";
+import ButtonUI                 from "@ui/version_2/components/ButtonUI/button_ui.vue";
 
 import { AppEvents  }       from "@/types/app_event_type";
 
@@ -23,7 +24,7 @@ class LoginViewController extends BaseController {
 
     // Method to get ui components
     protected getUIComponents(): Record<string, any> { 
-        return  { InputGroupUI, ToastAlertUI }; 
+        return  { InputGroupUI, ToastAlertUI, ButtonUI }; 
     }
 
     // Method to get ui computed data
@@ -40,7 +41,9 @@ class LoginViewController extends BaseController {
 
             password_input_group_props: LoginViewPropsBuilder.getPasswordInputGroupProps(this.event_handler),
 
-            toast_alert_props: LoginViewPropsBuilder.getToastAlertProps(this.event_handler)
+            toast_alert_props: LoginViewPropsBuilder.getToastAlertProps(this.event_handler),
+
+            btn_props: LoginViewPropsBuilder.getBtnProps(this.event_handler)
         } 
     }
 

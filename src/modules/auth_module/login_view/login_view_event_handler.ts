@@ -29,6 +29,18 @@ class LoginViewEventHandler extends BaseEventHandler {
         this.controller.state_refs.toast_alert_props.message = "";
     }
 
+    // Method tp handle submit btn click
+    public async handleSubmitBtnClick (event: MouseEvent) {
+        try {
+            
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to submit form`, { error })
+        }
+        
+
+    }
+
 }
 
 export default LoginViewEventHandler;

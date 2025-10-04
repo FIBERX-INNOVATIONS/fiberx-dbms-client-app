@@ -63,6 +63,10 @@ const ClassStyles = {
             info_class_style: "text-sm font-semibold text-blue-900 bg-blue-300" ,
             warning_class_style: "text-sm font-semibold text-amber-900 bg-yellow-100"
         }
+    },
+    form_button_ui: {
+        icon_class_style: "w-4 h-4 ml-2 flex items-center",
+        btn_class_style: "w-full cursor-pointer inline-flex mt-4 items-center justify-center rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 w-full bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider py-3"
     }
 }
 

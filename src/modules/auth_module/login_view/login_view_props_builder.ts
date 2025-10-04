@@ -15,6 +15,8 @@ import {
 import {
     InputGroupPropsInterface,
     ToastAlertPropsInterface,
+    ButtonPropsInterface,
+    ButtonType,
 } from "@ui/version_2/types/props_builder_type";
 
 class LoginViewPropsBuilder {
@@ -75,6 +77,30 @@ class LoginViewPropsBuilder {
         
         return ToastAlertUIPropsBuilder.getToastAlertProps(event_handler, status, message, class_styles);
 
+    }
+
+    // Method to get btn props
+    public static getBtnProps (
+        event_handler: BaseEventHandlerInterface,
+        disabled: boolean = false,
+        show_loader: boolean = true,
+    ): ButtonPropsInterface {
+        const content_manager       = ContentManagerUtil.getInstance();
+        const content_data          = content_manager?.get("content_resource.login_view_ui.fieldset") ?? {};
+        const class_styles          = ClassStyles?.form_button_ui ?? {};
+        const icon_class_style      = class_styles?.icon_class_style;
+        const btn_class_style       = class_styles?.btn_class_style
+
+        const btn_type              = "button";
+        const { btn_text }          = content_data;
+        const content_text          = RenderHtmlUtil.renderHtml({ text: btn_text, icon: SVGIcons.paper_airplane_send_svg_icon, icon_class_style, order: "text-first" })
+        const loader_content_text   = RenderHtmlUtil.renderLoaderHtml({});
+        const on_click              = event_handler?.handleSubmitBtnClick.bind(event_handler);
+
+        return reactive({
+            type: btn_type, disabled, show_loader, 
+            content_text, loader_content_text, btn_class_style, on_click
+        })
     }
 }
 
