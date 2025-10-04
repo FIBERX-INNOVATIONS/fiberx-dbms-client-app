@@ -23,6 +23,15 @@ const ClassStyles = {
             sucess_text_class_style: "text-white font-black",
             error_text_class_style: "text-white font-black",
             info_text_class_style: "text-white font-bold",
+        },
+    },
+    auth: {
+        auth_base_view_ui: {
+            footer_class_style: "w-screen p-0 m-0 bg-white shadow-md z-50",
+            copy_right_ui: {
+                wrapper_class_style: "w-full text-center py-4 font-bold text-gray-700 border-t",
+                text_class_style: ""
+            }
         }
     }
 }

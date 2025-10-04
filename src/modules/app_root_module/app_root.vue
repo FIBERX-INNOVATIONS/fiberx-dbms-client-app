@@ -4,6 +4,8 @@
         <ScreenLoaderUI v-bind="state_refs.screen_loader_props" @isLoading="event_handler.handleLoading" />
         <!-- alert -->
         <StatusAlertUI v-bind="state_refs.status_alert_props" @statusChanged="event_handler.handleStatusChanged" />
+        <!-- Auth View -->
+        <AuthBaseView v-if="computed_refs.is_auth_route" />
 
 
     </template>
@@ -15,6 +17,7 @@ import AppRootController from "./app_root_controller";
 const props                             = defineProps({});
 const controller                        = new AppRootController(props)
 const event_handler                     = controller.event_handler;
-const { state_refs, components }        = controller.getComponentDefinition();
-const { ScreenLoaderUI, StatusAlertUI } = components;
+
+const { state_refs, components, computed_refs } = controller.getComponentDefinition();
+const { ScreenLoaderUI, StatusAlertUI, AuthBaseView } = components;
 </script>

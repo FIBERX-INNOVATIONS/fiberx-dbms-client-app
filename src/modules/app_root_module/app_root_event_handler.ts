@@ -30,7 +30,7 @@ class AppRootEventHandler extends BaseEventHandler {
     public handleStatusChanged (payload: { status: string; message: string }) {
         const { status, message }   = payload;
         const visible               = status && message ? true : false
-        const status_alert_props    = AppRootPropsBuilder.getStatusAlertProps(this, visible, status, message)
+        const status_alert_props    = AppRootPropsBuilder.getStatusAlertPropsInterface(this, visible, status, message)
         this.controller.state_refs.status_alert_props = status_alert_props
     };
 }

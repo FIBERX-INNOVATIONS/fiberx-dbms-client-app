@@ -9,8 +9,8 @@ import {
 } from "@ui/version_2/types/component_type";
 
 import { 
-    ScreenLoaderProps,
-    StatusAlertProps
+    ScreenLoaderPropsInterface,
+    StatusAlertPropsInterface
 } from "@/types/props_builder_type";
 
 class AppRootPropsBuilder {
@@ -68,7 +68,7 @@ class AppRootPropsBuilder {
 
 
     // Method to get screen loader ui props
-    public static getScreenLoaderProps (visible: boolean = false, load_text: string | null = null): ScreenLoaderProps {
+    public static getScreenLoaderProps (visible: boolean = false, load_text: string | null = null): ScreenLoaderPropsInterface {
         const content_manager   = ContentManagerUtil.getInstance();
         const content_data      = content_manager?.get("content_resource.screen_loader_ui") ?? {};
         const class_styles      = ClassStyles?.app_root?.screen_loader_ui ?? {};
@@ -84,19 +84,19 @@ class AppRootPropsBuilder {
 
         const _load_text = load_text ?? loader_text
 
-        return reactive<ScreenLoaderProps>({
+        return reactive<ScreenLoaderPropsInterface>({
             visible, loader_symbol, loader_text: _load_text,
             ...class_styles
         })
     }
 
     // Method to get status alert ui props
-    public static getStatusAlertProps(
+    public static getStatusAlertProps (
         event_handler: BaseEventHandlerInterface, 
         visible: boolean = false,
         status: string = "",
         message: string = "",
-    ): StatusAlertProps {
+    ): StatusAlertPropsInterface {
         const alert_box_id              = "StatusAlertBox";
         const alert_status              = status;
         const alert_message             = message;
@@ -108,7 +108,7 @@ class AppRootPropsBuilder {
         const status_content_class_style= `${class_styles?.status_content_class_style} ${this.getStatusTextClassStyle(alert_status)}`;
         const on_close                  = event_handler.handleOnCloseStatusClick.bind(event_handler)
 
-        return reactive<StatusAlertProps>({
+        return reactive<StatusAlertPropsInterface>({
             alert_box_id,
             visible, 
             alert_status,  

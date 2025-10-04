@@ -69,7 +69,7 @@ class FiberxDbmsClientApp {
 
         this.initializeAppGlobalProperties();
 
-        // this.vue_app.use(this.router);
+        this.vue_app.use(this.router);
         this.vue_app.mount(selector);
     }
 }
