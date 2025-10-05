@@ -6,7 +6,6 @@ import ContentManagerUtil       from "@ui/version_2/utils/content_manager_util";
 import SVGIcons                 from "@ui/version_2/resources/svg_icon_resource";
 import RenderHtmlUtil           from "@ui/version_2/utils/render_html_util";
 import InputGroupPropsBuilder   from "@ui/version_2/props_builder/input_group_props_builder";
-import ToastAlertUIPropsBuilder from "@ui/version_2/props_builder/toast_alert_ui_props_builder";
 
 import { 
     BaseEventHandlerInterface,
@@ -14,7 +13,6 @@ import {
 
 import {
     InputGroupPropsInterface,
-    ToastAlertPropsInterface,
     ButtonPropsInterface,
     ButtonType,
 } from "@ui/version_2/types/props_builder_type";
@@ -67,18 +65,6 @@ class LoginViewPropsBuilder {
         return InputGroupPropsBuilder.buildInputGroupProps(class_styles, label_config, input_config);
     }
 
-    // Method to get toast alert props
-    public static getToastAlertProps (
-        event_handler: BaseEventHandlerInterface, 
-        status: string = "",
-        message: string = "",
-    ): ToastAlertPropsInterface {
-        const class_styles      = ClassStyles?.toast_alert_ui ?? {};
-        
-        return ToastAlertUIPropsBuilder.getToastAlertProps(event_handler, status, message, class_styles);
-
-    }
-
     // Method to get btn props
     public static getBtnProps (
         event_handler: BaseEventHandlerInterface,
@@ -95,7 +81,7 @@ class LoginViewPropsBuilder {
         const { btn_text }          = content_data;
         const content_text          = RenderHtmlUtil.renderHtml({ text: btn_text, icon: SVGIcons.paper_airplane_send_svg_icon, icon_class_style, order: "text-first" })
         const loader_content_text   = RenderHtmlUtil.renderLoaderHtml({});
-        const on_click              = event_handler?.handleSubmitBtnClick.bind(event_handler);
+        const on_click              = event_handler?.handleLoginSubmitBtnClick.bind(event_handler);
 
         return reactive({
             type: btn_type, disabled, show_loader, 

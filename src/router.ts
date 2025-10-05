@@ -10,7 +10,7 @@ import {
 import { LOCAT_STRAGE_FIELDS }      from "@/enums/constants.enums";
 import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manager_util";
 
-const LoginView                 = () => import("@/modules/auth_module/login_view/login_view.vue");
+const LoginView                 = () => import("@/modules/auth_module/views/login_view/login_view.vue");
 // const TwoFactorLoginView        = () => import("@/modules/auth_module/views/two_factor_login_view.vue");
 // const LogoutView                = () => import("@/modules/auth_module/views/logout_view.vue");
 // const DashboardView             = () => import("@/modules/dashboard_module/views/dashboard_view.vue");

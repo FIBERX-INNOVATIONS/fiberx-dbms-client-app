@@ -1,26 +1,22 @@
 
 import { ref, }             from "vue";
 import { useRoute }         from "vue-router";
-import { Emitter }          from "mitt";
+import { EventBus }         from "@/utils/gloabal_event_bus";
 import AppRootPropsBuilder  from "./app_root_props_builder";
 import AppRootEventHandler  from "./app_root_event_handler";
 import BaseController       from "@ui/version_2/base_classes/base_controller";
 import ScreenLoaderUI       from "@ui/version_2/components/LoaderUI/ScreenLoaderUI/screen_loader_ui.vue";
 import StatusAlertUI        from "@ui/version_2/components/AlertUI/StatusAlertUI/status_alert_ui.vue";
-import AuthBaseView         from "@/modules/auth_module/auth_base_view/auth_base_view.vue";
-import { createEventBus }   from "@ui/version_2/utils/global_event_bus_util";
-
-import { AppEvents  }       from "@/types/app_event_type";
+import AuthBaseView         from "@/modules/auth_module/views/auth_base_view/auth_base_view.vue";
 
 class AppRootController extends BaseController {
     public event_handler: AppRootEventHandler;
-    public event_bus: Emitter<AppEvents>;
+    public event_bus = EventBus;
 
     constructor(props: Record<string, any> = {}) {
         super("app_root", props);
 
         this.event_handler  = new AppRootEventHandler(this);
-        this.event_bus      = createEventBus<AppEvents>();
     }
 
     // Method to get ui components
@@ -55,6 +51,7 @@ class AppRootController extends BaseController {
         });
 
         this.event_bus.on("statusChanged", (payload: { status: string; message: string }) => {
+            console.log({ payload })
             this.event_handler.handleStatusChanged(payload);
         });
     }

@@ -1,28 +1,25 @@
 
-import { ref, }                 from "vue";
-import { Emitter }              from "mitt";
-import { createEventBus }       from "@ui/version_2/utils/global_event_bus_util";
-import LoginViewEventHandler    from "./login_view_event_handler";
-import LoginViewPropsBuilder    from "./login_view_props_builder";
-import LoginViewService         from "./login_view_service";
+import { ref, reactive }        from "vue";
+import { EventBus }              from "@/utils/gloabal_event_bus";
+import AuthPropsBuilder         from "@/modules/auth_module/base_logic/auth_props_builder"
+import AuthEventhandler         from "@/modules/auth_module/base_logic/auth_event_handler";;
+import LoginViewPropsBuilder    from "@/modules/auth_module/views/login_view/login_view_props_builder";
+import AuthService              from "@/modules/auth_module/base_logic/auth_service";
 import BaseController           from "@ui/version_2/base_classes/base_controller";
 import InputGroupUI             from "@ui/version_2/components/InputGroupUI/input_group_ui.vue";
 import ToastAlertUI             from "@ui/version_2/components/AlertUI/ToastAlertUI/toast_alert_ui.vue";
 import ButtonUI                 from "@ui/version_2/components/ButtonUI/button_ui.vue";
 
-import { AppEvents  }       from "@/types/app_event_type";
-
 class LoginViewController extends BaseController {
-    public event_handler: LoginViewEventHandler;
-    public service: LoginViewService;
-    public event_bus: Emitter<AppEvents>;
+    public event_handler: AuthEventhandler;
+    public service: AuthService;
+    public event_bus = EventBus
 
     constructor(props: Record<string, any> = {}) {
         super("login_view", props);
 
-        this.event_handler  = new LoginViewEventHandler(this);
-        this.service        = new LoginViewService(this);
-        this.event_bus      = createEventBus<AppEvents>();
+        this.event_handler  = new AuthEventhandler(this);
+        this.service        = new AuthService(this);
     }
 
     // Method to get ui components
@@ -46,7 +43,7 @@ class LoginViewController extends BaseController {
 
             password_input_group_props: LoginViewPropsBuilder.getPasswordInputGroupProps(this.event_handler),
 
-            toast_alert_props: LoginViewPropsBuilder.getToastAlertProps(this.event_handler),
+            toast_alert_props: AuthPropsBuilder.getToastAlertProps(this.event_handler),
 
             btn_props: LoginViewPropsBuilder.getBtnProps(this.event_handler, true)
         } 
@@ -54,6 +51,8 @@ class LoginViewController extends BaseController {
 
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
+        // get csrf token
+        await this.service.getFormCsrfToken();
         
     }
 

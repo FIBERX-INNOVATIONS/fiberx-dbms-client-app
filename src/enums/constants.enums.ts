@@ -7,3 +7,10 @@ export const LOCAT_STRAGE_FIELDS = {
     DEVICE_ID_KEY: "B8fH2vJ5Nq7ZcT3Y",
     DEVICE_NAME_KEY: "X1rL6mV8Kp3QwS9A"
 }
+
+export const CSRF_TOKEN_FOR = {
+    LOGIN: "login",
+    TWO_FACTOR: "two_factor_login",
+    REGISTER_APP: "register_app"
+    
+}
