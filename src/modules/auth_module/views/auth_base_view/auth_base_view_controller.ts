@@ -41,7 +41,7 @@ class AuthBaseViewController extends BaseController {
         const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
         const is_not_authenticated          = (is_fully_authenticated === false && is_partially_authenticated === false);
 
-        if(is_not_authenticated === false) { router.push("/dashboard") }
+        if(is_not_authenticated === false) { await router.push("/dashboard") }
     }
 }
 

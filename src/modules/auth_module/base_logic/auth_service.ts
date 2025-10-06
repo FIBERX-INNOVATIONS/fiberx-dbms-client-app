@@ -2,14 +2,19 @@
 import BaseService                  from "@ui/version_2/base_classes/base_service";
 import AuthAPIService               from "@/api_services/auth_api_service";
 import { BaseControllerInterface }  from "@ui/version_2/types/component_type";
-import { LoginFormDataInterface }   from "@/types/api_service_type";
 import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manager_util";
 
 import { 
     CSRF_TOKEN_FOR ,
     LOCAT_STRAGE_FIELDS
 } from "@/enums/constants.enums";
-import { CurrentMemberInterface } from "@ui/version_2/types/util_type";
+import { 
+    CurrentMemberInterface 
+} from "@ui/version_2/types/util_type";
+import { 
+    LoginFormDataInterface, 
+    TwoFactorFormDataInterface 
+} from "@/types/api_service_type";
 
 class AuthService extends BaseService {
     public readonly api_service: AuthAPIService;
@@ -62,7 +67,7 @@ class AuthService extends BaseService {
         }
     }
 
-    // Method to handle posting log in request
+    // Method to execute login request
     public async executeLogIn(form_data: LoginFormDataInterface): Promise<{s_state: boolean, s_msg: string}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.logIn(form_data);
@@ -79,6 +84,28 @@ class AuthService extends BaseService {
         }
         catch(error: unknown) {
             this.logger.error(`Failed to execute log in`, { error });
+            return { s_state: false, s_msg: "error_occurred"};
+        }
+
+    }
+
+    // Method to execute two factor log in
+    public async executeTwoFactorLogIn(form_data: TwoFactorFormDataInterface): Promise<{s_state: boolean, s_msg: string}> {
+        try {
+            const { status, msg, data: response_data } = await this.api_service.twoFactorLogin(form_data);
+
+            if(status != "success") { return { s_state: false, s_msg: msg } }
+
+            const { current_member = {} }   = response_data;
+            
+            const stored = this.storeMemberData(current_member);
+
+            if(!stored) { return { s_state: false, s_msg: "error_occurred" } }
+
+            return { s_state: true, s_msg: msg };
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to execute two factor log in`, { error });
             return { s_state: false, s_msg: "error_occurred"};
         }
 

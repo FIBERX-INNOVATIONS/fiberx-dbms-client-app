@@ -11,7 +11,7 @@ import { LOCAT_STRAGE_FIELDS }      from "@/enums/constants.enums";
 import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manager_util";
 
 const LoginView                 = () => import("@/modules/auth_module/views/login_view/login_view.vue");
-// const TwoFactorLoginView        = () => import("@/modules/auth_module/views/two_factor_login_view.vue");
+const TwoFactorLoginView        = () => import("@/modules/auth_module/views/two_factor_login_view/two_factor_login_view.vue");
 // const LogoutView                = () => import("@/modules/auth_module/views/logout_view.vue");
 // const DashboardView             = () => import("@/modules/dashboard_module/views/dashboard_view.vue");
 // const RegisteredAppsView        = () => import("@/modules/registered_app_module/views/registered_apps_view.vue");
@@ -113,17 +113,16 @@ class RouterManager {
                     requires_no_auth_true: true
                 }
             },
-
-        //     { 
-        //         path: "/two-factor-login", 
-        //         name: "TwoFactorLogin", 
-        //         component: TwoFactorLoginView,
-        //         meta: {
-        //             title_key: "two-factor-login-page", 
-        //             permission_name: "member_2fa_login", 
-        //             requires_partial_auth: true,
-        //         }
-        //     },
+            { 
+                path: "/two-factor-login", 
+                name: "TwoFactorLogin", 
+                component: TwoFactorLoginView,
+                meta: {
+                    title_key: "two-factor-login-page", 
+                    permission_name: "member_2fa_login", 
+                    requires_partial_auth: true,
+                }
+            },
 
         //     { 
         //         path: "/logout", 

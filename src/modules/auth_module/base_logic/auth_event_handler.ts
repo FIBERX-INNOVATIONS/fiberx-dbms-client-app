@@ -3,8 +3,12 @@ import AuthPropsBuilder             from "@/modules/auth_module/base_logic/auth_
 import ContentManagerUtil           from "@ui/version_2/utils/content_manager_util";
 import AuthValidator                from "@/validators/auth_validator";
 import BaseEventHandler             from "@ui/version_2/base_classes/base_event_handler";
+
 import { BaseControllerInterface }  from "@ui/version_2/types/component_type";
-import { LoginFormDataInterface }   from "@/types/api_service_type";
+import { 
+    LoginFormDataInterface, 
+    TwoFactorFormDataInterface 
+}  from "@/types/api_service_type";
 
 // const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -46,7 +50,7 @@ class AuthEventhandler extends BaseEventHandler {
         this.controller.state_refs.toast_alert_props.message = "";
     }
 
-    // Method tp handle submit btn click
+    // Method to handle login submit btn click
     public async handleLoginSubmitBtnClick (event: MouseEvent) {
         this.hideErrorAlert()
         try {
@@ -78,6 +82,40 @@ class AuthEventhandler extends BaseEventHandler {
             this.logger.error(`Failed to submit form`, { error })
         }
     }
+
+    // Method to handle two factor submit btn click
+    public async handleTwoFactorLoginSubmitBtnClick (event: MouseEvent) {
+        this.hideErrorAlert()
+        try {
+
+            const form_data = this.form_data as TwoFactorFormDataInterface;
+            const { v_state, v_msg } = AuthValidator.validateTwoFactorLoginInput(form_data);
+
+            if(!v_state) {
+                const error_msg = this.content_manager?.getAPIResponseValue(v_msg);
+                return this.showErrorAlert("error", error_msg)
+            }
+
+            if(!this.controller?.service) { return }
+
+            const { s_state, s_msg } = await this.controller.service?.executeTwoFactorLogIn?.(form_data);
+
+            if(!s_state) {
+                const error_msg = this.content_manager?.getAPIResponseValue(s_msg);
+                return this.showErrorAlert("error", error_msg)
+            }
+
+            this.logger.log("Two factor Login successful, triggering statusChanged event", { s_msg });
+            const status_alert_options  = { duration: 3000, redirect_url: "/dashboard"}
+            const status_alert_payload  = { status: "success", message: s_msg, options: status_alert_options };
+
+            return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to submit form`, { error })
+        }
+    }
+
 
 }
 
