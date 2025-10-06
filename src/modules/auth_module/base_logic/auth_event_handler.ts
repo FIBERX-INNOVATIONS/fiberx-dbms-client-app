@@ -68,8 +68,11 @@ class AuthEventhandler extends BaseEventHandler {
                 return this.showErrorAlert("error", error_msg)
             }
 
-            return this.controller.event_bus.emit("statusChanged", { status: "success", message: s_msg });
+            this.logger.log("Login successful, triggering statusChanged event", { s_msg });
+            const status_alert_options  = { duration: 3000, redirect_url: "/two-factor-login"}
+            const status_alert_payload  = { status: "success", message: s_msg, options: status_alert_options };
 
+            return this.controller.event_bus.emit("statusChanged", status_alert_payload);
         }
         catch(error: unknown) {
             this.logger.error(`Failed to submit form`, { error })
