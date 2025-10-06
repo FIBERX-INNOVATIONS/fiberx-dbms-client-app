@@ -13,7 +13,7 @@ import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manage
 const LoginView                 = () => import("@/modules/auth_module/views/login_view/login_view.vue");
 const TwoFactorLoginView        = () => import("@/modules/auth_module/views/two_factor_login_view/two_factor_login_view.vue");
 // const LogoutView                = () => import("@/modules/auth_module/views/logout_view.vue");
-// const DashboardView             = () => import("@/modules/dashboard_module/views/dashboard_view.vue");
+const DashboardView             = () => import("@/modules/dashboard_module/views/main_dashboard_view/main_dashboard_view.vue");
 // const RegisteredAppsView        = () => import("@/modules/registered_app_module/views/registered_apps_view.vue");
 // const DatasourceView            = () => import("@/modules/datasource_module/views/list_view_ui.vue");
 // const SchemaView                = () => import("@/modules/schema_module/views/schemas_view.vue");
@@ -123,7 +123,6 @@ class RouterManager {
                     requires_partial_auth: true,
                 }
             },
-
         //     { 
         //         path: "/logout", 
         //         name: "Logout", 
@@ -134,17 +133,16 @@ class RouterManager {
         //             requires_full_auth: true 
         //         }
         //     },
-
-        //     { 
-        //         path: "/dashboard", 
-        //         name: "Dashboard", 
-        //         component: DashboardView,
-        //         meta: {
-        //             title_key: "dashboard-page", 
-        //             permission_name: "", 
-        //             requires_full_auth: true,
-        //         }
-        //     },
+            { 
+                path: "/dashboard", 
+                name: "Dashboard", 
+                component: DashboardView,
+                meta: {
+                    title_key: "dashboard-page", 
+                    permission_name: "", 
+                    requires_full_auth: true,
+                }
+            },
 
         //     { 
         //         path: "/registered-apps", 

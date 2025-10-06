@@ -8,8 +8,6 @@ import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manage
 import CopyRightUI                  from "@ui/version_2/components/CopyRightUI/copy_right_ui.vue";
 
 
-
-
 class AuthBaseViewController extends BaseController {
     private member_auth_manager: MemberAuthManagerUtil;
 

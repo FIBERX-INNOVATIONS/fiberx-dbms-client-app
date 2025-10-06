@@ -40,9 +40,9 @@ class AuthService extends BaseService {
     }
 
     // Method to get and set form csrf token
-    public async getFormCsrfToken(): Promise<boolean> {
+    public async getFormCsrfToken(token_for: string = CSRF_TOKEN_FOR.LOGIN ): Promise<boolean> {
         try {
-            const { data }      = await this.api_service.getFormCSRFToken(CSRF_TOKEN_FOR.LOGIN);
+            const { data }      = await this.api_service.getFormCSRFToken(token_for);
             const csrf_token    = data?.token;
 
             if(!csrf_token) { return false }

@@ -2,7 +2,6 @@
 import { ref, reactive }                from "vue";
 import { useRouter }                    from "vue-router";
 import { EventBus }                     from "@/utils/gloabal_event_bus";
-import { LOCAT_STRAGE_FIELDS }          from "@/enums/constants.enums";
 
 import AuthPropsBuilder                 from "@/modules/auth_module/base_logic/auth_props_builder"
 import AuthEventhandler                 from "@/modules/auth_module/base_logic/auth_event_handler";;
@@ -13,6 +12,11 @@ import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_ma
 import InputGroupUI                     from "@ui/version_2/components/InputGroupUI/input_group_ui.vue";
 import ToastAlertUI                     from "@ui/version_2/components/AlertUI/ToastAlertUI/toast_alert_ui.vue";
 import ButtonUI                         from "@ui/version_2/components/ButtonUI/button_ui.vue";
+
+import { 
+    CSRF_TOKEN_FOR,
+    LOCAT_STRAGE_FIELDS 
+} from "@/enums/constants.enums";
 
 
 class TwoFactorLoginViewController extends BaseController {
@@ -66,7 +70,7 @@ class TwoFactorLoginViewController extends BaseController {
             if(!is_partially_authenticated) { await router.push("/login") }
 
             // get csrf token
-            await this.service.getFormCsrfToken();
+            await this.service.getFormCsrfToken(CSRF_TOKEN_FOR.TWO_FACTOR);
         }
         catch (error: unknown) {
             this.logger.error("Failed during TwoFactorLoginView mount logic", { error });

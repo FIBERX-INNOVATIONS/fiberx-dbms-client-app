@@ -8,6 +8,7 @@ import BaseController       from "@ui/version_2/base_classes/base_controller";
 import ScreenLoaderUI       from "@ui/version_2/components/LoaderUI/ScreenLoaderUI/screen_loader_ui.vue";
 import StatusAlertUI        from "@ui/version_2/components/AlertUI/StatusAlertUI/status_alert_ui.vue";
 import AuthBaseView         from "@/modules/auth_module/views/auth_base_view/auth_base_view.vue";
+import DashboardBaseView    from "@/modules/dashboard_module/views/dashboard_base_view/dashboard_base_view.vue";
 
 import { 
     StatusChangedPayloadInterface 
@@ -25,7 +26,7 @@ class AppRootController extends BaseController {
 
     // Method to get ui components
     protected getUIComponents(): Record<string, any> { 
-        return  { ScreenLoaderUI, StatusAlertUI, AuthBaseView }; 
+        return  { ScreenLoaderUI, StatusAlertUI, AuthBaseView, DashboardBaseView }; 
     }
 
     // Method to get ui computed data

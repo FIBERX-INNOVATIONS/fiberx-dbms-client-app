@@ -6,6 +6,8 @@
         <StatusAlertUI v-bind="state_refs.status_alert_props" @statusChanged="event_handler.handleStatusChanged" />
         <!-- Auth View -->
         <AuthBaseView v-if="computed_refs.is_auth_route" />
+        <!-- Dashboard View -->
+        <DashboardBaseView v-if="computed_refs.is_auth_route === false" />
 
 
     </template>
@@ -19,5 +21,5 @@ const controller                        = new AppRootController(props)
 const event_handler                     = controller.event_handler;
 
 const { state_refs, components, computed_refs } = controller.getComponentDefinition();
-const { ScreenLoaderUI, StatusAlertUI, AuthBaseView } = components;
+const { ScreenLoaderUI, StatusAlertUI, AuthBaseView, DashboardBaseView } = components;
 </script>
