@@ -9,6 +9,10 @@ import ScreenLoaderUI       from "@ui/version_2/components/LoaderUI/ScreenLoader
 import StatusAlertUI        from "@ui/version_2/components/AlertUI/StatusAlertUI/status_alert_ui.vue";
 import AuthBaseView         from "@/modules/auth_module/views/auth_base_view/auth_base_view.vue";
 
+import { 
+    StatusChangedPayloadInterface 
+} from "@/types/app_event_type";
+
 class AppRootController extends BaseController {
     public event_handler: AppRootEventHandler;
     public event_bus = EventBus;
@@ -50,9 +54,8 @@ class AppRootController extends BaseController {
             this.event_handler.handleLoading(val);
         });
 
-        this.event_bus.on("statusChanged", (payload: { status: string; message: string }) => {
-            console.log({ payload })
-            this.event_handler.handleStatusChanged(payload);
+        this.event_bus.on("statusChanged", async (payload: StatusChangedPayloadInterface) => {
+            await this.event_handler.handleStatusChanged(payload);
         });
     }
 
