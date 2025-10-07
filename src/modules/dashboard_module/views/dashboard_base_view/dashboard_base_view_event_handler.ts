@@ -1,6 +1,7 @@
 
-import BaseEventHandler             from "@ui/version_2/base_classes/base_event_handler";
-import { BaseControllerInterface }  from "@ui/version_2/types/component_type";
+import DashboardBaseViewPropsBuilder    from "./dashboard_base_view_props_builder";
+import BaseEventHandler                 from "@ui/version_2/base_classes/base_event_handler";
+import { BaseControllerInterface }      from "@ui/version_2/types/component_type";
 
 
 class DashboardBaseViewEventHandler extends BaseEventHandler {
@@ -25,8 +26,15 @@ class DashboardBaseViewEventHandler extends BaseEventHandler {
     };
 
     // Method to handle on click event
-    public handleOpenSidebarModel (event: MouseEvent) {
-        console.log({ event })
+    public toggleSidebarModal (event: MouseEvent) {
+        const { sidebar_props } = this.controller.state_refs;
+
+        if(!sidebar_props) { return }
+
+        const is_visible        = sidebar_props.visible;
+        const new_props_value   = DashboardBaseViewPropsBuilder.getModalSidebarUIProps(this, !is_visible);
+
+        Object.assign(this.controller.state_refs.sidebar_props, new_props_value);
     }
 
     // Method to handle on click event to show profile dropdown

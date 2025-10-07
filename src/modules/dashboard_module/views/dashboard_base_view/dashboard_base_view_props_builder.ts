@@ -19,7 +19,8 @@ import {
     ButtonPropsInterface,
     NavLinkUIPropsInterface,
     ImgAvatarUIPropsInterface,
-    MenuListUIPropsInterface
+    MenuListUIPropsInterface,
+    ModalSidebarUIPropsInterface
 } from "@ui/version_2/types/props_builder_type";
 
 import { CurrentMemberInterface } from "@ui/version_2/types/util_type";
@@ -48,7 +49,7 @@ class DashboardBaseViewPropsBuilder {
         const btn_type              = "button";
         const content_text          = RenderHtmlUtil.renderHtml({ icon_class_style, icon: SVGIcons.hamburger_svg_icon })
         const loader_content_text   = RenderHtmlUtil.renderLoaderHtml({});
-        const on_click              = event_handler?.handleOpenSidebarModel.bind(event_handler);
+        const on_click              = event_handler?.toggleSidebarModal.bind(event_handler);
 
         return reactive({
             type: btn_type, disabled: false, show_loader: false, 
@@ -113,11 +114,38 @@ class DashboardBaseViewPropsBuilder {
         const parent_id             = "MemberProfileAvatar";
         const class_styles          = ClassStyles?.profile_dropdown_menu_list_ui ?? {};
         const menu_list             = MemberProfileMenuListconfig.getMemberProfileMenuList(current_member);
-        console.log({menu_list})
 
         const { wrapper_class_style, list_class_style, list_item_class_style } = class_styles;
 
         return reactive({ id, parent_id, wrapper_class_style, list_class_style, list_item_class_style, menu_list  })
+    }
+
+    // Method to get sidebar ui props
+    public static getModalSidebarUIProps (
+        event_handler: BaseEventHandlerInterface, 
+        visible: boolean = true,
+        position: string = "left"
+    ): ModalSidebarUIPropsInterface {
+        const id                    = "SideBar";
+        const class_styles          = ClassStyles?.sidebar_ui ?? {};
+        const on_click              = event_handler.toggleSidebarModal.bind(event_handler);
+
+        let {
+            wrapper_class_style, sidebar_class_style, left_position_class_style,
+            section_1_wrapper_class_style, section_2_wrapper_class_style, right_position_class_style,
+            transition_x_class_style, left_transition_x_class_style, right_transition_x_class_style
+        } = class_styles;
+
+        const position_class_style      = position === "left" ? left_position_class_style : right_position_class_style;
+        const transisiton_class_style   = visible ?transition_x_class_style  : (position === "left" ? left_transition_x_class_style : right_transition_x_class_style);
+        sidebar_class_style             = `${sidebar_class_style} ${position_class_style} ${transisiton_class_style}`;
+        
+
+        return reactive({
+            id, on_click, visible, 
+            wrapper_class_style, sidebar_class_style, 
+            section_1_wrapper_class_style, section_2_wrapper_class_style
+        });
     }
 
 }

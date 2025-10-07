@@ -18,6 +18,7 @@
             </TopBarUI>
 
         </header>
+        <ModalSidebarUI v-bind="state_refs.sidebar_props"></ModalSidebarUI>
         <main :class="state_refs.base_class_styles.main_class_style">
             <RouterView />
         </main>
@@ -31,5 +32,5 @@ const props            = defineProps({});
 const controller       = new DashboardBaseViewController(props)
 
 const { state_refs, components} = controller.getComponentDefinition();
-const { TopBarUI, ButtonUI, NavLinkUI, ImgAvatarUI, MenuListUI } = components;
+const { TopBarUI, ButtonUI, NavLinkUI, ImgAvatarUI, MenuListUI, ModalSidebarUI } = components;
 </script>

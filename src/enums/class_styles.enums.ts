@@ -115,6 +115,17 @@ const ClassStyles = {
             content_class_style: "flex items-center justify-start text-white text-[16px] text-start w-full"
         }
     },
+    sidebar_ui: {
+        wrapper_class_style: "fixed inset-0 z-[90] bg-[#000000cc] cursor-pointer",
+        sidebar_class_style: "fixed top-0 h-screen transition-all duration-[2000s] ease-in-out bg-[#001f3f] shadow-lg w-48",
+        section_1_wrapper_class_style: "h-[15%] flex items-center justify-center",
+        section_2_wrapper_class_style: "h-[85%] overflow-y-auto",
+        left_position_class_style: "left-0",
+        right_position_class_style: "right-0",
+        transition_x_class_style: "translate-x-0",
+        left_transition_x_class_style: "-translate-x-full",
+        right_transition_x_class_style: "translate-x-full"
+    }
 }
 
 export default ClassStyles;

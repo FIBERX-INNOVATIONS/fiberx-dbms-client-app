@@ -472,6 +472,9 @@
   .w-44 {
     width: calc(var(--spacing) * 44);
   }
+  .w-48 {
+    width: calc(var(--spacing) * 48);
+  }
   .w-\[40px\] {
     width: 40px;
   }
@@ -730,6 +733,9 @@
   }
   .bg-\[\#0d0a0ad6\] {
     background-color: #0d0a0ad6;
+  }
+  .bg-\[\#000000cc\] {
+    background-color: #000000cc;
   }
   .bg-\[\#001f3f\] {
     background-color: #001f3f;
