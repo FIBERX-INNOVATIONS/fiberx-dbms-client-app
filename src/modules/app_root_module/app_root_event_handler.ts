@@ -1,5 +1,4 @@
 
-import { useRouter }                from "vue-router";
 
 import AppRootPropsBuilder          from "./app_root_props_builder";
 import BaseEventHandler             from "@ui/version_2/base_classes/base_event_handler";
@@ -36,7 +35,7 @@ class AppRootEventHandler extends BaseEventHandler {
 
     // Method to handle status changed event
     public async handleStatusChanged (payload: StatusChangedPayloadInterface) {
-       const { status, message, options = {} } = payload;
+        const { status, message, options = {} } = payload;
         const { duration = 2000, should_reload = false, redirect_url = "", close_modal = false } = options;
 
         const visible                   = !!(status && message);
@@ -54,11 +53,11 @@ class AppRootEventHandler extends BaseEventHandler {
         this.controller.state_refs.status_alert_props.visible = false;
 
         // Handle post-alert actions
-        const router = useRouter()
+        if(!this.controller.router) { return }
 
-        if (should_reload) { router.go(0); } 
+        if (should_reload) { this.controller.router.go(0); } 
 
-        else if (redirect_url && redirect_url.length > 0) { await router.push(redirect_url); }
+        else if (redirect_url && redirect_url.length > 0) { await this.controller.router.push(redirect_url); }
     };
 }
 

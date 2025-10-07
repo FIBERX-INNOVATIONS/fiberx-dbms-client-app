@@ -33,15 +33,33 @@ class AuthEventhandler extends BaseEventHandler {
         Object.assign(this.controller.state_refs.toast_alert_props, new_toast_alert_props)
     }
 
+    // Method to reirect to login after some time
+    public redirectToLoginAfterDelay(delay_in_mins: number = 5) {
+        const mins_value    = delay_in_mins && Number.isInteger(delay_in_mins) ? delay_in_mins : 5;
+        const delay_in_ms   = (mins_value * 60 * 1000);
+
+        setTimeout(async () => {
+            try {
+                this.logger.error(`Redirecting user to login after ${delay_in_ms / 1000 / 60} minutes`);
+                if (this.controller?.router) {
+                    await this.controller.router.push("/login");
+                }
+            } catch (error) {
+                this.logger.error("Failed to redirect to login after delay", { error });
+            }
+        }, delay_in_ms);
+    }
+
     // Method to handle on input changed
-    public handleOnInputchanged (event: Event | InputEvent) {
+    public handleOnInputchanged (event: Event | InputEvent, input_model_value: any) {
         const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
 
         if (!target) { return; }
 
-        const new_value             = target.value;
-        const input_id              = target.id;
-        this.form_data[input_id]    = new_value;
+        const new_value                 = input_model_value ?? target?.value;
+        const input_id                  = target.id;
+        const formatted_key             = input_id.replace(/_\d+$/, '');
+        this.form_data[formatted_key]   = new_value;
     }
 
     // Method to handle on toast alert close button
@@ -98,9 +116,13 @@ class AuthEventhandler extends BaseEventHandler {
 
             if(!this.controller?.service) { return }
 
-            const { s_state, s_msg } = await this.controller.service?.executeTwoFactorLogIn?.(form_data);
+            const { s_state, s_msg, logout } = await this.controller.service?.executeTwoFactorLogIn?.(form_data);
 
-            if(!s_state) {
+            if(logout) {
+                return await this.controller.router.push("/logout");
+            }
+
+            else if(!s_state) {
                 const error_msg = this.content_manager?.getAPIResponseValue(s_msg);
                 return this.showErrorAlert("error", error_msg)
             }

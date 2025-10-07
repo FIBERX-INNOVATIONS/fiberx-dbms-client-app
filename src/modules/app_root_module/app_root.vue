@@ -5,9 +5,9 @@
         <!-- alert -->
         <StatusAlertUI v-bind="state_refs.status_alert_props" @statusChanged="event_handler.handleStatusChanged" />
         <!-- Auth View -->
-        <AuthBaseView v-if="computed_refs.is_auth_route" />
+        <AuthBaseView v-if="computed_refs.is_auth_route.value" />
         <!-- Dashboard View -->
-        <DashboardBaseView v-if="computed_refs.is_auth_route === false" />
+        <DashboardBaseView v-else />
 
 
     </template>

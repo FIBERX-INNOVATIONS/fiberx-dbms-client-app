@@ -51,6 +51,8 @@ class LoginViewController extends BaseController {
 
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
+        // delete member data
+        this.service?.deleteMemberdata?.();
         // get csrf token
         await this.service.getFormCsrfToken();
         

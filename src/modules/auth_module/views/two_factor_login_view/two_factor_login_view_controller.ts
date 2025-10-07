@@ -1,6 +1,6 @@
 
 import { ref, reactive }                from "vue";
-import { useRouter }                    from "vue-router";
+import { Router, useRouter }                    from "vue-router";
 import { EventBus }                     from "@/utils/gloabal_event_bus";
 
 import AuthPropsBuilder                 from "@/modules/auth_module/base_logic/auth_props_builder"
@@ -20,6 +20,7 @@ import {
 
 
 class TwoFactorLoginViewController extends BaseController {
+    public router: Router;
     public event_handler: AuthEventhandler;
     public service: AuthService;
     public event_bus = EventBus;
@@ -28,6 +29,7 @@ class TwoFactorLoginViewController extends BaseController {
     constructor(props: Record<string, any> = {}) {
         super("two_factor_login_view", props);
 
+        this.router                 = useRouter();
         this.event_handler          = new AuthEventhandler(this);
         this.service                = new AuthService(this);
         this.member_auth_manager    = new MemberAuthManagerUtil();
@@ -61,16 +63,18 @@ class TwoFactorLoginViewController extends BaseController {
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
         try {
-            const router                        = useRouter()
             const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
             const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
             
-            if(is_fully_authenticated) { await router.push("/dashboard") }
+            if(is_fully_authenticated) { await this.router.push("/dashboard") }
 
-            if(!is_partially_authenticated) { await router.push("/login") }
+            if(!is_partially_authenticated) { await this.router.push("/login") }
 
             // get csrf token
             await this.service.getFormCsrfToken(CSRF_TOKEN_FOR.TWO_FACTOR);
+
+            // 🔹 Call event handler to schedule 5-minute redirect
+            this.event_handler.redirectToLoginAfterDelay();
         }
         catch (error: unknown) {
             this.logger.error("Failed during TwoFactorLoginView mount logic", { error });

@@ -18,7 +18,7 @@ import {
 
 class AuthService extends BaseService {
     public readonly api_service: AuthAPIService;
-    private member_auth_manager: MemberAuthManagerUtil;
+    public member_auth_manager: MemberAuthManagerUtil;
 
     constructor(controller: BaseControllerInterface) {
         super(controller, controller.component_name);
@@ -28,15 +28,21 @@ class AuthService extends BaseService {
     }
 
     // Method to store member data
-    private storeMemberData (current_member: CurrentMemberInterface): boolean {
-        const permissions               = current_member.permissions;
+    private storeMemberData (current_member: CurrentMemberInterface, access_token?: string): boolean {
+        const permissions               = current_member?.permissions || [];
         const member_key                = LOCAT_STRAGE_FIELDS.MEMBER;
         const permissions_key           = LOCAT_STRAGE_FIELDS.MEMBER_PERMISSIONS;
+        const acces_token_key           = LOCAT_STRAGE_FIELDS.ACCESS_TOKEN_KEY;
 
         const other_member_data: Record<string, any>    = {};
         other_member_data[permissions_key]              = permissions;
+        other_member_data[acces_token_key]              = access_token ?? "";
 
         return this.member_auth_manager.setCurrentMemberData(member_key, current_member, other_member_data);
+    }
+
+    public deleteMemberdata(): boolean {
+        return this.member_auth_manager.deleteCurrentMemberData(LOCAT_STRAGE_FIELDS.MEMBER);
     }
 
     // Method to get and set form csrf token
@@ -69,14 +75,17 @@ class AuthService extends BaseService {
 
     // Method to execute login request
     public async executeLogIn(form_data: LoginFormDataInterface): Promise<{s_state: boolean, s_msg: string}> {
+        
         try {
             const { status, msg, data: response_data } = await this.api_service.logIn(form_data);
 
             if(status != "success") { return { s_state: false, s_msg: msg } }
 
-            const { current_member = {} }   = response_data;
+            const { current_member = {}, access_token }   = response_data;
+
+            current_member.is_fully_authenticated = false;
             
-            const stored = this.storeMemberData(current_member);
+            const stored = this.storeMemberData(current_member, access_token);
 
             if(!stored) { return { s_state: false, s_msg: "error_occurred" } }
 
@@ -90,15 +99,19 @@ class AuthService extends BaseService {
     }
 
     // Method to execute two factor log in
-    public async executeTwoFactorLogIn(form_data: TwoFactorFormDataInterface): Promise<{s_state: boolean, s_msg: string}> {
+    public async executeTwoFactorLogIn(form_data: TwoFactorFormDataInterface): Promise<{s_state: boolean, s_msg: string, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.twoFactorLogin(form_data);
 
-            if(status != "success") { return { s_state: false, s_msg: msg } }
+            if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
 
-            const { current_member = {} }   = response_data;
+            else if(status != "success") { return { s_state: false, s_msg: msg } }
+
+            const { current_member = {}, access_token }   = response_data;
+
+            current_member.is_fully_authenticated = true;
             
-            const stored = this.storeMemberData(current_member);
+            const stored = this.storeMemberData(current_member, access_token);
 
             if(!stored) { return { s_state: false, s_msg: "error_occurred" } }
 

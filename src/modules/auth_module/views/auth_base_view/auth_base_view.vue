@@ -4,7 +4,7 @@
         <main :style="state_refs.main_bg_style">
             <RouterView />
         </main>
-        <footer :class="state_refs.footer_class_style">
+        <footer :class="state_refs.footer_class_style.value">
             <CopyRightUI v-bind="state_refs.copyright_props" />
         </footer>
     </template>

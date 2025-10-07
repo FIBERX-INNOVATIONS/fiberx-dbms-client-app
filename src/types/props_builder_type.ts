@@ -121,3 +121,15 @@ export interface InputGroupPropsInterface {
 
     input_config: InputPropsInterface
 }
+
+export interface DashboardBaseClassStyleInterface {
+    header_class_style: string;
+    main_class_style: string;
+}
+
+export interface TopBarPropsInterface {
+    wrapper_class_style?: string;
+    section_1_wrapper_class_style?: string;
+    section_2_wrapper_class_style?: string;
+    section_3_wrapper_class_style?: string;
+}

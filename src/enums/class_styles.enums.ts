@@ -42,6 +42,7 @@ const ClassStyles = {
     },
     input_ui: {
         wrapper_class_style: "w-full my-4 flex flex-col space-y-2",
+        otp_wrapper_class_style: "flex gap-2 justify-center",
         label_class_style: "text-sm font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
         label_required_class_style: "italic font-medium",
         input_class_style: "w-full min-h-10 flex w-full rounded-md border px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2  bg-gray-200 border-blue-600/70 text-black placeholder-gray-400 focus:ring-sky-500"
@@ -67,7 +68,53 @@ const ClassStyles = {
     form_button_ui: {
         icon_class_style: "w-4 h-4 ml-2 flex items-center",
         btn_class_style: "w-full cursor-pointer inline-flex mt-4 items-center justify-center rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 w-full bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider py-3"
-    }
+    },
+    dashboard_base_ui: {
+        header_class_style: "fixed top-0 left-0 w-screen p-0 m-0 bg-white shadow-md z-[80]",
+        main_class_style: "pt-[92px] pb-[60px] h-screen overflow-y-auto overflow-x-hidden",
+        top_bar_section_1_wrapper_class_style: "flex items-center w-full h-full space-x-2",
+        top_bar_section_3_wrapper_class_style: "flex items-center justify-end w-full h-full space-x-2"
+    },
+    top_bar_ui: {
+        wrapper_class_style: "w-screen px-4 flex flex-wrap items-center justify-between relative h-[70px] w-full bg-[#001f3f] py-2",
+        section_1_wrapper_class_style: "md:w-3/12 w-6/12 flex items-center overflow-hidde h-full",
+        section_2_wrapper_class_style: "md:w-6/12 w-full flex items-center overflow-hidden md:order-1 order-2 h-full",
+        section_3_wrapper_class_style: "md:w-3/12 w-6/12 flex items-center  md:order-2 order-1 h-full relative",
+    },
+    hamburger_btn_ui: {
+        hamburger_btn_class_style: "w-10 h-10 flex items-center justify-center overflow-hidden text-white cursor-pointer",
+        icon_class_style: "w-6 h-6 flex items-center mr-2",
+    },
+    logo_link_ui: {
+        wrapper_class_style: "flex items-center cursor-pointer",
+        active_menu_class_style: "",
+        icon_img_wrapper_class_style: "flex items-center justify-center overflow-hidden",
+        icon_img_class_style: "w-full h-auto object-cover",
+        content_class_style: "flex items-center text-white text-[20px] font-black"
+    },
+    img_avatar_ui: {
+        wrapper_class_style: "w-full max-w-8/12 flex items-center justify-end h-full space-x-2 hover:shadow-lg hover:bg-[#031329] px-2 rounded-lg cursor-pointer",
+        avatar_circle_class_style: "flex items-center rounded-full overflow-hidden w-[40px] h-[40px] border-4 border-white bg-gray-200",
+        img_class_style: "w-full h-auto object-cover",
+        initials_class_style: "uppercase text-[#001f3f] flex items-center justify-center font-bold w-full h-full text-center rounded-full border border-[#001f3f]",
+        right_slot_class_style: "items-center text-white sm:flex hidden w-9/12 overflow-hidden",
+        right_slot_wrapper_class_style: "flex flex-col items-center justify-end w-full",
+        right_slot_title_text_class_style: "text-white font-bold text-md w-full truncate text-start",
+        right_slot_sub_title_class_style: "text-xs font-medium text-gray-200 capitalize text-start w-full"
+
+    },
+    profile_dropdown_menu_list_ui: {
+        wrapper_class_style: "hidden divide-y divide-gray-100 w-[170px] bg-[#001f3f] p-0 min-h-[114px] m-0 absolute border border-white top-14 rounded-2xl shadow-lg transform transition-all duration-300 ease-in-out origin-top",
+        list_class_style: "py-2 w-full border-b-2 border-[#6f7e8d6e] last:border-b-0",
+        list_item_class_style: "w-full p-0 m-0",
+        menu_list_item_ui: {
+            wrapper_class_style: "flex items-center cursor-pointer px-4 py-2 flex justify-between items-center group/link w-full hover:bg-[#6f7e8d6e]",
+            active_menu_class_style: "bg-[#6f7e8d6e]",
+            icon_img_wrapper_class_style: "flex items-center justify-center overflow-hidden  w-3/12 p-2",
+            icon_img_class_style: "w-full h-auto text-white",
+            content_class_style: "flex items-center justify-start text-white text-[16px] text-start w-full"
+        }
+    },
 }
 
 export default ClassStyles;
