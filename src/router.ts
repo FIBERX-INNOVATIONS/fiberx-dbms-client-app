@@ -9,6 +9,7 @@ import {
 
 import { LOCAT_STRAGE_FIELDS }      from "@/enums/constants.enums";
 import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manager_util";
+import GlobalVariableManager        from "@ui/version_1/Resources/global_variable_manager_util";
 
 const LoginView                 = () => import("@/modules/auth_module/views/login_view/login_view.vue");
 const TwoFactorLoginView        = () => import("@/modules/auth_module/views/two_factor_login_view/two_factor_login_view.vue");
@@ -25,11 +26,13 @@ class RouterManager {
     private routes: RouteRecordRaw[];
     private router: Router;
     private member_auth_manager: MemberAuthManagerUtil;
+    private global_vars: GlobalVariableManager
 
     constructor() {
         this.routes                     = this.getRoutes();
         this.router                     = this.createRouter();
         this.member_auth_manager        = new MemberAuthManagerUtil();
+        this.global_vars                = GlobalVariableManager.getInstance();
 
         this.setupRouterGuards();
     }
@@ -48,6 +51,9 @@ class RouterManager {
                 console.warn("Route not found, redirecting back...");
                 return next(from.fullPath);
             }
+
+            const global_vars   = GlobalVariableManager.getInstance();
+            global_vars.setVariable("CURRENT_PAGE_ID", route.name)
 
             const {
                 title_key,

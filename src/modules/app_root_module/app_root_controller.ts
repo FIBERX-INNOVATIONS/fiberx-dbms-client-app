@@ -11,6 +11,7 @@ import StatusAlertUI            from "@ui/version_2/components/AlertUI/StatusAle
 import AuthBaseView             from "@/modules/auth_module/views/auth_base_view/auth_base_view.vue";
 import DashboardBaseView        from "@/modules/dashboard_module/views/dashboard_base_view/dashboard_base_view.vue";
 
+
 import { 
     StatusChangedPayloadInterface 
 } from "@/types/app_event_type";
@@ -34,7 +35,7 @@ class AppRootController extends BaseController {
 
     // Method to get ui computed data
     protected getUIComputedData(): Record<string, () => any> { 
-        const route  = useRoute();
+        const route         = useRoute();
         
         return {
             is_auth_route: () => { console.log(route?.meta?.requires_no_auth === true); return route?.meta?.requires_no_auth === true }

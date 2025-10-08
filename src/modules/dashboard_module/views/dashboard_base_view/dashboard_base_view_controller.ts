@@ -11,6 +11,7 @@ import NavLinkUI                        from "@ui/version_2/components/Navigatio
 import ImgAvatarUI                      from "@ui/version_2/components/ImgAvatarUI/img_avatar_ui.vue";
 import MenuListUI                       from "@ui/version_2/components/NavigationUI/MenuListUI/menu_list_ui.vue";
 import ModalSidebarUI                   from "@ui/version_2/components/NavigationUI/ModalSideBarUI/modal_sidebar_ui.vue";
+import ImageTextUI                      from "@ui/version_2/components/ImageTextUI/image_text_ui.vue";
 
 
 class DashboardBaseViewController extends BaseController {
@@ -28,7 +29,7 @@ class DashboardBaseViewController extends BaseController {
 
     // Method to get ui components
     protected getUIComponents(): Record<string, any> { 
-        return  { TopBarUI, ButtonUI, NavLinkUI, ImgAvatarUI, MenuListUI, ModalSidebarUI }; 
+        return  { TopBarUI, ButtonUI, NavLinkUI, ImgAvatarUI, MenuListUI, ModalSidebarUI, ImageTextUI }; 
     }
 
     // Method to get ui state data
@@ -48,6 +49,10 @@ class DashboardBaseViewController extends BaseController {
             profile_dropdown_list_props: DashboardBaseViewPropsBuilder.getProfileDropdownUIProps(current_member),
 
             sidebar_props: DashboardBaseViewPropsBuilder.getModalSidebarUIProps(this.event_handler),
+
+            sidebar_logo_props: DashboardBaseViewPropsBuilder.getSidebaLogoProps(),
+
+            sidebar_menu_list_props: DashboardBaseViewPropsBuilder.getSidebarMenuListProps(),
         } 
     }
 

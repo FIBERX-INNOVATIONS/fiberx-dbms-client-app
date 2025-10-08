@@ -4,6 +4,7 @@ import ContentManagerUtil           from "@ui/version_2/utils/content_manager_ut
 import SVGIcons                     from "@ui/version_2/resources/svg_icon_resource";
 import RenderHtmlUtil               from "@ui/version_2/utils/render_html_util";
 import MemberProfileMenuListconfig  from "@/configs/menu_list_configs/member_profile_menu_list_config";
+import SidebarMenuListConfig        from "@/configs/menu_list_configs/sidebar_menu_list_config";
 import { DEFAULT_PROFILE_PHOTO }    from "@/enums/constants.enums";
 
 import { 
@@ -20,10 +21,12 @@ import {
     NavLinkUIPropsInterface,
     ImgAvatarUIPropsInterface,
     MenuListUIPropsInterface,
-    ModalSidebarUIPropsInterface
+    ModalSidebarUIPropsInterface,
+    ImageTextUIPropsInterface
 } from "@ui/version_2/types/props_builder_type";
 
 import { CurrentMemberInterface } from "@ui/version_2/types/util_type";
+
 
 
 class DashboardBaseViewPropsBuilder {
@@ -123,7 +126,7 @@ class DashboardBaseViewPropsBuilder {
     // Method to get sidebar ui props
     public static getModalSidebarUIProps (
         event_handler: BaseEventHandlerInterface, 
-        visible: boolean = true,
+        visible: boolean = false,
         position: string = "left"
     ): ModalSidebarUIPropsInterface {
         const id                    = "SideBar";
@@ -146,6 +149,28 @@ class DashboardBaseViewPropsBuilder {
             wrapper_class_style, sidebar_class_style, 
             section_1_wrapper_class_style, section_2_wrapper_class_style
         });
+    }
+
+    // Method to get sidebar logo props
+    public static getSidebaLogoProps ():ImageTextUIPropsInterface {
+        const content_manager       = ContentManagerUtil.getInstance();
+        const class_styles          = ClassStyles?.sidebar_logo_ui ?? {};
+        const content_data          = content_manager?.get("content_resource.side_bar_ui") ?? {};
+
+        const { logo_img_link, logo_img_alt_text } = content_data;
+
+        return reactive({ image_src: logo_img_link, img_alt_text: logo_img_alt_text, ...class_styles });
+    }
+
+    // Method to get sidebar menu list
+    public static getSidebarMenuListProps (): MenuListUIPropsInterface {
+        const id                    = "SideBarMenuList";
+        const class_styles          = ClassStyles?.sidebar_menu_list_ui ?? {};
+        const menu_list             = SidebarMenuListConfig.getSidebarMenuList();
+
+        const { wrapper_class_style, list_class_style, list_item_class_style } = class_styles;
+
+        return reactive({ id, wrapper_class_style, list_class_style, list_item_class_style, menu_list  })
     }
 
 }

@@ -118,13 +118,31 @@ const ClassStyles = {
     sidebar_ui: {
         wrapper_class_style: "fixed inset-0 z-[90] bg-[#000000cc] cursor-pointer",
         sidebar_class_style: "fixed top-0 h-screen transition-all duration-[2000s] ease-in-out bg-[#001f3f] shadow-lg w-48",
-        section_1_wrapper_class_style: "h-[15%] flex items-center justify-center",
-        section_2_wrapper_class_style: "h-[85%] overflow-y-auto",
+        section_1_wrapper_class_style: "h-[15%] flex items-center justify-center overflow-hidden w-full",
+        section_2_wrapper_class_style: "h-[85%] overflow-x-hidden overflow-y-auto w-full ",
         left_position_class_style: "left-0",
         right_position_class_style: "right-0",
         transition_x_class_style: "translate-x-0",
         left_transition_x_class_style: "-translate-x-full",
-        right_transition_x_class_style: "translate-x-full"
+        right_transition_x_class_style: "translate-x-full",
+    },
+    sidebar_logo_ui: {
+        wrapper_class_style: "w-full h-full flex items-center justify-center p-2 border-b border-white overflow-hidden",
+        img_wrapper_class_style: "w-full h-auto flex items-center justify-center p-0 m-0",
+        img_class_style: "object-contian w-full",
+        text_class_style: "",
+    },
+    sidebar_menu_list_ui: {
+        wrapper_class_style: "divide-y divide-gray-100 w-full bg-[#001f3f] p-0 h-full m-0 border shadow-lg",
+        list_class_style: "py-2 w-full border-b-2 border-[#6f7e8d6e] last:border-b-0",
+        list_item_class_style: "w-full p-0 m-0",
+        menu_list_item_ui: {
+            wrapper_class_style: "flex items-center cursor-pointer px-4 py-2 flex justify-between items-center group/link w-full hover:bg-[#6f7e8d6e]",
+            active_menu_class_style: "bg-[#6f7e8d6e]",
+            icon_img_wrapper_class_style: "flex items-center justify-center overflow-hidden  w-3/12 p-2",
+            icon_img_class_style: "w-full h-auto text-white",
+            content_class_style: "flex items-center justify-start text-white text-[16px] text-start w-full"
+        }
     }
 }
 

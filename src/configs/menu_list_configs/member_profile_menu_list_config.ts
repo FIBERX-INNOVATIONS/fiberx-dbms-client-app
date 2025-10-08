@@ -1,16 +1,15 @@
+
 import { reactive  }                from "vue";
 import ClassStyles                  from "@/enums/class_styles.enums";
 import ContentManagerUtil           from "@ui/version_2/utils/content_manager_util";
 import SVGIcons                     from "@ui/version_2/resources/svg_icon_resource";
 
-import { BaseEventHandlerInterface, } from "@ui/version_2/types/component_type";
+import { NavLinkUIPropsInterface }      from "@ui/version_2/types/props_builder_type";
+import { CurrentMemberInterface }       from "@ui/version_2/types/util_type";
 
-import { NavLinkUIPropsInterface } from "@ui/version_2/types/props_builder_type";
-import RenderHtmlUtil from "@ui/version_2/utils/render_html_util";
-import { CurrentMemberInterface } from "@ui/version_2/types/util_type";
 
 class MemberProfileMenuListconfig {
-    public readonly name = "menu_profile_menu-list_config";
+    public readonly name = "menu_profile_menu_list_config";
 
     private static getMenuItem (
         menu_id: string, 
