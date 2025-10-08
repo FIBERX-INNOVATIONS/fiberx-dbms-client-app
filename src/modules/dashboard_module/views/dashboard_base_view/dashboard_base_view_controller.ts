@@ -1,5 +1,5 @@
 import { ref, }                         from "vue";
-import { Router, useRouter }                    from "vue-router";
+import { Router, useRouter }            from "vue-router";
 import { LOCAT_STRAGE_FIELDS }          from "@/enums/constants.enums";
 import DashboardBaseViewPropsBuilder    from "./dashboard_base_view_props_builder";
 import DashboardBaseViewEventHandler    from "./dashboard_base_view_event_handler";

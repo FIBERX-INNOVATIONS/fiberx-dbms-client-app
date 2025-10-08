@@ -1,5 +1,5 @@
 
-import { ref, }                         from "vue";
+import { ref, getCurrentInstance }     from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 
 import { EventBus }             from "@/utils/gloabal_event_bus";
@@ -35,11 +35,21 @@ class AppRootController extends BaseController {
 
     // Method to get ui computed data
     protected getUIComputedData(): Record<string, () => any> { 
-        const route         = useRoute();
-        
+        const route                         = useRoute();
+        const vue_instance                  = getCurrentInstance();
+        const auth_routes_list: string[]    = vue_instance?.proxy?.$AUTH_ROUTES ?? [];
+
         return {
-            is_auth_route: () => { console.log(route?.meta?.requires_no_auth === true); return route?.meta?.requires_no_auth === true }
-        }; 
+            is_auth_route: () => {
+                // If route.meta is present, use it directly
+                if (route?.meta?.is_auth_page) { return true; }
+
+                // Fallback to checking global auth routes
+                const route_name = route?.name?.toString() ?? "";
+                const is_included = auth_routes_list.includes(route_name);
+                return is_included
+            }
+        };
     }
 
     // Method to get ui state data

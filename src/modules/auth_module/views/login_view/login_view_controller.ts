@@ -1,11 +1,14 @@
 
 import { ref, reactive }        from "vue";
-import { EventBus }              from "@/utils/gloabal_event_bus";
+import { Router, useRouter }    from "vue-router";
+import { EventBus }             from "@/utils/gloabal_event_bus";
+import { LOCAT_STRAGE_FIELDS }  from "@/enums/constants.enums";
 import AuthPropsBuilder         from "@/modules/auth_module/base_logic/auth_props_builder"
 import AuthEventhandler         from "@/modules/auth_module/base_logic/auth_event_handler";;
 import LoginViewPropsBuilder    from "@/modules/auth_module/views/login_view/login_view_props_builder";
 import AuthService              from "@/modules/auth_module/base_logic/auth_service";
 import BaseController           from "@ui/version_2/base_classes/base_controller";
+import MemberAuthManagerUtil    from "@ui/version_2/utils/member_auth_manager_util";
 import InputGroupUI             from "@ui/version_2/components/InputGroupUI/input_group_ui.vue";
 import ToastAlertUI             from "@ui/version_2/components/AlertUI/ToastAlertUI/toast_alert_ui.vue";
 import ButtonUI                 from "@ui/version_2/components/ButtonUI/button_ui.vue";
@@ -13,13 +16,17 @@ import ButtonUI                 from "@ui/version_2/components/ButtonUI/button_u
 class LoginViewController extends BaseController {
     public event_handler: AuthEventhandler;
     public service: AuthService;
-    public event_bus = EventBus
+    public event_bus = EventBus;
+    public router: Router;
+    private member_auth_manager: MemberAuthManagerUtil;
 
     constructor(props: Record<string, any> = {}) {
         super("login_view", props);
 
-        this.event_handler  = new AuthEventhandler(this);
-        this.service        = new AuthService(this);
+        this.event_handler              = new AuthEventhandler(this);
+        this.service                    = new AuthService(this);
+        this.router                     = useRouter();
+        this.member_auth_manager        = new MemberAuthManagerUtil();
     }
 
     // Method to get ui components
@@ -51,6 +58,13 @@ class LoginViewController extends BaseController {
 
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
+        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
+        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
+
+        if(is_fully_authenticated) { await this.router.push("/dashboard") }
+
+        if(is_partially_authenticated) { await this.router.push("/two-factor-login") }
+
         // delete member data
         this.service?.deleteMemberdata?.();
         // get csrf token

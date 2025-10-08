@@ -2,7 +2,7 @@
 import { createApp, App as VueApp } from "vue";
 import { Router } from "vue-router";
 
-import GlobalVariableManager        from "@ui/version_1/Resources/global_variable_manager_util";
+import GlobalVariableManager        from "@ui/version_2/utils/global_variable_manager_util";
 import LoggerUtil                   from "@ui/version_2/utils/logger_util";
 import ENVManagerUtil               from "@ui/version_2/utils/env_manager_util";
 import ContentManagerUtil           from "@ui/version_2/utils/content_manager_util";
@@ -21,6 +21,7 @@ class FiberxDbmsClientApp {
     private global_vars: GlobalVariableManager;
     private content_manager: ContentManagerUtil;
     private logger: LoggerUtil;
+    private route_manager: RouterManager;
     private router: Router;
 
     constructor(app_component: any) {
@@ -29,7 +30,8 @@ class FiberxDbmsClientApp {
 
         this.global_vars        = GlobalVariableManager.getInstance();
         this.content_manager    = ContentManagerUtil.getInstance();
-        this.router             = new RouterManager().getRouter();
+        this.route_manager      = new RouterManager();
+        this.router             = this.route_manager.getRouter();
         this.logger             = new LoggerUtil({ prefix: this.name, show_timestamp: false })
         this.ENV                = new ENVManagerUtil().env_data;
         
@@ -55,9 +57,19 @@ class FiberxDbmsClientApp {
         }
     }
 
+    // Method to get the names of auth routes
+    private getAuthRouteNames(): string[] {
+        const routes        = this.router.getRoutes() ?? [];
+        const auth_routes =  routes
+            .filter(route => route.meta?.is_auth_page === true && route.name)
+            .map(route => route.name as string); // extract the name as string
+        return auth_routes;
+    }
+
     // Method to initialize global properties
     private initializeAppGlobalProperties (): void {
-        this.vue_app.config.globalProperties.$ENV = this.ENV;
+        this.vue_app.config.globalProperties.$ENV           = this.ENV;
+        this.vue_app.config.globalProperties.$AUTH_ROUTES   = this.getAuthRouteNames();
         
         // 🔥 Add error handler immediately after app is created
         this.vue_app.config.errorHandler = this.handleAppError.bind(this)

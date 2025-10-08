@@ -1,6 +1,15 @@
 // @ts-nocheck
 export {};
 
+import { ComponentPublicInstance } from "vue";
+
+declare module "@vue/runtime-core" {
+    interface ComponentCustomProperties {
+        $ENV: Record<string, any>;
+        $AUTH_ROUTES: string[];
+    }
+}
+
 ; declare global {
 	const __VLS_directiveBindingRestFields: { instance: null, oldValue: null, modifiers: any, dir: any };
 	const __VLS_unref: typeof import('vue').unref;
@@ -134,4 +143,5 @@ export {};
 	function __VLS_asFunctionalElement<T>(tag: T, endTag?: T): (attrs: T & Record<string, unknown>) => void;
 	function __VLS_asFunctionalSlot<S>(slot: S): S extends () => infer R ? (props: {}) => R : NonNullable<S>;
 	function __VLS_tryAsConstant<const T>(t: T): T;
+
 }

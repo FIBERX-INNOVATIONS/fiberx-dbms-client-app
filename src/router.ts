@@ -9,11 +9,11 @@ import {
 
 import { LOCAT_STRAGE_FIELDS }      from "@/enums/constants.enums";
 import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manager_util";
-import GlobalVariableManager        from "@ui/version_1/Resources/global_variable_manager_util";
+import GlobalVariableManager        from "@ui/version_2/utils/global_variable_manager_util";
 
 const LoginView                 = () => import("@/modules/auth_module/views/login_view/login_view.vue");
 const TwoFactorLoginView        = () => import("@/modules/auth_module/views/two_factor_login_view/two_factor_login_view.vue");
-// const LogoutView                = () => import("@/modules/auth_module/views/logout_view.vue");
+const LogoutView                = () => import("@/modules/auth_module/views/logout_view/logout_view.vue");
 const DashboardView             = () => import("@/modules/dashboard_module/views/main_dashboard_view/main_dashboard_view.vue");
 // const RegisteredAppsView        = () => import("@/modules/registered_app_module/views/registered_apps_view.vue");
 // const DatasourceView            = () => import("@/modules/datasource_module/views/list_view_ui.vue");
@@ -53,7 +53,7 @@ class RouterManager {
             }
 
             const global_vars   = GlobalVariableManager.getInstance();
-            global_vars.setVariable("CURRENT_PAGE_ID", route.name)
+            global_vars.updateVariable("CURRENT_PAGE_ID", route.name)
 
             const {
                 title_key,
@@ -74,7 +74,7 @@ class RouterManager {
 
                 if (is_partially_authenticated) { return next("/two-factor-login"); }
 
-                if (is_fully_authenticated) { return next("/dashboard"); }
+                // if (is_fully_authenticated) { return next("/dashboard"); }
             }
 
             // 🚦 Handle partial-auth routes
@@ -106,6 +106,7 @@ class RouterManager {
                 meta: {
                     title_key: "home-page",
                     permission_name: "", 
+                    is_auth_page: true,
                     requires_no_auth: true
                 }
             },
@@ -116,7 +117,8 @@ class RouterManager {
                 meta: {
                     title_key: "login-page",
                     permission_name: "member_login", 
-                    requires_no_auth_true: true
+                    is_auth_page: true,
+                    requires_no_auth: true
                 }
             },
             { 
@@ -126,19 +128,21 @@ class RouterManager {
                 meta: {
                     title_key: "two-factor-login-page", 
                     permission_name: "member_2fa_login", 
+                    is_auth_page: true,
                     requires_partial_auth: true,
                 }
             },
-        //     { 
-        //         path: "/logout", 
-        //         name: "Logout", 
-        //         component: LogoutView, 
-        //         meta: {
-        //             title_key: "logout-page", 
-        //             permission_name: "member_logout",
-        //             requires_full_auth: true 
-        //         }
-        //     },
+            { 
+                path: "/logout", 
+                name: "Logout", 
+                component: LogoutView, 
+                meta: {
+                    title_key: "logout-page", 
+                    permission_name: "member_logout",
+                    is_auth_page: true,
+                    requires_full_auth: true 
+                }
+            },
             { 
                 path: "/dashboard", 
                 name: "Dashboard", 

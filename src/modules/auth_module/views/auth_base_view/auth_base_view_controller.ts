@@ -1,7 +1,6 @@
 
 import { ref, }                     from "vue";
 import { Router, useRouter }        from "vue-router";
-import { LOCAT_STRAGE_FIELDS }      from "@/enums/constants.enums";
 import AuthBaseViewPropsBuilder     from "./auth_base_view_props_builder";
 import BaseController               from "@ui/version_2/base_classes/base_controller";
 import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manager_util";
@@ -32,13 +31,6 @@ class AuthBaseViewController extends BaseController {
 
             copyright_props: AuthBaseViewPropsBuilder.getCopyRightProps (),
         } 
-    }
-
-    // Method to handle on mount logic
-    protected async handleOnMountedLogic(): Promise<void> {
-        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
-
-        if(is_fully_authenticated) { await this.router.push("/dashboard") }
     }
 }
 

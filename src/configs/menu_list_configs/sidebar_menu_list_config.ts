@@ -1,5 +1,5 @@
 import { reactive  }                    from "vue";
-import GlobalVariableManager            from "@ui/version_1/Resources/global_variable_manager_util";
+import GlobalVariableManager            from "@ui/version_2/utils/global_variable_manager_util";
 import ClassStyles                      from "@/enums/class_styles.enums";
 import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
 import SVGIcons                         from "@ui/version_2/resources/svg_icon_resource";
@@ -14,7 +14,7 @@ class SidebarMenuListConfig {
     private static checkIfMenuIsActive = (menu_id: string): boolean => {
         const global_vars       = GlobalVariableManager.getInstance();
         const current_page_id   = global_vars.getVariable("CURRENT_PAGE_ID")
-        console.log({ current_page_id, menu_id})
+        // console.log({ current_page_id, menu_id})
 
         return menu_id === current_page_id;
     }

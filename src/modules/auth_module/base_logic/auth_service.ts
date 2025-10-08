@@ -124,6 +124,22 @@ class AuthService extends BaseService {
 
     }
 
+    // Method to execute two factor log in
+    public async executeLogOut(): Promise<{s_state: boolean, s_msg: string, logout?: boolean}> {
+        try {
+            await this.api_service.logOut();
+
+            this.deleteMemberdata()
+
+            return { s_state: true, s_msg: "" };
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to execute two factor log in`, { error });
+            return { s_state: false, s_msg: "error_occurred"};
+        }
+
+    }
+
 }
 
 export default AuthService
