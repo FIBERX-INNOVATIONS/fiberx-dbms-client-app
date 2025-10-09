@@ -14,6 +14,8 @@ import {
 
 class AuthEventhandler extends BaseEventHandler {
     public content_manager: ContentManagerUtil;
+    private redirect_timer: ReturnType<typeof setTimeout> | null = null;
+
 
     constructor(controller: BaseControllerInterface) {
         super(controller, controller.component_name);
@@ -38,7 +40,12 @@ class AuthEventhandler extends BaseEventHandler {
         const mins_value    = delay_in_mins && Number.isInteger(delay_in_mins) ? delay_in_mins : 5;
         const delay_in_ms   = (mins_value * 60 * 1000);
 
-        setTimeout(async () => {
+        // Clear any existing timer before scheduling a new one
+        if (this.redirect_timer) {
+            clearTimeout(this.redirect_timer);
+        }
+
+        this.redirect_timer = setTimeout(async () => {
             try {
                 this.logger.error(`Redirecting user to login after ${delay_in_ms / 1000 / 60} minutes`);
                 if (this.controller?.router) {
@@ -48,6 +55,15 @@ class AuthEventhandler extends BaseEventHandler {
                 this.logger.error("Failed to redirect to login after delay", { error });
             }
         }, delay_in_ms);
+    }
+
+    // 🔹 Add method to clear timer
+    public clearRedirectTimer() {
+        if (this.redirect_timer) {
+            clearTimeout(this.redirect_timer);
+            this.redirect_timer = null;
+            this.logger.log("Redirect timer cleared");
+        }
     }
 
     // Method to handle on input changed

@@ -10,6 +10,7 @@ import AppRootComponent             from "@/modules/app_root_module/app_root.vue
 import RouterManager                from "@/router";
 
 import { ENVInterface }             from "@ui/version_2/types/env_type";
+import { LOCAT_STORAGE_FIELDS }     from "@/enums/constants.enums";
 
 
 
@@ -75,11 +76,27 @@ class FiberxDbmsClientApp {
         this.vue_app.config.errorHandler = this.handleAppError.bind(this)
     }
 
+    // Method to register local storage keys
+    private registerLocalStorageKeys(): void {
+        Object.entries(LOCAT_STORAGE_FIELDS).forEach(([key, value]) => {
+            if (!key || !value) {
+                this.logger.warn(`⚠️ Skipping invalid entry: key="${key}", value="${value}"`);
+                return;
+            }
+
+            this.global_vars.setVariable(key, value);
+        });
+
+        this.logger.log("✅ All provided global variables have been registered successfully.");
+    }
+
     // Method to mount root app component
     public  async mountApp (selector: string): Promise<void> {
         await this.getAppContentData();
 
         this.initializeAppGlobalProperties();
+
+        this.registerLocalStorageKeys();
 
         this.vue_app.use(this.router);
         this.vue_app.mount(selector);

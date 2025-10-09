@@ -1,7 +1,6 @@
 
 import BaseAPIService               from "@ui/version_2/base_classes/base_api_service";
 import { APIResponseInterface }     from "@ui/version_2/types/util_type";
-import { LOCAT_STRAGE_FIELDS }      from "@/enums/constants.enums";
 
 import { 
     LoginFormDataInterface,
@@ -11,15 +10,6 @@ import {
 
 class AuthAPIService extends BaseAPIService {
     constructor() { super("auth_api_service"); }
-
-    // Method 🔑 Override storage keys
-    protected getStorageKeys() {
-        return {
-            ACCESS_TOKEN_KEY: LOCAT_STRAGE_FIELDS.ACCESS_TOKEN_KEY,
-            DEVICE_ID_KEY: LOCAT_STRAGE_FIELDS.DEVICE_ID_KEY,
-            DEVICE_NAME_KEY: LOCAT_STRAGE_FIELDS.DEVICE_NAME_KEY
-        };
-    }
 
     // Service method to query get csrf token endpoint
     public async getFormCSRFToken(token_for: string): Promise<APIResponseInterface<any>> {

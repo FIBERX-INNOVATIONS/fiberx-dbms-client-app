@@ -15,7 +15,7 @@ import ButtonUI                         from "@ui/version_2/components/ButtonUI/
 
 import { 
     CSRF_TOKEN_FOR,
-    LOCAT_STRAGE_FIELDS 
+    LOCAT_STORAGE_FIELDS 
 } from "@/enums/constants.enums";
 
 
@@ -63,8 +63,8 @@ class TwoFactorLoginViewController extends BaseController {
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
         try {
-            const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
-            const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
+            const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
+            const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
             
             if(is_fully_authenticated) { await this.router.push("/dashboard") }
 
@@ -80,6 +80,11 @@ class TwoFactorLoginViewController extends BaseController {
             this.logger.error("Failed during TwoFactorLoginView mount logic", { error });
         }
         
+    }
+ // Method to handle on unmount logic
+    protected async handleBeforeUnmountedLogic(): Promise<void> {
+        this.event_handler.clearRedirectTimer();
+        console.log("Timer cleared for two factor")
     }
 
 

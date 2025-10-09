@@ -6,7 +6,7 @@ import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manage
 
 import { 
     CSRF_TOKEN_FOR ,
-    LOCAT_STRAGE_FIELDS
+    LOCAT_STORAGE_FIELDS
 } from "@/enums/constants.enums";
 import { 
     CurrentMemberInterface 
@@ -30,9 +30,9 @@ class AuthService extends BaseService {
     // Method to store member data
     private storeMemberData (current_member: CurrentMemberInterface, access_token?: string): boolean {
         const permissions               = current_member?.permissions || [];
-        const member_key                = LOCAT_STRAGE_FIELDS.MEMBER;
-        const permissions_key           = LOCAT_STRAGE_FIELDS.MEMBER_PERMISSIONS;
-        const acces_token_key           = LOCAT_STRAGE_FIELDS.ACCESS_TOKEN_KEY;
+        const member_key                = LOCAT_STORAGE_FIELDS.MEMBER_KEY;
+        const permissions_key           = LOCAT_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY;
+        const acces_token_key           = LOCAT_STORAGE_FIELDS.ACCESS_TOKEN_KEY;
 
         const other_member_data: Record<string, any>    = {};
         other_member_data[permissions_key]              = permissions;
@@ -42,7 +42,7 @@ class AuthService extends BaseService {
     }
 
     public deleteMemberdata(): boolean {
-        return this.member_auth_manager.deleteCurrentMemberData(LOCAT_STRAGE_FIELDS.MEMBER);
+        return this.member_auth_manager.deleteCurrentMemberData(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
     }
 
     // Method to get and set form csrf token

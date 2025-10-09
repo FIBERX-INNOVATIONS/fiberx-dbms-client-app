@@ -1,6 +1,7 @@
 import { ref, }                         from "vue";
 import { Router, useRouter }            from "vue-router";
-import { LOCAT_STRAGE_FIELDS }          from "@/enums/constants.enums";
+import { LOCAT_STORAGE_FIELDS }          from "@/enums/constants.enums";
+import DashbaordBaseViewService         from "@/modules/dashboard_module/base_logic/dashboard_base_view_service";
 import DashboardBaseViewPropsBuilder    from "./dashboard_base_view_props_builder";
 import DashboardBaseViewEventHandler    from "./dashboard_base_view_event_handler";
 import BaseController                   from "@ui/version_2/base_classes/base_controller";
@@ -18,6 +19,7 @@ class DashboardBaseViewController extends BaseController {
     public router: Router;
     private member_auth_manager: MemberAuthManagerUtil;
     public event_handler: DashboardBaseViewEventHandler;
+    public service: DashbaordBaseViewService;
 
     constructor(props: Record<string, any> = {}) {
         super("auth_base_view", props);
@@ -25,6 +27,7 @@ class DashboardBaseViewController extends BaseController {
         this.router                     = useRouter();
         this.member_auth_manager        = new MemberAuthManagerUtil();
         this.event_handler              = new DashboardBaseViewEventHandler(this);
+        this.service                    = new DashbaordBaseViewService(this);
     }
 
     // Method to get ui components
@@ -34,7 +37,7 @@ class DashboardBaseViewController extends BaseController {
 
     // Method to get ui state data
     protected getUIStateData(): Record<string, any> {  
-        const current_member = this.member_auth_manager.getCurrentMember(LOCAT_STRAGE_FIELDS.MEMBER);       
+        const current_member = this.member_auth_manager.getCurrentMember(LOCAT_STORAGE_FIELDS.MEMBER_KEY);       
         return {
             base_class_styles: DashboardBaseViewPropsBuilder.getBaseClassStyle(),
 
@@ -58,8 +61,8 @@ class DashboardBaseViewController extends BaseController {
 
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
-        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
-        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
+        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
+        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
 
         if(is_partially_authenticated) { await this.router.push("/two-factor-login") }
 

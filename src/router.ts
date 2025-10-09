@@ -7,7 +7,7 @@ import {
   RouteMeta
 } from "vue-router";
 
-import { LOCAT_STRAGE_FIELDS }      from "@/enums/constants.enums";
+import { LOCAT_STORAGE_FIELDS }      from "@/enums/constants.enums";
 import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manager_util";
 import GlobalVariableManager        from "@ui/version_2/utils/global_variable_manager_util";
 
@@ -63,18 +63,18 @@ class RouterManager {
                 requires_partial_auth = false
             } = (route.meta || {}) as RouteMeta;
 
-            const has_permission                = this.member_auth_manager.canMemberAccess(permission_name, LOCAT_STRAGE_FIELDS.MEMBER_PERMISSIONS);
-            const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
-            const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STRAGE_FIELDS.MEMBER);
+            const has_permission                = this.member_auth_manager.canMemberAccess(permission_name, LOCAT_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY);
+            const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
+            const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
             const is_not_authenticated          = (is_fully_authenticated === false && is_partially_authenticated === false);
 
             // 🚦 Handle no-auth routes
             if (requires_no_auth) {
                 if (is_not_authenticated) { return next(); }
 
-                if (is_partially_authenticated) { return next("/two-factor-login"); }
+                if (is_partially_authenticated && route.name === "Login") { return next("/two-factor-login"); }
 
-                // if (is_fully_authenticated) { return next("/dashboard"); }
+                if (is_fully_authenticated) { return next("/dashboard"); }
             }
 
             // 🚦 Handle partial-auth routes
