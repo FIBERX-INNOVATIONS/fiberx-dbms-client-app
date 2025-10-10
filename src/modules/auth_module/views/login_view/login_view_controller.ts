@@ -66,7 +66,7 @@ class LoginViewController extends BaseController {
         if(is_partially_authenticated) { await this.router.push("/two-factor-login") }
 
         // delete member data
-        // this.service?.deleteMemberdata?.();
+        this.service?.deleteMemberdata?.();
         // get csrf token
         await this.service.getFormCsrfToken();
         

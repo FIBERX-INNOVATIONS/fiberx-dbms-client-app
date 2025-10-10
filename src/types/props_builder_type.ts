@@ -133,3 +133,9 @@ export interface TopBarPropsInterface {
     section_2_wrapper_class_style?: string;
     section_3_wrapper_class_style?: string;
 }
+
+export interface BaseListViewClassStyleinterface {
+    wrapper_class_style: string;
+    header_text_class_style: string;
+}
+

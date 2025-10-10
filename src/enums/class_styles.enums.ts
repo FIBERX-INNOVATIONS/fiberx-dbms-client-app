@@ -143,6 +143,23 @@ const ClassStyles = {
             icon_img_class_style: "w-full h-auto text-white",
             content_class_style: "flex items-center justify-start text-white text-[16px] text-start w-full"
         }
+    },
+    main_dashboard_ui: {
+        wrapper_class_style: "w-full px-[5%]",
+        header_text_class_style: "font-bold text-start capitalize text-2xl flex w-full items-center justify-start"
+    },
+    bread_crumb_ui: {
+        wrapper_class_style: "w-full py-4 px-[2%] rounded-3xl bg-white shadow-lg border border-gray-100 my-2 h-[50px]",
+        list_class_style: "inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse",
+        list_item_class_style: "inline-flex items-center",
+        divider_class_style: "px-2 text-gray-400",
+        menu_list_item_ui: {
+            wrapper_class_style: "inline-flex items-center text-sm font-medium cursor-pointer text-gray-700 hover:text-blue-600",
+            active_menu_class_style: "",
+            icon_img_wrapper_class_style: "flex items-center justify-center overflow-hidden  w-4 h-4 me-2",
+            icon_img_class_style: "w-full h-auto",
+            content_class_style: "flex space-x-2 items-center justify-start text-md"
+        }
     }
 }
 

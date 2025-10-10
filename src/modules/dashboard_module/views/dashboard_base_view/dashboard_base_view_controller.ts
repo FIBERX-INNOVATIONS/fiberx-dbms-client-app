@@ -22,7 +22,7 @@ class DashboardBaseViewController extends BaseController {
     public service: DashbaordBaseViewService;
 
     constructor(props: Record<string, any> = {}) {
-        super("auth_base_view", props);
+        super("dashboard_base_view", props);
 
         this.router                     = useRouter();
         this.member_auth_manager        = new MemberAuthManagerUtil();
