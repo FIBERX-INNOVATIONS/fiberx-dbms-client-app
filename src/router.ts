@@ -15,7 +15,7 @@ const LoginView                 = () => import("@/modules/auth_module/views/logi
 const TwoFactorLoginView        = () => import("@/modules/auth_module/views/two_factor_login_view/two_factor_login_view.vue");
 const LogoutView                = () => import("@/modules/auth_module/views/logout_view/logout_view.vue");
 const DashboardView             = () => import("@/modules/dashboard_module/views/main_dashboard_view/main_dashboard_view.vue");
-// const RegisteredAppsView        = () => import("@/modules/registered_app_module/views/registered_apps_view.vue");
+const RegisteredAppListView     = () => import("@/modules/registered_app_module/views/list_view/registered_app_list_view.vue");
 // const DatasourceView            = () => import("@/modules/datasource_module/views/list_view_ui.vue");
 // const SchemaView                = () => import("@/modules/schema_module/views/schemas_view.vue");
 // const AppSchemaView             = () => import("@/modules/app_schema_module/views/app_schemas_view.vue");
@@ -153,17 +153,16 @@ class RouterManager {
                     requires_full_auth: true,
                 }
             },
-
-        //     { 
-        //         path: "/registered-apps", 
-        //         name: "RegisteredAppsView", 
-        //         component: RegisteredAppsView,
-        //         meta: {
-        //             title_key: "registered-app-page", 
-        //             permission_name: "view_all_registered_apps" , 
-        //             requires_full_auth: true
-        //         }
-        //      },
+            { 
+                path: "/registered-apps", 
+                name: "RegisteredAppsView", 
+                component: RegisteredAppListView,
+                meta: {
+                    title_key: "registered-app-page", 
+                    permission_name: "view_all_registered_apps" , 
+                    requires_full_auth: true
+                }
+            },
 
         //     { 
         //         path: "/datasources", 

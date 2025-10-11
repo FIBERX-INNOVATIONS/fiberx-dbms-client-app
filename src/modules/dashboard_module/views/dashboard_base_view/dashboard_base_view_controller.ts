@@ -59,6 +59,22 @@ class DashboardBaseViewController extends BaseController {
         } 
     }
 
+    // Method to get ui watchers
+    protected getUIWatchers(): Record<string, (new_val: any, old_val: any) => void> { 
+        return {
+            route: (new_val, old_val) => {
+                const { visible } = this.state_refs.sidebar_props;
+
+                // hide sidebar
+                if(visible) {
+                    const new_sidebar_props = DashboardBaseViewPropsBuilder.getModalSidebarUIProps(this.event_handler, false);
+
+                    Object.assign(this.state_refs.sidebar_props, new_sidebar_props);
+                }
+            }
+        }; 
+    }
+
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
         const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);

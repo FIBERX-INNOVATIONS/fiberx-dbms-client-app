@@ -160,6 +160,13 @@ const ClassStyles = {
             icon_img_class_style: "w-full h-auto",
             content_class_style: "flex space-x-2 items-center justify-start text-md"
         }
+    },
+    registered_app_ui: {
+        list_view_ui: {
+            section_wrapper_class_style: "w-full px-[5%]",
+            header_text_class_style: "font-bold text-start capitalize text-2xl flex w-full items-center justify-start"
+        }
+
     }
 }
 
