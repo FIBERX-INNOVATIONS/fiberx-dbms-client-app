@@ -17,7 +17,7 @@ import {
  } from "@/types/props_builder_type";
 
  import {
-    ButtonPropsInterface,
+    ButtonUIPropsInterface,
     NavLinkUIPropsInterface,
     ImgAvatarUIPropsInterface,
     MenuListUIPropsInterface,
@@ -44,7 +44,7 @@ class DashboardBaseViewPropsBuilder {
     }
 
     // Method to get hamburger btn props
-    public static getHamburgerBtnProps (event_handler: BaseEventHandlerInterface): ButtonPropsInterface {
+    public static getHamburgerBtnProps (event_handler: BaseEventHandlerInterface): ButtonUIPropsInterface {
         const class_styles          = ClassStyles?.hamburger_btn_ui ?? {};
         const btn_class_style       = class_styles?.hamburger_btn_class_style;
         const icon_class_style      = class_styles?.icon_class_style;

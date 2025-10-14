@@ -7,6 +7,12 @@ const RegisteredAppListViewProps   = {
 
     header_text_class_style: { type: String, default: ui_class_styles.header_text_class_style, required: false },
 
+    data_section_wrapper_class_style: { type: String, default: ui_class_styles.data_section_wrapper_class_style, required: false },
+
+    list_data_action_section_class_style: { type: String, default: ui_class_styles.list_data_action_section_class_style, required: false },
+
+    form_action_btn_section_class_style: { type: String, default: ui_class_styles.form_action_btn_section_class_style, required: false },
+
 }
 
 export default RegisteredAppListViewProps;

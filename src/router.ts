@@ -155,7 +155,7 @@ class RouterManager {
             },
             { 
                 path: "/registered-apps", 
-                name: "RegisteredAppsView", 
+                name: "RegisteredApps", 
                 component: RegisteredAppListView,
                 meta: {
                     title_key: "registered-app-page", 

@@ -67,7 +67,8 @@ const ClassStyles = {
     },
     form_button_ui: {
         icon_class_style: "w-4 h-4 ml-2 flex items-center",
-        btn_class_style: "w-full cursor-pointer inline-flex mt-4 items-center justify-center rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 w-full bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider py-3"
+        btn_class_style: "md:w-auto w-full  cursor-pointer inline-flex mt-4 items-center justify-center rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider py-3",
+        auto_width_btn_class_style: "w-auto cursor-pointer inline-flex items-center justify-center rounded-full ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider py-3"
     },
     dashboard_base_ui: {
         header_class_style: "fixed top-0 left-0 w-screen p-0 m-0 bg-white shadow-md z-[80]",
@@ -161,10 +162,24 @@ const ClassStyles = {
             content_class_style: "flex space-x-2 items-center justify-start text-md"
         }
     },
+    search_field_ui: {
+        wrapper_class_style: "w-full my-4 md:items-start items-center flex flex-col px-2 md:justify-start justify-center",
+        label_class_style: "",
+        label_required_class_style: "",
+        search_wrapper_class_style: "w-full flex items-center justify-between",
+        btn_wrapper_class_style: "w-1/12 flex items-center justify-center mr-1",
+        input_wrapper_class_style: "w-11/12 flex items-center justify-center",
+        btn_class_style: "w-full p-2 cursor-pointer flex items-center justify-center rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider",
+        icon_class_style: "w-6 h-6 flex items-center",
+    },
     registered_app_ui: {
         list_view_ui: {
             section_wrapper_class_style: "w-full px-[5%]",
-            header_text_class_style: "font-bold text-start capitalize text-2xl flex w-full items-center justify-start"
+            header_text_class_style: "font-bold text-start capitalize text-2xl flex w-full items-center justify-start",
+            data_section_wrapper_class_style: "my-4 w-full bg-white flex flex-col justify-center rounded-3xl border border-gray-200 p-6 relative break-words flex-col card shadow-md",
+            list_data_action_section_class_style: "py-4 grid md:grid-cols-2 grid-cols-1",
+            form_action_btn_section_class_style: "w-full my-4 md:items-end items-center flex flex-col px-2 md:justify-end justify-center"
+
         }
 
     }

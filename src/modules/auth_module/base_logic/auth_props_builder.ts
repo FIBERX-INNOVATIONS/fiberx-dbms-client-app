@@ -12,7 +12,7 @@ import {
 import {
     InputGroupPropsInterface,
     ToastAlertPropsInterface,
-    ButtonPropsInterface,
+    ButtonUIPropsInterface,
     ButtonType,
 } from "@ui/version_2/types/props_builder_type";
 

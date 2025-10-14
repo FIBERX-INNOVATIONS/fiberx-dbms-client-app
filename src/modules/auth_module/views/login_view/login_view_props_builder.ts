@@ -5,7 +5,7 @@ import ClassStyles              from "@/enums/class_styles.enums";
 import ContentManagerUtil       from "@ui/version_2/utils/content_manager_util";
 import SVGIcons                 from "@ui/version_2/resources/svg_icon_resource";
 import RenderHtmlUtil           from "@ui/version_2/utils/render_html_util";
-import InputGroupPropsBuilder   from "@ui/version_2/props_builder/input_group_props_builder";
+import InputGroupUIPropsBuilder   from "@ui/version_2/props_builder/input_group_ui_props_builder";
 
 import { 
     BaseEventHandlerInterface,
@@ -13,7 +13,7 @@ import {
 
 import {
     InputGroupPropsInterface,
-    ButtonPropsInterface,
+    ButtonUIPropsInterface,
 } from "@ui/version_2/types/props_builder_type";
 
 class LoginViewPropsBuilder {
@@ -43,7 +43,7 @@ class LoginViewPropsBuilder {
             value: "", required: true, on_change
         }
 
-        return InputGroupPropsBuilder.buildInputGroupProps(class_styles, label_config, input_config);
+        return InputGroupUIPropsBuilder.buildInputGroupProps(class_styles, label_config, input_config);
     }
 
     // Method to get password input group props
@@ -61,7 +61,7 @@ class LoginViewPropsBuilder {
             value: "", required: true, on_change
         }
 
-        return InputGroupPropsBuilder.buildInputGroupProps(class_styles, label_config, input_config);
+        return InputGroupUIPropsBuilder.buildInputGroupProps(class_styles, label_config, input_config);
     }
 
     // Method to get btn props
@@ -69,7 +69,7 @@ class LoginViewPropsBuilder {
         event_handler: BaseEventHandlerInterface,
         disabled: boolean = false,
         show_loader: boolean = true,
-    ): ButtonPropsInterface {
+    ): ButtonUIPropsInterface {
         const content_manager       = ContentManagerUtil.getInstance();
         const content_data          = content_manager?.get("content_resource.login_view_ui.fieldset") ?? {};
         const class_styles          = ClassStyles?.form_button_ui ?? {};
