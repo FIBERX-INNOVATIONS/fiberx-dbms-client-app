@@ -1,19 +1,33 @@
 
 <template>
     <section id="RegisteredAppListView" :class="props?.section_wrapper_class_style">
-        <h1 :class="props.header_text_class_style" v-html="computed_refs.header_text.value"></h1>
-
-        <!-- Breadcrumb -->
-        <BreadCrumbUI v-bind="state_refs.breadcrumb_props" />
+        <PageTitleAndBreadcrumbSectionUI
+            :header_text_class_style="props.header_text_class_style"
+            :header_text="computed_refs.header_text.value"
+            :breadcrumb_props="state_refs.breadcrumb_props"
+        />
+        
 
         <section id="ListDataSection" :class="props.data_section_wrapper_class_style">
 
-            <section id="ListDataActionSection" :class="props.list_data_action_section_class_style">
-                <SearchFieldUI v-bind="state_refs.search_field_props" />
-                <div :class="props.form_action_btn_section_class_style">
-                    <ButtonUI v-bind="state_refs.form_action_btn_props" />
-                </div>
-            </section>
+            <SearchAndActionBtnSectionUI
+                :list_data_action_section_class_style="props.list_data_action_section_class_style"
+                :grid_1_wrapper_class_style="props.grid_1_wrapper_class_style"
+                :grid_2_wrapper_class_style="props.grid_2_wrapper_class_style"
+                :search_field_props="state_refs.search_field_props"
+                :form_action_btn_props="state_refs.form_action_btn_props"
+            />
+
+            <PaginationResultAndBulkActionSectionUI
+                :list_data_action_section_class_style="props.list_data_action_section_class_style"
+                :grid_1_wrapper_class_style="props.grid_1_wrapper_class_style"
+                :grid_2_wrapper_class_style="props.grid_2_wrapper_class_style"
+                :pagination_summary_class_style="props.pagination_summary_class_style"
+                :pagination_summary_text="computed_refs.pagination_result_text.value"
+                :bulk_action_btn_props="state_refs.bulk_action_btn_props"
+                :bulk_action_menu_list_props="state_refs.bulk_action_dropdown_menu_props"
+
+            />
 
         </section>
         
@@ -29,5 +43,9 @@ const controller       = new RegisteredAppListViewController(props)
 
 const { state_refs, computed_refs, components} = controller.getComponentDefinition();
 
-const { BreadCrumbUI, ButtonUI, SearchFieldUI } = components;
+const { 
+    PageTitleAndBreadcrumbSectionUI,
+    SearchAndActionBtnSectionUI,
+    PaginationResultAndBulkActionSectionUI
+} = components;
 </script>

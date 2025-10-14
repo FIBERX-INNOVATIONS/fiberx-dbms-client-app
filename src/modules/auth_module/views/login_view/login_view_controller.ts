@@ -26,7 +26,7 @@ class LoginViewController extends BaseController {
         this.event_handler              = new AuthEventhandler(this);
         this.service                    = new AuthService(this);
         this.router                     = useRouter();
-        this.member_auth_manager        = new MemberAuthManagerUtil();
+        this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
     }
 
     // Method to get ui components

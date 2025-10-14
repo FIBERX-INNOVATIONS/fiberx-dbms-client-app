@@ -25,7 +25,7 @@ class DashboardBaseViewController extends BaseController {
         super("dashboard_base_view", props);
 
         this.router                     = useRouter();
-        this.member_auth_manager        = new MemberAuthManagerUtil();
+        this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
         this.event_handler              = new DashboardBaseViewEventHandler(this);
         this.service                    = new DashbaordBaseViewService(this);
     }

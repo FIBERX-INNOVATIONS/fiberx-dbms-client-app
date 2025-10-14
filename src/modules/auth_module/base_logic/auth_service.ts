@@ -24,7 +24,7 @@ class AuthService extends BaseService {
         super(controller, controller.component_name);
 
         this.api_service            = new AuthAPIService();
-        this.member_auth_manager    = new MemberAuthManagerUtil();
+        this.member_auth_manager    = MemberAuthManagerUtil.getInstance();
     }
 
     // Method to store member data

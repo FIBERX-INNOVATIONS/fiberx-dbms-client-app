@@ -31,7 +31,7 @@ class RouterManager {
     constructor() {
         this.routes                     = this.getRoutes();
         this.router                     = this.createRouter();
-        this.member_auth_manager        = new MemberAuthManagerUtil();
+        this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
         this.global_vars                = GlobalVariableManager.getInstance();
 
         this.setupRouterGuards();

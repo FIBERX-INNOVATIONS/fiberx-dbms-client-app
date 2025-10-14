@@ -32,7 +32,7 @@ class TwoFactorLoginViewController extends BaseController {
         this.router                 = useRouter();
         this.event_handler          = new AuthEventhandler(this);
         this.service                = new AuthService(this);
-        this.member_auth_manager    = new MemberAuthManagerUtil();
+        this.member_auth_manager    = MemberAuthManagerUtil.getInstance();
     }
 
     // Method to get ui components

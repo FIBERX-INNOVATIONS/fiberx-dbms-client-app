@@ -172,16 +172,32 @@ const ClassStyles = {
         btn_class_style: "w-full p-2 cursor-pointer flex items-center justify-center rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider",
         icon_class_style: "w-6 h-6 flex items-center",
     },
-    registered_app_ui: {
-        list_view_ui: {
-            section_wrapper_class_style: "w-full px-[5%]",
-            header_text_class_style: "font-bold text-start capitalize text-2xl flex w-full items-center justify-start",
-            data_section_wrapper_class_style: "my-4 w-full bg-white flex flex-col justify-center rounded-3xl border border-gray-200 p-6 relative break-words flex-col card shadow-md",
-            list_data_action_section_class_style: "py-4 grid md:grid-cols-2 grid-cols-1",
-            form_action_btn_section_class_style: "w-full my-4 md:items-end items-center flex flex-col px-2 md:justify-end justify-center"
+    ellipsis_menu_options_ui: {
+        icon_class_style: "w-6 h-6 flex items-center",
+        btn_class_style: "rounded-full p-2 cursor-pointer hover:bg-gray-300 hover:shadow-lg flex "
+    },
+    list_view_ui: {
+        section_wrapper_class_style: "w-full px-[5%]",
+        header_text_class_style: "font-bold text-start capitalize text-2xl flex w-full items-center justify-start",
+        data_section_wrapper_class_style: "my-4 w-full bg-white flex flex-col justify-center rounded-3xl border border-gray-200 p-6 relative break-words flex-col card shadow-md",
+        list_data_action_section_class_style: "py-4 grid md:grid-cols-2 grid-cols-1",
+        pagination_summary_class_style: "text-gray-500 text-sm flex items-center w-full md:justify-start justify-center",
+        grid_1_wrapper_class_style: "relative w-full my-4 md:items-start items-center flex flex-col px-2 justify-center",
+        grid_2_wrapper_class_style: "relative w-full my-4 md:items-end items-center flex flex-col px-2 justify-center",
 
-        }
+        dropdown_menu_list_ui: {
+            wrapper_class_style: "hidden divide-y divide-gray-100 w-[170px] bg-white shadow-xl border border-gray-200 z-[10] p-0 min-h-[114px] m-0 absolute top-10 rounded-2xl transform transition-all duration-300 ease-in-out origin-top",
+            list_class_style: "py-2 w-full",
+            list_item_class_style: "w-full p-0 m-0 border-b-2 border-[#6f7e8d6e] last:border-b-0",
 
+            menu_list_item_ui: {
+                wrapper_class_style: "flex items-center cursor-pointer px-4 py-2 flex justify-between items-center group/link w-full hover:bg-[#6f7e8d6e]",
+                active_menu_class_style: "bg-[#6f7e8d6e]",
+                icon_img_wrapper_class_style: "flex items-center justify-center overflow-hidden  w-3/12 p-2",
+                icon_img_class_style: "w-full h-auto text-gray-900",
+                content_class_style: "flex items-center justify-start text-gray-900 text-[16px] text-start w-full"
+            }
+        },
     }
 }
 

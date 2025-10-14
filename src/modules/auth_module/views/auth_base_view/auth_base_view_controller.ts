@@ -14,7 +14,7 @@ class AuthBaseViewController extends BaseController {
     constructor(props: Record<string, any> = {}) {
         super("auth_base_view", props);
         this.router                     = useRouter();
-        this.member_auth_manager        = new MemberAuthManagerUtil();
+        this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
     }
 
     // Method to get ui components

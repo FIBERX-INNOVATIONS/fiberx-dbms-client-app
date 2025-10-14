@@ -15,7 +15,7 @@ class DashbaordBaseViewService extends BaseService {
         super(controller, controller.component_name);
 
         this.api_service            = new AuthAPIService();
-        this.member_auth_manager    = new MemberAuthManagerUtil();
+        this.member_auth_manager    = MemberAuthManagerUtil.getInstance();
         this.auth_token_manager     = AuthTokenManagerUtil.getInstance(this.api_service);
     }
 

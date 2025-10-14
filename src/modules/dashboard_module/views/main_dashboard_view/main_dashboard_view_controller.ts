@@ -16,7 +16,7 @@ class MainDashboardViewController extends BaseController {
         super("main_dashboard_view", props);
 
         this.router                     = useRouter();
-        this.member_auth_manager        = new MemberAuthManagerUtil();
+        this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
         this.content_field_key          = "dashbaord_view_ui"
     }
 

@@ -41,7 +41,7 @@ class SidebarMenuListConfig {
     }
 
     public static getSidebarMenuList (): NavLinkUIPropsInterface[] {
-        const member_auth_manager   = new MemberAuthManagerUtil();
+        const member_auth_manager   = MemberAuthManagerUtil.getInstance();
         const content_manager       = ContentManagerUtil.getInstance();
         const content_data          = content_manager?.get("content_resource.side_bar_ui");
         const { menu_list = [] }    = content_data;

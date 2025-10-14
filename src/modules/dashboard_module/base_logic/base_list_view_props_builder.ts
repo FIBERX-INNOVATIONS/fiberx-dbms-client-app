@@ -1,3 +1,4 @@
+
 import { reactive  }                        from "vue";
 import ClassStyles                          from "@/enums/class_styles.enums";
 import ContentManagerUtil                   from "@ui/version_2/utils/content_manager_util";
@@ -11,13 +12,11 @@ import { BaseListViewClassStyleinterface }  from "@/types/props_builder_type";
 import { 
     BreadCrumbUIPropsInterface, 
     ButtonType, 
-    SearchFieldUIPropsInterface 
-} from "@ui/version_2/types/props_builder_type"
-
-import {
-    InputGroupPropsInterface,
+    SearchFieldUIPropsInterface,
     ButtonUIPropsInterface,
-} from "@ui/version_2/types/props_builder_type";
+    MenuListUIPropsInterface
+} from "@ui/version_2/types/props_builder_type"
+import RegisteredAppMenuListConfig from "@/configs/menu_list_configs/registered_app_menu_list_config";
 
 
 
@@ -109,6 +108,67 @@ class BaseListViewPropsBuilder {
             type: btn_type, disabled, show_loader, 
             content_text, loader_content_text, btn_class_style, on_click
         })
+    }
+
+    // Method to get pagination result props
+    public static getPaginationResultProps (
+        content_field_key: string,
+        current_page: number = 1,
+        total_pages: number = 0, 
+        total_items: number = 0,
+        size: number = 12,
+    ): string {
+        const pagination_data: Record<string, number> = {  current_page, total_items, total_pages, page_limit: size };
+
+        const content_manager           = ContentManagerUtil.getInstance();
+        const content_data              = content_manager?.get(`content_resource.${content_field_key}.pagination_result`) ?? {};
+        const { result_text }           = content_data;
+
+        const generated_text = result_text.replace(/{{(\w+)}}/g, (match: string, key: string): string => {
+            return key in pagination_data ? String(pagination_data[key]) : match;
+        });
+        return generated_text
+    }
+
+    // Method to get ellipsis button props
+    public static getEllipsisBtnProps (
+        id: string,
+        event_handler: BaseEventHandlerInterface,
+        is_visible: boolean = true,
+        btn_text: string = "",
+        disabled: boolean = false,
+        show_loader: boolean = true,
+
+    ): ButtonUIPropsInterface {
+        const class_styles              = ClassStyles?.ellipsis_menu_options_ui ?? {};
+        const icon_class_style          = class_styles?.icon_class_style;
+        const btn_class_style           = `${class_styles?.btn_class_style} ${is_visible ? "": "hidden"}`;
+        const btn_type                  = "button";
+        const content_text              = RenderHtmlUtil.renderHtml({ text: btn_text, icon: SVGIcons.vertical_elipsis_svg_icon, icon_class_style, })
+        const loader_content_text       = RenderHtmlUtil.renderLoaderHtml({});
+        const on_click                  = event_handler?.toggleEllipsisDropdown.bind(event_handler);
+
+        return reactive({
+            id, type: btn_type, disabled, show_loader, 
+            content_text, loader_content_text, btn_class_style, on_click
+        })
+    }
+
+    // Method to get Profile dropdown ui props
+    public static getBulkActionMenuListProps (
+        btn_id:string, 
+        menu_id: string, 
+        event_handler: BaseEventHandlerInterface,
+        content_field_key: string,
+    ): MenuListUIPropsInterface {
+        const id                    = menu_id;
+        const parent_id             = btn_id;
+        const class_styles          = ClassStyles?.list_view_ui.dropdown_menu_list_ui ?? {};
+        const menu_list             = RegisteredAppMenuListConfig.getBulkActionMenuList(event_handler, content_field_key)
+
+        const { wrapper_class_style, list_class_style, list_item_class_style } = class_styles;
+
+        return reactive({ id, parent_id, wrapper_class_style, list_class_style, list_item_class_style, menu_list  })
     }
 
 }
