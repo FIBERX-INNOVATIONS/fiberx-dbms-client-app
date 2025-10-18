@@ -26,7 +26,18 @@
                 :pagination_summary_text="computed_refs.pagination_result_text.value"
                 :bulk_action_btn_props="state_refs.bulk_action_btn_props"
                 :bulk_action_menu_list_props="state_refs.bulk_action_dropdown_menu_props"
+            />
 
+            <DataTableSectionUI
+                table_id="RegisteredAppDataTable"
+                :is_loading="state_refs.is_loading.value"
+                :header_props="state_refs.table_header_props"
+                :body_props="state_refs.table_body_props"
+                :wrapper_class_style="props.data_table_section_wrapper_class_style"
+                :table_class_style="props.data_table_class_style"
+                :lg_table_wrapper_class_style="props.lg_table_wrapper_class_style"
+                :action_menu_list_props_method="controller.getTableRecordMenuListProps"
+                :action_btn_props_method="controller.getTableActionBtnProps"
             />
 
         </section>
@@ -46,6 +57,7 @@ const { state_refs, computed_refs, components} = controller.getComponentDefiniti
 const { 
     PageTitleAndBreadcrumbSectionUI,
     SearchAndActionBtnSectionUI,
-    PaginationResultAndBulkActionSectionUI
+    PaginationResultAndBulkActionSectionUI,
+    DataTableSectionUI
 } = components;
 </script>

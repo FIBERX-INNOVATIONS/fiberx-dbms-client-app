@@ -9,14 +9,19 @@ import SearchFieldUIPropsBuilder            from "@ui/version_2/props_builder/se
 
 import { BaseEventHandlerInterface }        from "@ui/version_2/types/component_type";
 import { BaseListViewClassStyleinterface }  from "@/types/props_builder_type";
+import { MenuListConfigInterface }          from "@/types/menu_list_config_type";
+import { TableColumnConfigInterface }       from "@/types/table_column_config_type";
 import { 
+    SortDirectionType,
     BreadCrumbUIPropsInterface, 
     ButtonType, 
     SearchFieldUIPropsInterface,
     ButtonUIPropsInterface,
-    MenuListUIPropsInterface
+    MenuListUIPropsInterface,
+    TableHeaderUIPropsInterface,
+    TableBodyUIPropsInterface
 } from "@ui/version_2/types/props_builder_type"
-import RegisteredAppMenuListConfig from "@/configs/menu_list_configs/registered_app_menu_list_config";
+
 
 
 
@@ -138,7 +143,6 @@ class BaseListViewPropsBuilder {
         btn_text: string = "",
         disabled: boolean = false,
         show_loader: boolean = true,
-
     ): ButtonUIPropsInterface {
         const class_styles              = ClassStyles?.ellipsis_menu_options_ui ?? {};
         const icon_class_style          = class_styles?.icon_class_style;
@@ -160,17 +164,107 @@ class BaseListViewPropsBuilder {
         menu_id: string, 
         event_handler: BaseEventHandlerInterface,
         content_field_key: string,
+        menu_list_config: MenuListConfigInterface
     ): MenuListUIPropsInterface {
         const id                    = menu_id;
         const parent_id             = btn_id;
         const class_styles          = ClassStyles?.list_view_ui.dropdown_menu_list_ui ?? {};
-        const menu_list             = RegisteredAppMenuListConfig.getBulkActionMenuList(event_handler, content_field_key)
+        const menu_list             = menu_list_config.getBulkActionMenuList(event_handler, content_field_key)
 
         const { wrapper_class_style, list_class_style, list_item_class_style } = class_styles;
 
         return reactive({ id, parent_id, wrapper_class_style, list_class_style, list_item_class_style, menu_list  })
     }
 
+    // Method to get data table header props
+    public static getDataTableHeaderProps (
+        event_handler: BaseEventHandlerInterface,
+        content_field_key: string,
+        table_column_config: TableColumnConfigInterface,
+        order_by: string = "created_at",
+        order_direction: SortDirectionType = "desc"
+    ): TableHeaderUIPropsInterface {
+        const class_styles              = ClassStyles?.list_view_ui?.data_table_ui?.table_header_ui ?? {};
+        const content_manager           = ContentManagerUtil.getInstance();
+        const content_data              = content_manager?.get(`content_resource.${content_field_key}.data_table`) ?? {};
+        const { sn_text, actions_text } = content_data;
+        const columns                   = table_column_config.getTableColumnConfig(event_handler, content_field_key, order_by, order_direction);
+
+        const { wrapper_class_style, header_row_class_style, header_cell_class_style } = class_styles;
+
+
+        return reactive({
+            sn_text, actions_text, columns, wrapper_class_style, header_row_class_style, header_cell_class_style
+        })
+    }
+
+    // Method to get data table body props
+    public static getDataTableBodyProps (
+        event_handler: BaseEventHandlerInterface,
+        content_field_key: string,
+        table_column_config: TableColumnConfigInterface,
+        order_by: string = "created_at",
+        order_direction: SortDirectionType = "desc",
+        records: Record<string, any>[] = []
+    ): TableBodyUIPropsInterface {
+        const class_styles              = ClassStyles?.list_view_ui?.data_table_ui?.table_body_ui ?? {};
+        const content_manager           = ContentManagerUtil.getInstance();
+        const content_data              = content_manager?.get(`content_resource.${content_field_key}.data_table`) ?? {};
+        const columns                   = table_column_config.getTableColumnConfig(event_handler, content_field_key, order_by, order_direction);
+
+        const { sn_text, actions_text, no_data_text } = content_data;
+        const { wrapper_class_style, body_row_class_style, body_cell_class_style } = class_styles;
+
+
+        return reactive({
+            sn_text, actions_text, columns, records, empty_text: no_data_text,
+            wrapper_class_style, body_row_class_style, body_cell_class_style
+        })
+    }
+
+    // Method to get data table menu action btn
+    public static getTableActionBtnProps (
+        event_handler: BaseEventHandlerInterface,
+        record_index: Number,
+        record: Record<string, any>
+    ): ButtonUIPropsInterface {
+        const id                        = `TableActionBtn_${record_index}`;
+        const class_styles              = ClassStyles?.ellipsis_menu_options_ui ?? {};
+        const icon_class_style          = class_styles?.icon_class_style;
+        const btn_class_style           = class_styles?.btn_class_style;
+        const btn_type                  = "button";
+        const content_text              = RenderHtmlUtil.renderHtml({ icon: SVGIcons.vertical_elipsis_svg_icon, icon_class_style, })
+        const loader_content_text       = RenderHtmlUtil.renderLoaderHtml({});
+        const event_handler_method      = event_handler?.toggleEllipsisDropdown.bind(event_handler);
+
+        const on_click  = async (event: MouseEvent) => { 
+            await event_handler_method (event, record, record_index); 
+        }
+
+        return reactive({
+            id, type: btn_type, disabled: false, show_loader: false, 
+            content_text, loader_content_text, btn_class_style, on_click
+        })
+
+    }
+
+    // Method to get table action menu list props
+    public static getDataTableMenuListProps (
+        event_handler: BaseEventHandlerInterface,
+        content_field_key: string,
+        menu_list_config: MenuListConfigInterface,
+        record_index: Number,
+        record: Record<string, any>
+    ): MenuListUIPropsInterface {
+        const id                    = `TableActionMenu_${record_index}`;
+        const parent_id             = `TableActionBtn_${record_index}`;
+        const class_styles          = ClassStyles?.list_view_ui?.data_table_ui?.menu_list_item_ui ?? {};
+        const menu_list             = menu_list_config.getTableMenuList(event_handler, content_field_key)
+
+        const { wrapper_class_style, list_class_style, list_item_class_style } = class_styles;
+
+        return reactive({ id, parent_id, wrapper_class_style, list_class_style, list_item_class_style, menu_list  })
+    }
 }
 
 export default BaseListViewPropsBuilder;

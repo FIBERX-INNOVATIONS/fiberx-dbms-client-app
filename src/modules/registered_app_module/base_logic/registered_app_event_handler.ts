@@ -1,10 +1,13 @@
 
 
-import ContentManagerUtil           from "@ui/version_2/utils/content_manager_util";
-import BaseEventHandler             from "@ui/version_2/base_classes/base_event_handler";
-import BaseListViewPropsBuilder     from "@/modules/dashboard_module/base_logic/base_list_view_props_builder";
-import { BaseControllerInterface }  from "@ui/version_2/types/component_type";
+import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
+import BaseEventHandler                 from "@ui/version_2/base_classes/base_event_handler";
+import BaseListViewPropsBuilder         from "@/modules/dashboard_module/base_logic/base_list_view_props_builder";
+import RegisteredAppTableColumnConfig   from "@/configs/columns_config/registered_app_table_column_config";
+import { BaseControllerInterface }      from "@ui/version_2/types/component_type";
+import { SortDirectionType }            from "@ui/version_2/types/props_builder_type";
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 class RegisteredAppEventHandler extends BaseEventHandler {
     public content_manager: ContentManagerUtil;
@@ -18,13 +21,17 @@ class RegisteredAppEventHandler extends BaseEventHandler {
     }
 
     // method to hide menu on outside click
-    private handleOutsideClick = (event: MouseEvent) => {
-        const trigger_id            = this.controller?.bulk_action_btn_id;
-        const menu_list_id          = this.controller?.bulk_action_menu_id;
+    private handleOutsideClick = (
+        event: MouseEvent,
+        record?: Record<string, any>,
+        record_index?: Number
+    ) => {
+        const trigger_id            = record ? `TableActionBtn_${record_index}` : this.controller?.bulk_action_btn_id;
+        const menu_list_id          = record ? `TableActionMenu_${record_index}` : this.controller?.bulk_action_menu_id;
         const trigger_el            = document.getElementById(trigger_id);
         const menu_list_el          = document.getElementById(menu_list_id);
 
-        if (!trigger_el || !menu_list_el) return;
+        if (!trigger_el || !menu_list_el) { return; }
 
         const clicked_element = event.target as HTMLElement;
 
@@ -41,11 +48,16 @@ class RegisteredAppEventHandler extends BaseEventHandler {
     }
 
     // Method to handle toggling ellipsis dropdown
-    public async toggleEllipsisDropdown (event: MouseEvent) {
-        const trigger_id            = this.controller?.bulk_action_btn_id;
-        const menu_list_id          = this.controller?.bulk_action_menu_id;
+    public async toggleEllipsisDropdown (
+        event: MouseEvent, 
+        record?: Record<string, any>,
+        record_index?: Number
+    ) {
+        const trigger_id            = record ? `TableActionBtn_${record_index}` : this.controller?.bulk_action_btn_id;
+        const menu_list_id          = record ? `TableActionMenu_${record_index}` : this.controller?.bulk_action_menu_id;
         const trigger_el            = document.getElementById(trigger_id);
         const menu_list_el          = document.getElementById(menu_list_id);
+        const outside_click_method  = (event: MouseEvent) => { this.handleOutsideClick(event, record, record_index); }
 
         if(!trigger_el || !menu_list_el) { return }
 
@@ -53,15 +65,17 @@ class RegisteredAppEventHandler extends BaseEventHandler {
 
         if(is_visible) {
             menu_list_el.classList.add("hidden");
-            document.removeEventListener("click", this.handleOutsideClick as any);
+            document.removeEventListener("click", outside_click_method as any);
             return;
         }
 
         menu_list_el.classList.remove("hidden");
 
+        if(record && Object.keys(record).length) { this.controller.selected_record = record }
+
         // Delay the listener slightly to avoid immediately closing on this click
         setTimeout(() => {
-            document.addEventListener("click", this.handleOutsideClick as any);
+            document.addEventListener("click", outside_click_method as any);
         }, 0);
     }
 
@@ -89,6 +103,38 @@ class RegisteredAppEventHandler extends BaseEventHandler {
 
             Object.assign(this.controller.state_refs.bulk_action_btn_props, new_bulk_action_btn_props);
         }
+    }
+
+    // Method to handle on table column sort
+    public async handleOnColumnSort (event:MouseEvent, direction: SortDirectionType) {
+        const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
+        const [order_by, order_direction]           = direction.split("-");
+        const { event_handler, content_field_key }  = this.controller
+        const { 
+            order_by: current_order_by,
+            order_direction: current_order_direction,
+            records
+        } = this.controller.state_refs;
+
+        console.log(`Sorting ${records.value.length} Record(s) by column ${order_by} in direction ${order_direction}`)
+
+        if(!records.value || !records.value.length) { return }
+
+        if(!event_handler || !order_by || !order_direction) { return }
+
+        if(order_by === current_order_by.value && order_direction === current_order_direction.value ) { return }
+
+        const new_data_table_header_props = BaseListViewPropsBuilder.getDataTableHeaderProps(event_handler, content_field_key, RegisteredAppTableColumnConfig, order_by, order_direction as SortDirectionType);
+        Object.assign(this.controller.state_refs.data_table_header_props, new_data_table_header_props);
+    }
+
+    // Method to handle on record change of state
+    public async handleOnRecordChnageState (event:MouseEvent | InputEvent) {
+        console.log(`Changing state event ${event} this ${this}`);
+
+        await sleep(2000);
+
+        return true
     }
     
 
