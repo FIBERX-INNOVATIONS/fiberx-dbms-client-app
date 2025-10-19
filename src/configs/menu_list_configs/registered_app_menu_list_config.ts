@@ -71,8 +71,6 @@ class RegisteredAppMenuListConfig {
             edit_menu_text, edit_menu_svg_icon, delete_menu_text, delete_menu_svg_icon 
         } = content_data;
 
-        console.log({ content_data, content_key})
-
         const view_menu_on_click    = () => {}
         const view_menu             = this.buildMenuItem("ViewApp", view_menu_text, "", view_menu_svg_icon, view_menu_on_click);
 

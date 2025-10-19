@@ -1,9 +1,14 @@
 import { ref, }                                 from "vue";
 import { Router, useRouter }                    from "vue-router";
 import { LOCAT_STORAGE_FIELDS }                 from "@/enums/constants.enums";
-import { ButtonUIPropsInterface, MenuListUIPropsInterface, SortDirectionType }                    from "@ui/version_2/types/props_builder_type";
+import { EventBus }                             from "@/utils/gloabal_event_bus";
+import { 
+    ButtonUIPropsInterface, 
+    MenuListUIPropsInterface, 
+    SortDirectionType }                         from "@ui/version_2/types/props_builder_type";
 import BaseListViewPropsBuilder                 from "@/modules/dashboard_module/base_logic/base_list_view_props_builder";
 import RegisteredAppEventHandler                from "@/modules/registered_app_module/base_logic/registered_app_event_handler";
+import RegisteredAppService                     from "@/modules/registered_app_module/base_logic/registered_app_service";
 import BaseController                           from "@ui/version_2/base_classes/base_controller";
 import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";
 import PageTitleAndBreadcrumbSectionUI          from "@/ui_components/page_title_and_breadcrumb_section_ui/page_title_and_breadcrumb_section_ui.vue";
@@ -20,6 +25,8 @@ class RegisteredAppListViewController extends BaseController {
     private member_auth_manager: MemberAuthManagerUtil;
     public content_field_key: string;
     public event_handler: RegisteredAppEventHandler;
+    public service: RegisteredAppService;
+    public event_bus = EventBus;
     public bulk_action_btn_id: string;
     public bulk_action_menu_id: string;
     public current_page: number;
@@ -39,6 +46,7 @@ class RegisteredAppListViewController extends BaseController {
         this.router                     = useRouter();
         this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
         this.event_handler              = new RegisteredAppEventHandler(this);
+        this.service                    = new RegisteredAppService(this);
         this.content_field_key          = "registered_app_view_ui";
         this.bulk_action_btn_id         = "RegisteredAppBulkActionBtn";
         this.bulk_action_menu_id        = "RegisteredAppBulkActionMenu";
@@ -49,7 +57,7 @@ class RegisteredAppListViewController extends BaseController {
         this.order_by                   = "created_at"; 
         this.order_direction            = "desc";
         this.keyword                    = null;
-        this.records                    = RegisteredAppTableColumnConfig.getDummyData();
+        this.records                    = []
         this.selected_record            = null
     }
 
@@ -80,6 +88,10 @@ class RegisteredAppListViewController extends BaseController {
         return {
             selected_records: (new_val, old_val) => { 
                 this.event_handler?.onRecordSelected?.(new_val);
+            },
+
+            records: (new_val, old_val) => { 
+                this.event_handler?.onRecordUpdated?.(new_val);
             }
         }; 
     }
@@ -87,7 +99,7 @@ class RegisteredAppListViewController extends BaseController {
     // Method to get ui state data
     protected getUIStateData(): Record<string, any> {        
         return {
-            current_page: ref(this.current_page), size: (this.size),
+            current_page: ref(this.current_page), size: (this.size), keyword: ref(this.keyword),
             
             total_pages: ref(this.total_pages),  total_items: (this.total_items), 
             
@@ -122,14 +134,7 @@ class RegisteredAppListViewController extends BaseController {
 
         if(!is_fully_authenticated) { await this.router.push("/logout") }
 
-        // setInterval(() => {
-        //     const timestamp = new Date().toISOString();
-        //     this.state_refs.selected_records.value.push(`New item added at ${timestamp}`);
-        //     console.log("Updated Array:", this.state_refs.selected_records.value);
-
-        //     this.state_refs.total_items.value = 24;
-        //     this.state_refs.total_pages.value = 2;
-        // }, 10000); 
+        await this.event_handler.handleFetchRecords();
     }
 
     // Method to get table action btn props

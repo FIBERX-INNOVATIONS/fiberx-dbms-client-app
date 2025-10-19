@@ -83,7 +83,8 @@ class BaseListViewPropsBuilder {
         const label_config              = { label_text: search_label_text, label_required_text: "" };
         const loader_content_text       = RenderHtmlUtil.renderLoaderHtml({});
         const content_text              = RenderHtmlUtil.renderHtml({ icon: SVGIcons.search_svg_icon, icon_class_style })
-        const input_config              = { id: "RegisteredAppSearchInput", type: "text", value: "", placeholder: search_placeholder_text, input_class_style, on_change: null };
+        const on_change                 = event_handler.handleOnSearchInput.bind(event_handler);
+        const input_config              = { id: "RegisteredAppSearchInput", type: "text", value: "", placeholder: search_placeholder_text, input_class_style, on_change };
 
         const btn_config                = { id: "RegisteredAppSearchBtn", type: button_type, btn_class_style, clicked: false, show_loader: false, loader_content_text, content_text, on_click: null };
 

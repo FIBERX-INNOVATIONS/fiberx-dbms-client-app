@@ -18,6 +18,8 @@
                 :form_action_btn_props="state_refs.form_action_btn_props"
             />
 
+            table {{ state_refs.records.value.length }}
+            
             <PaginationResultAndBulkActionSectionUI
                 :list_data_action_section_class_style="props.list_data_action_section_class_style"
                 :grid_1_wrapper_class_style="props.grid_1_wrapper_class_style"
