@@ -62,13 +62,13 @@ class BaseTableColumnConfig {
             loader_content_class_style,
         } = class_styles;
 
-        const on_change         = undefined;
-        const on_click          = undefined
+        const swicth_btn_id     = record_id;
+        const switch_input_id   = `record-switch-${record_id}`
         const loader_content    = RenderHtmlUtil.renderLoaderHtml({});
 
         return reactive({
-            id: record_id, value, type, loader_content, required: true, is_checked: value,
-            on_change, on_click, wrapper_class_style, loader_class_style,
+            id: switch_input_id, swicth_btn_id, value, type, loader_content, required: true, is_checked: value,
+            wrapper_class_style, loader_class_style,
             switch_btn_class_style, active_class_style, inactive_class_style,
             knob_class_style, label_text_class_style, loader_content_class_style,
         })

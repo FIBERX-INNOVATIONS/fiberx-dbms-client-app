@@ -19,7 +19,8 @@ import {
     ButtonUIPropsInterface,
     MenuListUIPropsInterface,
     TableHeaderUIPropsInterface,
-    TableBodyUIPropsInterface
+    TableBodyUIPropsInterface,
+    PaginationUIPropsInterface
 } from "@ui/version_2/types/props_builder_type"
 
 
@@ -260,11 +261,46 @@ class BaseListViewPropsBuilder {
         const id                    = `TableActionMenu_${record_index}`;
         const parent_id             = `TableActionBtn_${record_index}`;
         const class_styles          = ClassStyles?.list_view_ui?.data_table_ui?.menu_list_item_ui ?? {};
-        const menu_list             = menu_list_config.getTableMenuList(event_handler, content_field_key)
+        const menu_list             = menu_list_config.getTableMenuList(event_handler, content_field_key, record, record_index)
 
         const { wrapper_class_style, list_class_style, list_item_class_style } = class_styles;
 
         return reactive({ id, parent_id, wrapper_class_style, list_class_style, list_item_class_style, menu_list  })
+    }
+
+    // Method to get pagination ui props
+    public static getPaginationProps (
+        event_handler: BaseEventHandlerInterface,
+        content_field_key: string,
+    ): PaginationUIPropsInterface {
+        const class_styles              = ClassStyles?.list_view_ui?.pagination_ui;
+        const content_manager           = ContentManagerUtil.getInstance();
+        const content_data              = content_manager?.get(`content_resource.${content_field_key}.pagination_result`) ?? {};
+
+        const { prev_btn_text, next_btn_text, page_text }   = content_data
+
+        const { 
+            wrapper_class_style, prev_button_class_style, next_button_class_style,
+            disabled_class_style, select_class_style, prev_btn_content_class_style,
+            next_btn_content_class_style,
+        } = class_styles;
+
+        const select_id                 = "registered_app_pagination_select"
+        const loader_content_text       = RenderHtmlUtil.renderLoaderHtml({});
+        const prev_btn_content          = RenderHtmlUtil.renderHtml({ text: prev_btn_text, icon: SVGIcons.less_than_caret_svg_icon, icon_class_style: prev_btn_content_class_style })
+        const next_btn_content          = RenderHtmlUtil.renderHtml({ text: next_btn_text, icon: SVGIcons.greater_than_caret_svg_icon, icon_class_style: next_btn_content_class_style, order: "text-first" })
+        const render_page_content       = (page: number) => { return page_text.replace("%", page); }
+        const on_prev_clicked           = event_handler?.handleOnPageChange.bind(event_handler);
+        const on_next_clicked           = event_handler?.handleOnPageChange.bind(event_handler);
+        const on_new_page_clicked       = event_handler?.handleOnPageChange.bind(event_handler);
+        
+
+        return reactive({
+            select_id, wrapper_class_style, prev_button_class_style, next_button_class_style,
+            disabled_class_style, select_class_style, show_loader: true, 
+            loader_content_text, prev_btn_content, next_btn_content, 
+            render_page_content, on_prev_clicked, on_next_clicked, on_new_page_clicked
+        })
     }
 }
 

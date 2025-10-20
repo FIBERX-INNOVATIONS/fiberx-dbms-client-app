@@ -226,7 +226,6 @@ const ClassStyles = {
                 content_class_style: "flex items-center justify-start text-gray-900 text-[16px] text-start w-full"
             }
         },
-
         data_table_ui: {
             table_header_ui: {
                 wrapper_class_style: "group/head text-sm font-medium capitalize ",
@@ -246,8 +245,18 @@ const ClassStyles = {
                 list_class_style: "py-2 w-full",
                 list_item_class_style: "w-full p-0 m-0 border-b-2 border-[#6f7e8d6e] last:border-b-0",
             }
+        },
+        pagination_ui: {
+            wrapper_class_style: "w-full flex items-center justify-center px-[10%] py-4",
+            prev_button_class_style: "p-2 cursor-pointer flex items-center justify-center rounded-l-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider",
+            next_button_class_style: "p-2 cursor-pointer flex items-center justify-center rounded-r-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider",
+            disabled_class_style: "disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed border-1",
+            select_class_style: "border h-10 w-[150px] m-0 bg-gray-100 text-center",
+            prev_btn_content_class_style: "w-6 h-6 flex items-center",
+            next_btn_content_class_style: "w-6 h-6 flex items-center"
         }
-    }
+    },
+    
 }
 
 export default ClassStyles;

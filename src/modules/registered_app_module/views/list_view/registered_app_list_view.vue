@@ -17,8 +17,6 @@
                 :search_field_props="state_refs.search_field_props"
                 :form_action_btn_props="state_refs.form_action_btn_props"
             />
-
-            table {{ state_refs.records.value.length }}
             
             <PaginationResultAndBulkActionSectionUI
                 :list_data_action_section_class_style="props.list_data_action_section_class_style"
@@ -42,6 +40,12 @@
                 :action_btn_props_method="controller.getTableActionBtnProps"
             />
 
+            <PaginationUI 
+                v-bind="state_refs.pagination_props"
+                :total_pages="state_refs.total_pages.value"
+                :current_page="state_refs.current_page.value"
+            />
+
         </section>
         
     </section>
@@ -60,6 +64,7 @@ const {
     PageTitleAndBreadcrumbSectionUI,
     SearchAndActionBtnSectionUI,
     PaginationResultAndBulkActionSectionUI,
-    DataTableSectionUI
+    DataTableSectionUI,
+    PaginationUI
 } = components;
 </script>

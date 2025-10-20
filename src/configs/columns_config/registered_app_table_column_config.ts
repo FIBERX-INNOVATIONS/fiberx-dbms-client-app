@@ -117,7 +117,7 @@ class RegisteredAppTableColumnConfig {
     private static getIsActiveUIProps (event_handler: BaseEventHandlerInterface, record: Record<string, any>): InputUIPropsInterface {
         const { public_id, is_active } = record;
         const is_active_boolean     = is_active ? true : false
-        const switch_props          = BaseTableColumnConfig.geIsActiveSwitchProps(`record-switch-${public_id}`, is_active_boolean);
+        const switch_props          = BaseTableColumnConfig.geIsActiveSwitchProps(public_id, is_active_boolean);
         switch_props.on_click       = event_handler.handleOnRecordChangeState.bind(event_handler);
 
         return switch_props;

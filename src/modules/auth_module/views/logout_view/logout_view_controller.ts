@@ -33,7 +33,7 @@ class LogoutViewController extends BaseController {
         // Member logout
         await this.service.executeLogOut();
 
-        // await this.router.push("/login");
+        await this.router.push("/login");
         
     }
 

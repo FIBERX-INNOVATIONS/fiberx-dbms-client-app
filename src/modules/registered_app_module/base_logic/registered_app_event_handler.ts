@@ -239,12 +239,31 @@ class RegisteredAppEventHandler extends BaseEventHandler {
     }
 
     // Method to handle on record change of state
-    public async handleOnRecordChangeState (event:MouseEvent | InputEvent) {
-        console.log(`Changing state event ${event} this ${this}`);
-
+    public async handleOnRecordChangeState (event:MouseEvent | InputEvent): Promise<boolean> {
         await sleep(2000);
+        try {
+            const target        = event.target as HTMLInputElement | HTMLTextAreaElement | null;
+            const record_id     = target?.id;
 
-        return true
+            if(!record_id) { return false }
+
+            const { s_state, s_msg, s_data, logout }    = await this.controller.service?.executeChangeRecordState?.(record_id);
+
+            const formatted_api_msg     = this.content_manager?.getAPIResponseValue(s_msg);
+            const status_alert_payload  = { status: "", message: formatted_api_msg, options: this.status_alert_options };
+
+            if(logout) { return await this.controller.router.push("/logout"); }
+
+            else if(!s_state) {
+                status_alert_payload.status = "error";
+                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            }
+
+            return true
+        }
+        catch(error: unknown) {
+            return false
+        }
     }
 
     // Method to handle fetching of records
@@ -285,8 +304,20 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         }
         finally { this.controller.state_refs.is_loading.value = false }
     }
-    
 
+    // Method to handle on page change
+    public async handleOnPageChange (event:MouseEvent | InputEvent, new_page_value: number): Promise<boolean> {
+        try {
+            if(!new_page_value || !Number.isInteger(new_page_value) || new_page_value <= 0) { return false }
+
+            this.updatecontrollerAttributes({ current_page: new_page_value });
+
+            await this.handleFetchRecords();
+
+            return true
+        }
+        catch(error: unknown) { return false }
+    }
 }
 
 export default RegisteredAppEventHandler;

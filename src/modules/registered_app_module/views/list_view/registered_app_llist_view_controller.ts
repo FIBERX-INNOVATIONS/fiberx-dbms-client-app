@@ -17,6 +17,7 @@ import PaginationResultAndBulkActionSectionUI   from "@/ui_components/pagination
 import DataTableSectionUI                       from "@/ui_components/data_table_section_ui/data_table_section_ui.vue";
 import RegisteredAppMenuListConfig              from "@/configs/menu_list_configs/registered_app_menu_list_config";
 import RegisteredAppTableColumnConfig           from "@/configs/columns_config/registered_app_table_column_config";
+import PaginationUI                             from "@ui/version_2/components/NavigationUI/PaginationUI/pagination_ui.vue";
 
 
 
@@ -67,7 +68,8 @@ class RegisteredAppListViewController extends BaseController {
             PageTitleAndBreadcrumbSectionUI,
             SearchAndActionBtnSectionUI,
             PaginationResultAndBulkActionSectionUI,
-            DataTableSectionUI
+            DataTableSectionUI,
+            PaginationUI
         }; 
     }
 
@@ -115,13 +117,15 @@ class RegisteredAppListViewController extends BaseController {
 
             form_action_btn_props: BaseListViewPropsBuilder.getFormActionBtnProps(this.content_field_key, this.event_handler),
 
-            bulk_action_btn_props: BaseListViewPropsBuilder.getEllipsisBtnProps(this.bulk_action_btn_id, this.event_handler, true),
+            bulk_action_btn_props: BaseListViewPropsBuilder.getEllipsisBtnProps(this.bulk_action_btn_id, this.event_handler, false),
 
             bulk_action_dropdown_menu_props: BaseListViewPropsBuilder.getBulkActionMenuListProps(this.bulk_action_btn_id, this.bulk_action_menu_id, this.event_handler, this.content_field_key, RegisteredAppMenuListConfig),
 
             table_header_props: BaseListViewPropsBuilder.getDataTableHeaderProps(this.event_handler, this.content_field_key, RegisteredAppTableColumnConfig, this.order_by, this.order_direction),
 
             table_body_props: BaseListViewPropsBuilder.getDataTableBodyProps(this.event_handler, this.content_field_key, RegisteredAppTableColumnConfig, this.order_by, this.order_direction, this.records),
+
+            pagination_props: BaseListViewPropsBuilder.getPaginationProps(this.event_handler, this.content_field_key),
         } 
     }
 

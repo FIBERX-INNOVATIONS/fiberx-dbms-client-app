@@ -44,6 +44,8 @@ export interface MenuListConfigInterface {
 
   getTableMenuList(
     event_handler: BaseEventHandlerInterface,
-    content_field_key: string
+    content_field_key: string,
+    record: Record<string, any>,
+    record_index: Number 
   ): NavLinkUIPropsInterface[];
 }

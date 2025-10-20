@@ -75,6 +75,23 @@ class RegisteredAppService extends BaseService {
         }
     }
 
+    // Method to execute login request
+    public async executeChangeRecordState(record_id: string): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+        try {
+            const { status, msg, data: response_data } = await this.api_service.updateAppState(record_id);
+
+            if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
+
+            else if(status != "success") { return { s_state: false, s_msg: msg } }
+            
+            return { s_state: true, s_msg: msg, s_data: response_data};
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to execute fetch records`, { error });
+            return { s_state: false, s_msg: "error_occurred"};
+        }
+    }
+
 }
 
 export default RegisteredAppService

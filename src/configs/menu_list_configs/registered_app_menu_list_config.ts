@@ -58,13 +58,17 @@ class RegisteredAppMenuListConfig {
 
     public static getTableMenuList (
         event_handler: BaseEventHandlerInterface,
-        content_field_key: string
+        content_field_key: string,
+        record: Record<string, any>,
+        record_index: Number
     ): NavLinkUIPropsInterface[] {
         const content_manager           = ContentManagerUtil.getInstance();
         const content_key               = content_field_key ? `content_resource.${content_field_key}.data_table.action_menu` : "content_resource.data_table.action_menu"
         const content_data              = content_manager?.get(content_key) ?? {};
         const member_authenticator      = MemberAuthManagerUtil.getInstance();
-        const member_perm_key           = LOCAT_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY
+        const member_perm_key           = LOCAT_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY;
+
+        const { is_active } = record;
 
         const { 
             view_menu_text, view_menu_svg_icon, select_menu_text, select_menu_svg_icon,
@@ -86,7 +90,7 @@ class RegisteredAppMenuListConfig {
             menu_list.push(edit_menu)
         }
 
-        if(member_authenticator.canMemberAccess("delete_registered_app", member_perm_key)) {
+        if(member_authenticator.canMemberAccess("delete_registered_app", member_perm_key) && !is_active) {
             const delete_menu_on_click  = () => {}
             const delete_menu           = this.buildMenuItem("DeleteApp", delete_menu_text, "", delete_menu_svg_icon, delete_menu_on_click);
 
