@@ -5,7 +5,9 @@ import BaseEventHandler             from "@ui/version_2/base_classes/base_event_
 import { BaseControllerInterface }  from "@ui/version_2/types/component_type";
 
 import { 
-    StatusChangedPayloadInterface 
+    OpenNewModalPayloadInterface,
+    StatusChangedPayloadInterface ,
+    CloseModalPayloadInterface
 } from "@/types/app_event_type";
 
 
@@ -44,7 +46,7 @@ class AppRootEventHandler extends BaseEventHandler {
         Object.assign(this.controller.state_refs.status_alert_props, new_status_alert_props);
 
         // Optional: close any open modal immediately
-        // if (close_modal) { this.closeModal(); }
+        if (close_modal) { this.handleCloseModal({}); }
 
         // Wait for the alert to be displayed
         if (duration > 0) { await new Promise((resolve) => setTimeout(resolve, duration)); }
@@ -59,6 +61,36 @@ class AppRootEventHandler extends BaseEventHandler {
 
         else if (redirect_url && redirect_url.length > 0) { await this.controller.router.push(redirect_url); }
     };
+
+    // Method to handle open new modal
+    public handleOpenNewModal (payload: OpenNewModalPayloadInterface) {
+        const { 
+            position = "center", width_class = "w-md",
+            title_content = "", close_btn_content = null,
+            component, component_props
+        } = payload;
+
+        const on_modal_close = (event: MouseEvent, layer: number) => { return this.handleCloseModal({ modal_index: layer}); }
+        const modal_props = AppRootPropsBuilder.getModalProps(title_content, close_btn_content, component, component_props, position, width_class, on_modal_close);
+
+        this.controller.state_refs.modals.value.push(modal_props);
+        return;
+        
+    }
+
+    // Method to close an open modal
+    public handleCloseModal (payload: CloseModalPayloadInterface): boolean {
+        const { modal_index = 0 } = payload;
+        const { modals } = this.controller.state_refs;
+        let valid_modal_index: number = (modals.value.length - 1);
+
+        if(modal_index && modal_index > 0 && modal_index < modals.value.length) {
+            valid_modal_index = modal_index
+        }
+
+        this.controller.state_refs.modals?.value.splice(valid_modal_index, 1)[0];
+        return true;
+    }
 }
 
 export default AppRootEventHandler;

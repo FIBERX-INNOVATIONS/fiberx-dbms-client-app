@@ -1,6 +1,6 @@
 import { ref, }                         from "vue";
 import { Router, useRouter }            from "vue-router";
-import { LOCAT_STORAGE_FIELDS }          from "@/enums/constants.enums";
+import { LOCAT_STORAGE_FIELDS }         from "@/enums/constants.enums";
 import DashbaordBaseViewService         from "@/modules/dashboard_module/base_logic/dashboard_base_view_service";
 import DashboardBaseViewPropsBuilder    from "./dashboard_base_view_props_builder";
 import DashboardBaseViewEventHandler    from "./dashboard_base_view_event_handler";
@@ -32,7 +32,15 @@ class DashboardBaseViewController extends BaseController {
 
     // Method to get ui components
     protected getUIComponents(): Record<string, any> { 
-        return  { TopBarUI, ButtonUI, NavLinkUI, ImgAvatarUI, MenuListUI, ModalSidebarUI, ImageTextUI }; 
+        return  { 
+            TopBarUI, 
+            ButtonUI, 
+            NavLinkUI, 
+            ImgAvatarUI, 
+            MenuListUI, 
+            ModalSidebarUI, 
+            ImageTextUI 
+        }; 
     }
 
     // Method to get ui state data

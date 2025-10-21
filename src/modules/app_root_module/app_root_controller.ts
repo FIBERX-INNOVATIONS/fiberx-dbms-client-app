@@ -10,10 +10,13 @@ import ScreenLoaderUI           from "@ui/version_2/components/LoaderUI/ScreenLo
 import StatusAlertUI            from "@ui/version_2/components/AlertUI/StatusAlertUI/status_alert_ui.vue";
 import AuthBaseView             from "@/modules/auth_module/views/auth_base_view/auth_base_view.vue";
 import DashboardBaseView        from "@/modules/dashboard_module/views/dashboard_base_view/dashboard_base_view.vue";
+import ModalUI                  from "@ui/version_2/components/ModalUI/modal_ui.vue";
 
 
 import { 
-    StatusChangedPayloadInterface 
+    StatusChangedPayloadInterface,
+    CloseModalPayloadInterface,
+    OpenNewModalPayloadInterface
 } from "@/types/app_event_type";
 
 class AppRootController extends BaseController {
@@ -30,7 +33,7 @@ class AppRootController extends BaseController {
 
     // Method to get ui components
     protected getUIComponents(): Record<string, any> { 
-        return  { ScreenLoaderUI, StatusAlertUI, AuthBaseView, DashboardBaseView }; 
+        return  { ScreenLoaderUI, StatusAlertUI, AuthBaseView, DashboardBaseView, ModalUI }; 
     }
 
     // Method to get ui computed data
@@ -55,6 +58,8 @@ class AppRootController extends BaseController {
     // Method to get ui state data
     protected getUIStateData(): Record<string, any> {         
         return {
+            modals: ref([]),
+
             screen_loader_props: AppRootPropsBuilder.getScreenLoaderProps(),
 
             status_alert_props: AppRootPropsBuilder.getStatusAlertProps(this.event_handler),
@@ -71,6 +76,14 @@ class AppRootController extends BaseController {
 
         this.event_bus.on("statusChanged", async (payload: StatusChangedPayloadInterface) => {
             await this.event_handler.handleStatusChanged(payload);
+        });
+
+        this.event_bus.on("open_new_modal", async (payload: OpenNewModalPayloadInterface) => {
+            this.event_handler.handleOpenNewModal(payload)
+        });
+
+        this.event_bus.on("close_modal", async (payload: CloseModalPayloadInterface) => {
+            this.event_handler.handleCloseModal(payload);
         });
     }
 

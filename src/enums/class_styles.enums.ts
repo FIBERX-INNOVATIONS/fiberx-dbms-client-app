@@ -24,6 +24,20 @@ const ClassStyles = {
             error_text_class_style: "text-white font-black",
             info_text_class_style: "text-white font-bold",
         },
+        modal_ui: {
+            overlay_class_style: "fixed inset-0 flex justify-center items-center bg-black/70",
+            modal_box_class_style: "overflow-hidden relative bg-white shadow-lg rounded-lg",
+            header_wrapper_class_style: "flex w-full h-[70px] border-b items-center justify-between overflow-hidden",
+            header_title_content_class_style: "flex items-center justify-start w-11/12 h-full py-2 px-2 overflow-hidden",
+            header_title_class_style: "font-black uppercase w-full truncate",
+            header_close_btn_content_class_style: "flex items-center justify-center w-1/12 h-full p-2 overflow-hidden",
+            close_btn_class_style: "w-[24px] h-[24px] cursor-pointer font-bold rounded-full hover:shadow-2xl flex items-center justify-center bg-gray-200",
+            body_class_style: "flex-1",
+            left_modal_position_class_style: "fixed left-0 top-0 h-full",
+            right_modal_position_class_style: "fixed right-0 top-0 h-full",
+            center_modal_position_class_style: "relative mx-auto my-auto",
+            close_btn_content_class_style: "w-full h-full font-bold flex items-center justify-center"
+        },
     },
     auth: {
         auth_base_view_ui: {

@@ -9,9 +9,11 @@ import {
     ListControllerAttributesInterface } from "@ui/version_2/types/component_type";
 import { SortDirectionType }            from "@ui/version_2/types/props_builder_type";
 import { RequestQueryInputInterface }   from "@/types/api_service_type";
-import { StatusPayloadOptionsInterface }from "@/types/app_event_type";
 import { debounceMethod }               from "@ui/version_2/utils/debounce_util";
 import { NON_INPUT_KEYS  }              from "@ui/version_2/enums/constants.enum";
+import { 
+    OpenNewModalPayloadInterface, 
+    StatusPayloadOptionsInterface }     from "@/types/app_event_type";
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -388,6 +390,27 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         }
         catch(error: unknown) { return false }
     }
+
+    // Method to handle opening registered app profile modal
+    public async handleOpenProfileModal (event: Event | InputEvent, record: Record<string, any>) {
+        try {
+            const content_data      = this.content_manager?.get("content_resource.registered_app_view_ui.app_profile");
+            const { title_text }    = content_data;
+            const title_content     = title_text.replace("%", record?.name);
+
+            const open_modal_payload: OpenNewModalPayloadInterface = {
+                position: "center", width_class: "w-lg", title_content,
+            }
+            this.controller.event_bus.emit("open_new_modal", open_modal_payload);
+        }
+        catch(error: unknown) {
+            const formatted_api_msg     = this.content_manager?.getAPIResponseValue("app_record_not_found");
+            const status_alert_payload  = { status: "error", message: formatted_api_msg, options: this.status_alert_options };
+            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+        }
+
+    }
+
 }
 
 export default RegisteredAppEventHandler;

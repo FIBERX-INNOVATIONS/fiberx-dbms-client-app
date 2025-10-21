@@ -1,8 +1,11 @@
 
-import { reactive  }            from "vue";
+import { reactive, Component  } from "vue";
 import ClassStyles              from "@/enums/class_styles.enums";
 import ContentManagerUtil       from "@ui/version_2/utils/content_manager_util";
 import SVGIcons                 from "@ui/version_2/resources/svg_icon_resource";
+import RenderHtmlUtil           from "@ui/version_2/utils/render_html_util";
+import { ModalUIPropsInterface }from "@ui/version_2/types/props_builder_type";
+
 
 import { 
     BaseEventHandlerInterface 
@@ -12,6 +15,7 @@ import {
     ScreenLoaderPropsInterface,
     StatusAlertPropsInterface
 } from "@/types/props_builder_type";
+
 
 class AppRootPropsBuilder {
     public readonly name = "app_root_props_builder";
@@ -121,6 +125,39 @@ class AppRootPropsBuilder {
             status_icon_class_style,
             status_content_class_style
         });
+    }
+
+    // Method to get modal props
+    public static getModalProps(
+        title_content: string,
+        close_btn_content: string | null = null,
+        component: Component | null = null,
+        component_props: Record<string, any> = {},
+        position: string = "center",
+        width_class: string = "w-md",
+        on_modal_close?: (event: MouseEvent, layer: number) => boolean
+    ): ModalUIPropsInterface {
+        const class_styles              = ClassStyles?.app_root?.modal_ui ?? {};
+
+        const { 
+            overlay_class_style,
+            modal_box_class_style, header_wrapper_class_style, header_title_content_class_style, 
+            header_title_class_style, header_close_btn_content_class_style, close_btn_class_style, 
+            body_class_style, close_btn_content_class_style 
+        } = class_styles;
+
+        const _close_btn_content        = close_btn_content ?? RenderHtmlUtil.renderHtml({ icon: SVGIcons.x_circile_svg_icon, });
+        const loader_content_text       = RenderHtmlUtil.renderLoaderHtml({});
+
+        return reactive({
+            is_open: true, position, width: width_class, title_content, 
+            close_btn_content: _close_btn_content, loader_content_text,
+            overlay_class_style, modal_box_class_style, header_wrapper_class_style, 
+            header_title_content_class_style, header_title_class_style, header_close_btn_content_class_style, 
+            close_btn_class_style, body_class_style, on_modal_close,
+            body_component: component, body_props: component_props,
+        })
+
     }
 }
 

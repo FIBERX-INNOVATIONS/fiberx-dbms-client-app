@@ -75,7 +75,7 @@ class RegisteredAppMenuListConfig {
             edit_menu_text, edit_menu_svg_icon, delete_menu_text, delete_menu_svg_icon 
         } = content_data;
 
-        const view_menu_on_click    = () => {}
+        const view_menu_on_click    = (event: MouseEvent) => { return event_handler.handleOpenProfileModal.bind(event_handler)(event, record); }
         const view_menu             = this.buildMenuItem("ViewApp", view_menu_text, "", view_menu_svg_icon, view_menu_on_click);
 
         const select_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOnRecordSelected.bind(event_handler)(event, record, true); }

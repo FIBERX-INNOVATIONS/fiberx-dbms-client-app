@@ -8,6 +8,13 @@
         <AuthBaseView v-if="computed_refs.is_auth_route.value" />
         <!-- Dashboard View -->
         <DashboardBaseView v-else />
+        <!-- Modals -->
+         <ModalUI
+            v-for="(modal_prop, index) in modals"
+            :key="index"
+            :layer="index"
+            v-bind="modal_prop"
+        />
 
 
     </template>
@@ -21,5 +28,6 @@ const controller                        = new AppRootController(props)
 const event_handler                     = controller.event_handler;
 
 const { state_refs, components, computed_refs } = controller.getComponentDefinition();
-const { ScreenLoaderUI, StatusAlertUI, AuthBaseView, DashboardBaseView } = components;
+const { ScreenLoaderUI, StatusAlertUI, AuthBaseView, DashboardBaseView, ModalUI } = components;
+const { modals } = state_refs;
 </script>
