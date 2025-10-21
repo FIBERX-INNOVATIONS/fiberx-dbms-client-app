@@ -129,6 +129,17 @@ const ClassStyles = {
         right_slot_sub_title_class_style: "text-[10px] text-start font-medium text-white bg-green-900 truncate font-black uppercase rounded-full shadow px-2 py-1"
 
     },
+    profile_img_avatar_ui: {
+        wrapper_class_style: "w-full flex flex-col items-center justify-center my-10",
+        avatar_circle_class_style: "flex items-center rounded-full overflow-hidden w-[80px] h-[80px] border-4 border-black bg-gray-200",
+        img_class_style: "w-full h-auto object-cover",
+        initials_class_style: "uppercase text-black flex items-center justify-center font-bold w-full h-full text-center rounded-full border border-black",
+        right_slot_class_style: "items-center text-black flex w-full overflow-hidden",
+        right_slot_wrapper_class_style: "flex flex-col items-center justify-center w-full",
+        right_slot_title_text_class_style: "text-black font-bold text-md w-full truncate text-center",
+        right_slot_sub_title_class_style: "text-[10px] text-center font-medium text-white bg-green-900 truncate font-black uppercase rounded-full shadow px-2 py-1"
+
+    },
     table_is_active_class_styles: {
         wrapper_class_style: "w-full flex relative items-center justify-center",
         loader_class_style: "flex items-center justify-center flex-col",
@@ -272,6 +283,32 @@ const ClassStyles = {
             next_btn_content_class_style: "w-6 h-6 flex items-center"
         }
     },
+    profile_view_ui: {
+        wrapper_class_style: "w-full block space-y-6 px-4 h-full max-h-[80vh] overflow-y-auto pb-[50px]",
+
+        member_avatar_wrapper_class_style: "flex items-center justify-center w-full",
+
+        info_section_wrapper_class_style: "flex flex-col items-center justify-center my-4",
+
+        key_text_class_style: "text-center text-xs font-black uppercase",
+
+        value_text_class_style: "text-center text-md font-bold",
+
+        underline_value_text_class_style: "text-center text-md font-bold underline",
+
+        social_links_wrapper_class_style: "flex flex-col items-center justify-center my-4",
+
+        social_link_item_class_style: "text-center text-md font-bold underline capitalize",
+
+        timestamp_section_wrapper_class_style: "flex flex-col items-center justify-center my-4",
+
+        description_section_wrapper_class_style: "flex flex-col items-center justify-center my-4",
+
+        description_key_text_class_style: "text-center text-xs font-black uppercase",
+
+        description_value_text_class_style: "text-center text-md font-bold",
+    }
+
     
 }
 
