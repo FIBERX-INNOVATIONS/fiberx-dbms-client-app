@@ -33,10 +33,10 @@ class RegisteredAppEventHandler extends BaseEventHandler {
     }
 
     // Method to update controller attributes
-    private updatecontrollerAttributes (updated_attr: ListControllerAttributesInterface): boolean {
+    private updateControllerAttributes (updated_attr: ListControllerAttributesInterface): boolean {
         const { 
             current_page, records, total_items, total_pages, selected_record, 
-            order_by, order_direction, keyword
+            order_by, order_direction, keyword, selected_records
         } = updated_attr;
 
         if(Number.isInteger(current_page)) {
@@ -62,6 +62,11 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         if(Array.isArray(records)) {
             this.controller.records = records
             this.controller.state_refs.records.value = records;
+        }
+
+        if(Array.isArray(selected_records)) {
+            this.controller.selected_records = selected_records;
+            this.controller.state_refs.selected_records.value = selected_records;
         }
 
         if(order_by) {
@@ -148,33 +153,46 @@ class RegisteredAppEventHandler extends BaseEventHandler {
     }
 
     // Method to handle on record selected
-    public async onRecordSelected (updated_array: string[]) {
+    public async afterRecordSelected (updated_array: string[]) {
         const { 
-            state_refs, bulk_action_btn_id, bulk_action_menu_id,content_field_key
+            state_refs, bulk_action_btn_id, bulk_action_menu_id, content_field_key,
+            order_by, order_direction, records, record_id_key
         } = this.controller;
 
         const { bulk_action_btn_props } = state_refs;
 
         const btn_is_hidden     = bulk_action_btn_props?.btn_class_style.includes("hidden");
-        const is_empty          = updated_array.length <= 0;
+        const should_show       = updated_array.length > 0;
         const content_manager   = ContentManagerUtil.getInstance();
         const content_data      = content_manager?.get(`content_resource.${content_field_key}.bulk_action_menu`) ?? {};
         const btn_text          = content_data?.selected_row_counter_text.replace("%", updated_array.length);
 
-        if(!is_empty) {
-            const new_bulk_action_btn_props = BaseListViewPropsBuilder.getEllipsisBtnProps(bulk_action_btn_id, this, true, btn_text);
+        const new_bulk_action_btn_props = BaseListViewPropsBuilder.getEllipsisBtnProps(bulk_action_btn_id, this, should_show, btn_text);
+        const new_table_header_props    = BaseListViewPropsBuilder.getDataTableHeaderProps(this, content_field_key, RegisteredAppTableColumnConfig, order_by, order_direction, records.length, updated_array);
+        const new_table_body_props      = BaseListViewPropsBuilder.getDataTableBodyProps(this, content_field_key, RegisteredAppTableColumnConfig, record_id_key, order_by, order_direction, records, updated_array);
 
-            Object.assign(this.controller.state_refs.bulk_action_btn_props, new_bulk_action_btn_props);
-        }
+        Object.assign(this.controller.state_refs.bulk_action_btn_props, new_bulk_action_btn_props);
+        Object.assign(this.controller.state_refs.table_header_props, new_table_header_props);
+        Object.assign(this.controller.state_refs.table_body_props, new_table_body_props);
+    
     }
 
     // Method to handle on record selected
-    public async onRecordUpdated (updated_array: Record<string, any>[]) {
-        const { state_refs, content_field_key, order_by, order_direction } = this.controller;
+    public async afterRecordUpdated (updated_array: Record<string, any>[]) {
+        const { state_refs, content_field_key, order_by, order_direction, record_id_key } = this.controller;
 
         if(!Array.isArray(updated_array)) { return }
 
-        const new_table_body_props = BaseListViewPropsBuilder.getDataTableBodyProps(this, content_field_key, RegisteredAppTableColumnConfig, order_by, order_direction, updated_array);
+        const new_table_body_props = BaseListViewPropsBuilder.getDataTableBodyProps(
+            this, 
+            content_field_key, 
+            RegisteredAppTableColumnConfig, 
+            record_id_key,
+            order_by, 
+            order_direction, 
+            updated_array,
+            state_refs.selected_records.value
+        );
 
         Object.assign(this.controller.state_refs.table_body_props, new_table_body_props);
         
@@ -196,7 +214,7 @@ class RegisteredAppEventHandler extends BaseEventHandler {
 
         // Case 2: update controller keyword
         this.controller.state_refs.is_loading.value = true
-        this.updatecontrollerAttributes({ keyword: new_keyword, current_page: 1 })
+        this.updateControllerAttributes({ keyword: new_keyword, current_page: 1 })
 
         // Case 3: only fetch when user types something or clears previous text
         if (new_keyword.length > 0 || (is_deleting && previous_keyword.length > 0 && new_keyword.length === 0)) {
@@ -214,7 +232,9 @@ class RegisteredAppEventHandler extends BaseEventHandler {
             const { 
                 order_by: current_order_by,
                 order_direction: current_order_direction,
-                records
+                records,
+                size,
+                selected_records
             } = this.controller.state_refs;
 
             if(!records.value || !records.value.length) { return }
@@ -223,12 +243,19 @@ class RegisteredAppEventHandler extends BaseEventHandler {
 
             if(order_by === current_order_by.value && order_direction === current_order_direction.value ) { return }
 
-            const new_table_header_props = BaseListViewPropsBuilder.getDataTableHeaderProps(event_handler, content_field_key, RegisteredAppTableColumnConfig, order_by, order_direction as SortDirectionType);
+            const new_table_header_props = BaseListViewPropsBuilder.getDataTableHeaderProps(
+                event_handler, 
+                content_field_key, 
+                RegisteredAppTableColumnConfig, 
+                order_by, order_direction as SortDirectionType,
+                records.value.length,
+                selected_records.value
+            );
     
             Object.assign(this.controller.state_refs.table_header_props, new_table_header_props);
 
             const _order_direction  = order_direction as SortDirectionType;
-            const updated           = this.updatecontrollerAttributes({ order_by, order_direction: _order_direction });
+            const updated           = this.updateControllerAttributes({ order_by, order_direction: _order_direction });
 
             if(updated) { await this.debouncedFetchRecords(); }
         }
@@ -236,6 +263,49 @@ class RegisteredAppEventHandler extends BaseEventHandler {
             this.logger.error(`Failed to sort and fetch records`, { error })
         }
         finally { this.controller.state_refs.is_loading.value = false }
+    }
+
+    // Method to handle on record selected 
+    public async handleOnRecordSelected (event: Event | InputEvent, record: Record<string, any>, checked: boolean) {
+        const { record_id_key, selected_records } = this.controller;
+
+        if (!record_id_key || !Array.isArray(selected_records)) { return; }
+
+        const record_value          = record?.[record_id_key];
+
+        if (!record_value) { return; }
+
+        let new_selected_records    = [...selected_records];
+
+        if (checked && !new_selected_records.includes(record_value)) { 
+            new_selected_records.push(record_value); 
+        } 
+
+        else if (!checked) {
+            new_selected_records = new_selected_records.filter( (id) => id !== record_value);  
+        }
+
+        this.updateControllerAttributes({ selected_records: new_selected_records });
+    }
+
+    // Method to ahndle on all records selected
+    public async handleOnAllRecordsSelected (event: Event | InputEvent, checked: boolean) {
+        const { record_id_key, selected_records, records } = this.controller;
+
+        if (!Array.isArray(records) || !records.length || !record_id_key) { return; }
+
+        let new_selected_records    = [...selected_records];
+
+        if(!records.length) { return }
+
+        if (checked) {  
+            new_selected_records = records
+            .map((obj: Record<string, any>) => obj?.[record_id_key])
+            .filter((id: any) => id !== undefined && id !== null);
+        }
+        else { new_selected_records = []; }
+
+        this.updateControllerAttributes({ selected_records: new_selected_records });
     }
 
     // Method to handle on record change of state
@@ -290,7 +360,7 @@ class RegisteredAppEventHandler extends BaseEventHandler {
 
             const { current_page, records, total_items, total_pages } = s_data;
 
-            this.updatecontrollerAttributes({ current_page, records, total_items, total_pages })
+            this.updateControllerAttributes({ current_page, records, total_items, total_pages })
             
             if(!this.records_initially_fetched) {
                 status_alert_payload.status = "success";
@@ -310,7 +380,7 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         try {
             if(!new_page_value || !Number.isInteger(new_page_value) || new_page_value <= 0) { return false }
 
-            this.updatecontrollerAttributes({ current_page: new_page_value });
+            this.updateControllerAttributes({ current_page: new_page_value });
 
             await this.handleFetchRecords();
 

@@ -1083,6 +1083,9 @@
       color: var(--color-gray-400);
     }
   }
+  .accent-blue-600 {
+    accent-color: var(--color-blue-600);
+  }
   .opacity-30 {
     opacity: 30%;
   }

@@ -184,19 +184,29 @@ class BaseListViewPropsBuilder {
         content_field_key: string,
         table_column_config: TableColumnConfigInterface,
         order_by: string = "created_at",
-        order_direction: SortDirectionType = "desc"
+        order_direction: SortDirectionType = "desc",
+        record_length: number = 12,
+        selected_records: string[] | number[] = []
     ): TableHeaderUIPropsInterface {
         const class_styles              = ClassStyles?.list_view_ui?.data_table_ui?.table_header_ui ?? {};
         const content_manager           = ContentManagerUtil.getInstance();
         const content_data              = content_manager?.get(`content_resource.${content_field_key}.data_table`) ?? {};
         const { sn_text, actions_text } = content_data;
         const columns                   = table_column_config.getTableColumnConfig(event_handler, content_field_key, order_by, order_direction);
+        const all_selected              = selected_records.length === record_length && record_length > 0;
+        const some_selected             = selected_records.length ? true : false;
+        const on_toggle_all             = event_handler?.handleOnAllRecordsSelected?.bind(event_handler);
 
-        const { wrapper_class_style, header_row_class_style, header_cell_class_style } = class_styles;
+        const { 
+            wrapper_class_style, header_row_class_style, header_cell_class_style,
+            selected_checkbox_class_style
+        } = class_styles;
 
 
         return reactive({
-            sn_text, actions_text, columns, wrapper_class_style, header_row_class_style, header_cell_class_style
+            sn_text, actions_text, columns, all_selected, some_selected, on_toggle_all,
+            wrapper_class_style, header_row_class_style, header_cell_class_style,
+            selected_checkbox_class_style
         })
     }
 
@@ -205,22 +215,27 @@ class BaseListViewPropsBuilder {
         event_handler: BaseEventHandlerInterface,
         content_field_key: string,
         table_column_config: TableColumnConfigInterface,
+        record_id_key: string,
         order_by: string = "created_at",
         order_direction: SortDirectionType = "desc",
-        records: Record<string, any>[] = []
+        records: Record<string, any>[] = [],
+        selected_records: string[] | number[] = []
     ): TableBodyUIPropsInterface {
         const class_styles              = ClassStyles?.list_view_ui?.data_table_ui?.table_body_ui ?? {};
         const content_manager           = ContentManagerUtil.getInstance();
         const content_data              = content_manager?.get(`content_resource.${content_field_key}.data_table`) ?? {};
         const columns                   = table_column_config.getTableColumnConfig(event_handler, content_field_key, order_by, order_direction);
+        const on_row_select             = event_handler?.handleOnRecordSelected?.bind(event_handler)
 
         const { sn_text, actions_text, no_data_text } = content_data;
-        const { wrapper_class_style, body_row_class_style, body_cell_class_style } = class_styles;
+        const { wrapper_class_style, body_row_class_style, body_cell_class_style, selected_checkbox_class_style } = class_styles;
 
 
         return reactive({
             sn_text, actions_text, columns, records, empty_text: no_data_text,
-            wrapper_class_style, body_row_class_style, body_cell_class_style
+            record_id_key, selected_records, on_row_select,
+            wrapper_class_style, body_row_class_style, body_cell_class_style,
+            selected_checkbox_class_style
         })
     }
 

@@ -39,6 +39,8 @@ class RegisteredAppListViewController extends BaseController {
     public keyword: string | null | undefined;
     public records: Record<string, any>[];
     public selected_record: Record<string, any> | null;
+    public selected_records: string[] | number [];
+    public record_id_key = "public_id";
 
 
     constructor(props: Record<string, any> = {}) {
@@ -59,7 +61,8 @@ class RegisteredAppListViewController extends BaseController {
         this.order_direction            = "desc";
         this.keyword                    = null;
         this.records                    = []
-        this.selected_record            = null
+        this.selected_record            = null;
+        this.selected_records           = [];
     }
 
     // Method to get ui components
@@ -89,11 +92,11 @@ class RegisteredAppListViewController extends BaseController {
     protected getUIWatchers(): Record<string, (new_val: any, old_val: any) => void> { 
         return {
             selected_records: (new_val, old_val) => { 
-                this.event_handler?.onRecordSelected?.(new_val);
+                this.event_handler?.afterRecordSelected?.(new_val);
             },
 
             records: (new_val, old_val) => { 
-                this.event_handler?.onRecordUpdated?.(new_val);
+                this.event_handler?.afterRecordUpdated?.(new_val);
             }
         }; 
     }
@@ -107,7 +110,7 @@ class RegisteredAppListViewController extends BaseController {
             
             order_by: ref(this.order_by), order_direction: ref(this.order_direction), 
 
-            records: ref(this.records), selected_records: ref([]), is_loading: ref(false),
+            records: ref(this.records), selected_records: ref(this.selected_records), is_loading: ref(false),
 
             base_class_styles: BaseListViewPropsBuilder.getBaseClassStyle(),
 
@@ -121,9 +124,9 @@ class RegisteredAppListViewController extends BaseController {
 
             bulk_action_dropdown_menu_props: BaseListViewPropsBuilder.getBulkActionMenuListProps(this.bulk_action_btn_id, this.bulk_action_menu_id, this.event_handler, this.content_field_key, RegisteredAppMenuListConfig),
 
-            table_header_props: BaseListViewPropsBuilder.getDataTableHeaderProps(this.event_handler, this.content_field_key, RegisteredAppTableColumnConfig, this.order_by, this.order_direction),
+            table_header_props: BaseListViewPropsBuilder.getDataTableHeaderProps(this.event_handler, this.content_field_key, RegisteredAppTableColumnConfig, this.order_by, this.order_direction, this.records.length, this.selected_records),
 
-            table_body_props: BaseListViewPropsBuilder.getDataTableBodyProps(this.event_handler, this.content_field_key, RegisteredAppTableColumnConfig, this.order_by, this.order_direction, this.records),
+            table_body_props: BaseListViewPropsBuilder.getDataTableBodyProps(this.event_handler, this.content_field_key, RegisteredAppTableColumnConfig, this.record_id_key, this.order_by, this.order_direction, this.records, this.selected_records),
 
             pagination_props: BaseListViewPropsBuilder.getPaginationProps(this.event_handler, this.content_field_key),
         } 

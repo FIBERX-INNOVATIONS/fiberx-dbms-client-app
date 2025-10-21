@@ -78,7 +78,7 @@ class RegisteredAppMenuListConfig {
         const view_menu_on_click    = () => {}
         const view_menu             = this.buildMenuItem("ViewApp", view_menu_text, "", view_menu_svg_icon, view_menu_on_click);
 
-        const select_menu_on_click  = () => {}
+        const select_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOnRecordSelected.bind(event_handler)(event, record, true); }
         const select_menu           = this.buildMenuItem("SelectApp", select_menu_text, "", select_menu_svg_icon, select_menu_on_click);
 
         const menu_list: NavLinkUIPropsInterface[] = [view_menu, select_menu];

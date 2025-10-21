@@ -233,12 +233,14 @@ const ClassStyles = {
                 header_cell_class_style: "border-b border-black group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg px-4 py-4 text-md font-semibold text-black capitalize text-center",
                 sortable_cell_wrapper_class_style: "border-b border-black group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg px-4 py-4 text-md font-semibold text-black capitalize text-center",
                 sortable_icon_class_style: "w-4 h-4 cursor-pointer flex",
-                sortable_cell_content_wrapper_class_style: "flex space-x-2 items-center justify-center"
+                sortable_cell_content_wrapper_class_style: "flex space-x-2 items-center justify-center",
+                selected_checkbox_class_style: "w-4 h-4 p-2 rounded-lg cursor-pointer"
             },
             table_body_ui: {
                 wrapper_class_style: "group/body divide-y divide-border border-black",
                 body_row_class_style: "group/row text-sm",
-                body_cell_class_style: "px-4 py-3 whitespace-nowrap border-b border-black text-sm text-center relative"
+                body_cell_class_style: "px-4 py-3 whitespace-nowrap border-b border-black text-sm text-center relative",
+                selected_checkbox_class_style: "w-4 h-4 p-2 rounded-lg cursor-pointer"
             },
             menu_list_item_ui: {
                 wrapper_class_style: "hidden divide-y divide-gray-100 w-[170px] bg-white shadow-xl border border-gray-200 z-[10] p-0 min-h-[114px] m-0 absolute top-16 right-2 rounded-2xl transform transition-all duration-300 ease-in-out origin-top",
