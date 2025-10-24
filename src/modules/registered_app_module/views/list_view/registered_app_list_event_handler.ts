@@ -1,21 +1,22 @@
 
-
+import { markRaw }                      from "vue";
 import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
 import BaseEventHandler                 from "@ui/version_2/base_classes/base_event_handler";
 import BaseListViewPropsBuilder         from "@/modules/dashboard_module/base_logic/base_list_view_props_builder";
 import RegisteredAppTableColumnConfig   from "@/configs/columns_config/registered_app_table_column_config";
 import RegisteredAppProfileView         from "@/modules/registered_app_module/views/profile_view/registered_app_profile_view.vue";
-import { 
-    BaseControllerInterface,
-    ListControllerAttributesInterface } from "@ui/version_2/types/component_type";
+import RegisteredAppFormView            from "@/modules/registered_app_module/views/form_view/registered_app_form_view.vue";
 import { SortDirectionType }            from "@ui/version_2/types/props_builder_type";
 import { RequestQueryInputInterface }   from "@/types/api_service_type";
 import { debounceMethod }               from "@ui/version_2/utils/debounce_util";
 import { NON_INPUT_KEYS  }              from "@ui/version_2/enums/constants.enum";
 import { 
+    BaseControllerInterface,
+    ListControllerAttributesInterface } from "@ui/version_2/types/component_type";
+import { 
     OpenNewModalPayloadInterface, 
     StatusPayloadOptionsInterface }     from "@/types/app_event_type";
-import { markRaw } from "vue";
+
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -116,7 +117,7 @@ class RegisteredAppEventHandler extends BaseEventHandler {
 
     // Method to handle form action btn click
     public async handleFormActionBtnClick (event: MouseEvent) {
-        console.log(`Form button clicked`)
+        this.handleOpenFormModal(event, {});
     }
 
     // Method to handle toggling ellipsis dropdown
@@ -400,6 +401,31 @@ class RegisteredAppEventHandler extends BaseEventHandler {
             const { title_text }    = content_data;
             const title_content     = title_text.replace("%", record?.name);
             const component         = markRaw(RegisteredAppProfileView);
+            const component_props   = { record };
+
+            const open_modal_payload: OpenNewModalPayloadInterface = {
+                position: "center", width_class: "w-lg", title_content,
+                component, component_props
+            }
+            this.controller.event_bus.emit("open_new_modal", open_modal_payload);
+        }
+        catch(error: unknown) {
+            const formatted_api_msg     = this.content_manager?.getAPIResponseValue("app_record_not_found");
+            const status_alert_payload  = { status: "error", message: formatted_api_msg, options: this.status_alert_options };
+            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+        }
+
+    }
+
+    // Method to handle opening registered app form modal
+    public async handleOpenFormModal (event: Event | InputEvent, record: Record<string, any> = {}) {
+        try {
+            const content_data = this.content_manager?.get("content_resource.registered_app_view_ui.app_form");
+
+            const { new_app_title_text, edit_app_title_text }    = content_data;
+
+            const title_content     = record?.name ? edit_app_title_text.replace("%", record?.name) : new_app_title_text;
+            const component         = markRaw(RegisteredAppFormView);
             const component_props   = { record };
 
             const open_modal_payload: OpenNewModalPayloadInterface = {

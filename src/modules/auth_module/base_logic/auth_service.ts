@@ -5,7 +5,7 @@ import { BaseControllerInterface }  from "@ui/version_2/types/component_type";
 import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manager_util";
 
 import { 
-    CSRF_TOKEN_FOR ,
+    CSRF_TOKEN_FOR,
     LOCAT_STORAGE_FIELDS
 } from "@/enums/constants.enums";
 import { 

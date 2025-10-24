@@ -81,8 +81,14 @@ const ClassStyles = {
     },
     form_button_ui: {
         icon_class_style: "w-4 h-4 ml-2 flex items-center",
-        btn_class_style: "md:w-auto w-full  cursor-pointer inline-flex mt-4 items-center justify-center rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider py-3",
+        btn_class_style: "w-full  cursor-pointer inline-flex mt-4 items-center justify-center rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider py-3",
         auto_width_btn_class_style: "w-auto cursor-pointer inline-flex items-center justify-center rounded-full ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider py-3"
+    },
+    social_link_btn_ui: {
+        btn_class_style: "w-8 h-8 flex items-center justify-center overlfow-hidden text-black hover:shadow-2xl cursor-pointer border rounded-full",
+        delete_btn_class_style: "w-6 h-6 flex items-center justify-center overlfow-hidden text-black hover:shadow-2xl cursor-pointer border rounded-full",
+        class_style: "w-full h-full font-bold",
+        icon_class_style: "w-full h-full font-bold"
     },
     dashboard_base_ui: {
         header_class_style: "fixed top-0 left-0 w-screen p-0 m-0 bg-white shadow-md z-[80]",
@@ -307,6 +313,21 @@ const ClassStyles = {
         description_key_text_class_style: "text-center text-xs font-black uppercase",
 
         description_value_text_class_style: "text-center text-md font-bold",
+    },
+    form_view_ui: {
+        section_wrapper_class_style: "w-full block my-2 space-y-6 px-4 h-full max-h-[70vh] overflow-y-auto",
+        form_class_style: "space-y-6 py-4 w-full h-full",
+        social_links_class_style: {
+            wrapper_class_style: "w-full flex flex-col items-center justify-center my-4",
+            header_class_style: "w-full flex items-center justify-between",
+            header_label_class_style: "w-8/12 font-bold text-start truncate",
+            header_add_btn_class_style: "w-4/12 flex items-center justify-end",
+            body_class_style: "w-full grid grid-cols-12 gap-4 items-center my-2 justify-center",
+            body_link_name_wrapper_class_style: "col-span-4 flex items-center justify-center",
+            body_link_value_wrapper_class_style: "col-span-7 flex items-center justify-center",
+            body_delete_btn_wrapper_class_style: "col-span-1 flex items-center justify-center h-full"
+        }
+
     }
 
     

@@ -44,7 +44,7 @@ class RegisteredAppAPIService extends BaseAPIService {
     } 
 
     // Service method to query delete app endpoint
-    public async deleteAppState (app_public_id: string) : Promise<APIResponseInterface<any>> {
+    public async deleteApp (app_public_id: string) : Promise<APIResponseInterface<any>> {
         const url           = `/registered-app/${app_public_id}/delete`;
         const config        = { url, method: "DELETE" };
 

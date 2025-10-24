@@ -59,7 +59,6 @@ class BaseTableColumnConfig {
             inactive_class_style,
             knob_class_style,
             label_text_class_style,
-            loader_content_class_style,
         } = class_styles;
 
         const swicth_btn_id     = record_id;
@@ -70,7 +69,7 @@ class BaseTableColumnConfig {
             id: switch_input_id, swicth_btn_id, value, type, loader_content, required: true, is_checked: value,
             wrapper_class_style, loader_class_style,
             switch_btn_class_style, active_class_style, inactive_class_style,
-            knob_class_style, label_text_class_style, loader_content_class_style,
+            knob_class_style, label_text_class_style,
         })
 
     }

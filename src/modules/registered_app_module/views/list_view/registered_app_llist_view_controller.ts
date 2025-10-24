@@ -7,7 +7,7 @@ import {
     MenuListUIPropsInterface, 
     SortDirectionType }                         from "@ui/version_2/types/props_builder_type";
 import BaseListViewPropsBuilder                 from "@/modules/dashboard_module/base_logic/base_list_view_props_builder";
-import RegisteredAppEventHandler                from "@/modules/registered_app_module/base_logic/registered_app_event_handler";
+import RegisteredAppEventHandler                from "@/modules/registered_app_module/views/list_view/registered_app_list_event_handler";
 import RegisteredAppService                     from "@/modules/registered_app_module/base_logic/registered_app_service";
 import BaseController                           from "@ui/version_2/base_classes/base_controller";
 import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";

@@ -84,7 +84,7 @@ class RegisteredAppMenuListConfig {
         const menu_list: NavLinkUIPropsInterface[] = [view_menu, select_menu];
 
         if(member_authenticator.canMemberAccess("update_registered_app", member_perm_key)) {
-            const edit_menu_on_click  = () => {}
+            const edit_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOpenFormModal.bind(event_handler)(event, record);}
             const edit_menu           = this.buildMenuItem("EditApp", edit_menu_text, "", edit_menu_svg_icon, edit_menu_on_click);
 
             menu_list.push(edit_menu)

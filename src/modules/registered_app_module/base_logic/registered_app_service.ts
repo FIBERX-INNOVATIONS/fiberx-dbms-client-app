@@ -58,7 +58,7 @@ class RegisteredAppService extends BaseService {
         }
     }
 
-    // Method to execute login request
+    // Method to execute fetch records
     public async executeFetchRecords(params: RequestQueryInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.getAllRegisteredApps(params);
@@ -75,7 +75,7 @@ class RegisteredAppService extends BaseService {
         }
     }
 
-    // Method to execute login request
+    // Method to execute change record state
     public async executeChangeRecordState(record_id: string): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.updateAppState(record_id);
@@ -88,6 +88,57 @@ class RegisteredAppService extends BaseService {
         }
         catch(error: unknown) {
             this.logger.error(`Failed to execute fetch records`, { error });
+            return { s_state: false, s_msg: "error_occurred"};
+        }
+    }
+
+    // Method to execute change record state
+    public async executeRegisterNewApp(form_data: RegisterAppFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+        try {
+            const { status, msg, data: response_data } = await this.api_service.createNewApp(form_data);
+
+            if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
+
+            else if(status != "success") { return { s_state: false, s_msg: msg } }
+            
+            return { s_state: true, s_msg: msg, s_data: response_data};
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to execute register new app`, { error });
+            return { s_state: false, s_msg: "error_occurred"};
+        }
+    }
+
+    // Method to execute update record
+    public async executeUpdateRegisteredApp(record_id: string, form_data: RegisterAppFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+        try {
+            const { status, msg, data: response_data } = await this.api_service.updateApp(record_id, form_data);
+
+            if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
+
+            else if(status != "success") { return { s_state: false, s_msg: msg } }
+            
+            return { s_state: true, s_msg: msg, s_data: response_data};
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to execute update app`, { error });
+            return { s_state: false, s_msg: "error_occurred"};
+        }
+    }
+
+    // Method to execute delete reord
+    public async executeDeleteRegisteredApp(record_id: string): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+        try {
+            const { status, msg, data: response_data } = await this.api_service.deleteApp(record_id)
+
+            if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
+
+            else if(status != "success") { return { s_state: false, s_msg: msg } }
+            
+            return { s_state: true, s_msg: msg, s_data: response_data};
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to execute delete app`, { error });
             return { s_state: false, s_msg: "error_occurred"};
         }
     }
