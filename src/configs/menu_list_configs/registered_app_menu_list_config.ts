@@ -91,7 +91,7 @@ class RegisteredAppMenuListConfig {
         }
 
         if(member_authenticator.canMemberAccess("delete_registered_app", member_perm_key) && !is_active) {
-            const delete_menu_on_click  = () => {}
+            const delete_menu_on_click  = (event: MouseEvent) => { return event_handler.handleConfirmDelete.bind(event_handler)(event, record); }
             const delete_menu           = this.buildMenuItem("DeleteApp", delete_menu_text, "", delete_menu_svg_icon, delete_menu_on_click);
 
             menu_list.push(delete_menu)

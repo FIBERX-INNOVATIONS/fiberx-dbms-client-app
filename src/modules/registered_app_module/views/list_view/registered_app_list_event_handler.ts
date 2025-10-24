@@ -1,11 +1,13 @@
 
 import { markRaw }                      from "vue";
+import ClassStyles                      from "@/enums/class_styles.enums";
 import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
 import BaseEventHandler                 from "@ui/version_2/base_classes/base_event_handler";
 import BaseListViewPropsBuilder         from "@/modules/dashboard_module/base_logic/base_list_view_props_builder";
 import RegisteredAppTableColumnConfig   from "@/configs/columns_config/registered_app_table_column_config";
 import RegisteredAppProfileView         from "@/modules/registered_app_module/views/profile_view/registered_app_profile_view.vue";
 import RegisteredAppFormView            from "@/modules/registered_app_module/views/form_view/registered_app_form_view.vue";
+import ConfirmActionUI                  from "@ui/version_2/components/confirm_action_ui/confirm_action_ui.vue";
 import { SortDirectionType }            from "@ui/version_2/types/props_builder_type";
 import { RequestQueryInputInterface }   from "@/types/api_service_type";
 import { debounceMethod }               from "@ui/version_2/utils/debounce_util";
@@ -19,6 +21,9 @@ import {
     RecordDeletedPayloadInterface, 
     RecordUpdatedPayloadInterface, 
     StatusPayloadOptionsInterface }     from "@/types/app_event_type";
+import RenderHtmlUtil from "@ui/version_2/utils/render_html_util";
+import SVGIcons from "@ui/version_2/resources/svg_icon_resource";
+
 
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -35,7 +40,7 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         super(controller, controller.component_name);
 
         this.content_manager            = ContentManagerUtil.getInstance();
-        this.status_alert_options       = { duration: 3000 };
+        this.status_alert_options       = { duration: 3000, close_modal: true };
         this.debouncedFetchRecords      = debounceMethod(this.handleFetchRecords.bind(this), 2000);
         this.records_initially_fetched  = false
     }
@@ -157,7 +162,7 @@ class RegisteredAppEventHandler extends BaseEventHandler {
 
     // Method to handle toggling ellipsis dropdown
     public async handleBulkDeleteActionClick (event: MouseEvent) {
-        console.log(`Bulk Delete button clicked`)
+        this.logger.log(`Bulk Delete button clicked`)
     }
 
     // Method to handle on record selected
@@ -334,8 +339,8 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         if (updated_records.length > size.value) { updated_records.pop(); }
 
         this.updateControllerAttributes({ records: updated_records, total_items: updated_total_items, total_pages: updated_total_pages })
-        console.log("✅ New record added:", record);
-        console.log("📊 Updated pagination:", {
+        this.logger.log("✅ New record added:", record);
+        this.logger.log("📊 Updated pagination:", {
             total_items: total_items,
             total_pages: total_pages,
             current_records_length: records.length,
@@ -343,7 +348,7 @@ class RegisteredAppEventHandler extends BaseEventHandler {
     }
 
     // Method to handle on record change of state
-    public async handleOnRecordChangeState (event:MouseEvent | InputEvent): Promise<boolean> {
+    public async handleOnRecordChangeState (event:MouseEvent | InputEvent, new_state_value: boolean): Promise<boolean> {
         await sleep(2000);
         try {
             const target        = event.target as HTMLInputElement | HTMLTextAreaElement | null;
@@ -363,6 +368,8 @@ class RegisteredAppEventHandler extends BaseEventHandler {
                 return this.controller.event_bus.emit("statusChanged", status_alert_payload);
             }
 
+            const payload = { record_id, record: { is_active: new_state_value } };
+            this.controller.event_bus.emit("on_record_updated",  payload);
             return true
         }
         catch(error: unknown) {
@@ -371,7 +378,7 @@ class RegisteredAppEventHandler extends BaseEventHandler {
     }
 
     // Method to handle on update a record in records
-    public async handleUpdateARecord (payload: RecordUpdatedPayloadInterface) {
+    public async handleOnRecordUpdated (payload: RecordUpdatedPayloadInterface) {
         const { record, record_id }     = payload;
         const { records = [] }          = this.controller;
         const record_to_update_index    = records.findIndex((obj: Record<string, any>) => { return obj.public_id === record_id });
@@ -385,16 +392,16 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         updated_records[record_to_update_index] = updated_record
 
         this.updateControllerAttributes({ records: updated_records });
-        console.log("✅ Record updated successfully:", { record_id, updated_record });
+        this.logger.log("✅ Record updated successfully:", { record_id, updated_record });
     }
 
     // Method to handle on delete record in recods
-    public async handleDeleteARecord (payload: RecordDeletedPayloadInterface) {
+    public async handleOnRecordDeleted (payload: RecordDeletedPayloadInterface) {
         const { record_id } = payload;
         const { records = [], total_items = 0, total_pages = 0, size = 12 } = this.controller;
 
         // 🟩 Find the index of the record to delete
-        const record_index = records.value.findIndex((obj: Record<string, any>) => obj.public_id === record_id);
+        const record_index = records.findIndex((obj: Record<string, any>) => obj.public_id === record_id);
 
         if (record_index < 0) {
             this.logger.warn(`⚠️ Record with ID '${record_id}' not found.`);
@@ -402,14 +409,14 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         }
 
         // 🔴 Remove record completely from array and Recalculate total items and pages
-        const updated_records       = records.value.filter((obj: Record<string, any>) => obj.public_id !== record_id);
+        const updated_records       = records.filter((obj: Record<string, any>) => obj.public_id !== record_id);
         const updated_total_items   = Math.max(total_items - 1, 0);
         const updated_total_pages   = Math.ceil(updated_total_items / size);
 
         // 🟥 Update controller attributes
         this.updateControllerAttributes({ records: updated_records, total_items: updated_total_items, total_pages: updated_total_pages });
 
-        console.log("🗑️ Deleted record successfully:", record_id);
+        this.logger.log("🗑️ Deleted record successfully:", record_id);
     }
 
     // Method to handle fetching of records
@@ -465,6 +472,55 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         catch(error: unknown) { return false }
     }
 
+    // Method to handle delete confim
+    public async handleConfirmDelete (event: Event | InputEvent, record: Record<string, any> = {}) {
+        try {
+
+            if(record.is_active) { return };
+
+            const class_styles = ClassStyles.confirm_action_ui;
+            const content_data = this.content_manager?.get("content_resource.registered_app_view_ui.confirm_delete_modal");
+
+            const { title_text, question_text, cancel_btn_text, confirm_btn_text }    = content_data;
+            const { 
+                wrapper_class_style, 
+                content_text_wrapper_class_style, 
+                content_class_style, 
+                action_btn_wrapper_class_style,
+                cancel_action_btn_ui,
+                confirm_action_btn_ui
+            } = class_styles
+
+            const cancel_btn_class_style        = cancel_action_btn_ui.content_class_style;
+            const cancel_btn_icon_class_style   = cancel_action_btn_ui.icon_class_style;
+            const confirm_btn_class_style       = confirm_action_btn_ui.content_class_style;
+            const confirm_btn_icon_class_style  = cancel_action_btn_ui.icon_class_style
+            const title_content                 = title_text;
+            const question_content              = question_text.replace("%", record?.name);
+            const component                     = markRaw(ConfirmActionUI);
+            const cancel_btn_content            = RenderHtmlUtil.renderHtml({ text: cancel_btn_text, icon: SVGIcons.delete_trash_svg_icon, class_style: cancel_btn_class_style, icon_class_style: cancel_btn_icon_class_style});
+            const confirm_btn_content           = RenderHtmlUtil.renderHtml({ text: confirm_btn_text, icon: SVGIcons.check_circle_svg_icon, class_style: confirm_btn_class_style, icon_class_style: confirm_btn_icon_class_style });
+            const on_cancel_click               = (event: MouseEvent) => { this.controller.event_bus.emit("close_modal", {}); };
+            const on_confirm_click              = (event: MouseEvent) => { this.handleDeleteARecord(event, record ); }
+            const component_props       = { 
+                question_text: question_content, confirm_btn_content, cancel_btn_content,
+                wrapper_class_style, content_text_wrapper_class_style, content_class_style, 
+                action_btn_wrapper_class_style, on_cancel_click, on_confirm_click
+            };
+
+            const open_modal_payload: OpenNewModalPayloadInterface = {
+                position: "center", width_class: "w-lg", title_content,
+                component, component_props, 
+            }
+            this.controller.event_bus.emit("open_new_modal", open_modal_payload);
+        }
+        catch(error: unknown) {
+            const formatted_api_msg     = this.content_manager?.getAPIResponseValue("app_record_not_found");
+            const status_alert_payload  = { status: "error", message: formatted_api_msg, options: this.status_alert_options };
+            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+        }
+    }
+
     // Method to handle opening registered app profile modal
     public async handleOpenProfileModal (event: Event | InputEvent, record: Record<string, any>) {
         try {
@@ -510,7 +566,44 @@ class RegisteredAppEventHandler extends BaseEventHandler {
             const status_alert_payload  = { status: "error", message: formatted_api_msg, options: this.status_alert_options };
             this.controller.event_bus.emit("statusChanged", status_alert_payload);
         }
+    }
 
+    // Method to handle login submit btn click
+    public async handleDeleteARecord (event: MouseEvent | InputEvent, record: Record<string, any> = {}) {
+        if(record.is_active) { return };
+
+        try {
+            const record_id             = record?.public_id;
+            const event_name            = "on_record_deleted";
+            const status_alert_payload  = { status: "error", message: "", options: this.status_alert_options };
+
+            if(!record_id) {
+                status_alert_payload.message = this.content_manager?.getAPIResponseValue("app_record_not_found");
+                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            }
+
+            if(!this.controller?.service) { return }
+
+            const { s_state, s_msg, logout } = await this.controller.service?.executeDeleteRegisteredApp(record_id);
+
+            if(logout) { return await this.controller.router.push("/logout"); }
+
+            if(!s_state) {
+                status_alert_payload.message = this.content_manager?.getAPIResponseValue(s_msg);
+                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            }
+
+            status_alert_payload.status     = "success";
+            status_alert_payload.message    = this.content_manager?.getAPIResponseValue(s_msg);
+            const event_payload             = { record_id };
+
+            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit(event_name, event_payload);
+            return;
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to delete a record`, { error })
+        }
     }
 
 }

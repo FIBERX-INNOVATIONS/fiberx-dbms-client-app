@@ -151,6 +151,8 @@ class RegisteredAppFormEventHandler extends BaseEventHandler {
                 ({ s_state, s_msg, s_data, logout } = await this.controller.service?.executeRegisterNewApp(form_data))
             }
 
+            if(logout) { return await this.controller.router.push("/logout"); }
+
             if(!s_state) {
                 const error_msg = this.content_manager?.getAPIResponseValue(s_msg);
                 return this.showErrorAlert("error", error_msg)
@@ -167,8 +169,6 @@ class RegisteredAppFormEventHandler extends BaseEventHandler {
             this.logger.error(`Failed to submit form`, { error })
         }
     }
-
-
 }
 
 export default RegisteredAppFormEventHandler;

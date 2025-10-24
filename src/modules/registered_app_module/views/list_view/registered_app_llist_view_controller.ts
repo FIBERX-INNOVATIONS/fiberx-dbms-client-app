@@ -153,11 +153,11 @@ class RegisteredAppListViewController extends BaseController {
         });
 
         this.event_bus.on("on_record_updated", async (payload: RecordUpdatedPayloadInterface) => {
-            this.event_handler.handleUpdateARecord(payload);
+            this.event_handler.handleOnRecordUpdated(payload);
         });
 
          this.event_bus.on("on_record_deleted", async (payload: RecordDeletedPayloadInterface) => {
-            this.event_handler.handleDeleteARecord(payload);
+            this.event_handler.handleOnRecordDeleted(payload);
         });
     }
 
