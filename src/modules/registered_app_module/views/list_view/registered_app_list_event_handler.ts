@@ -14,7 +14,10 @@ import {
     BaseControllerInterface,
     ListControllerAttributesInterface } from "@ui/version_2/types/component_type";
 import { 
+    NewRecordPayloadInterface,
     OpenNewModalPayloadInterface, 
+    RecordDeletedPayloadInterface, 
+    RecordUpdatedPayloadInterface, 
     StatusPayloadOptionsInterface }     from "@/types/app_event_type";
 
 
@@ -313,6 +316,32 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         this.updateControllerAttributes({ selected_records: new_selected_records });
     }
 
+    // Method to handle on new record created
+    public async handleOnNewRecordCreated (payload: NewRecordPayloadInterface) {
+        const { record } = payload;
+        const { total_items = 0, total_pages = 0, size = 12, records = [], current_page } = this.controller;
+
+        if(current_page > 1) { return;  }
+
+        // 🟩 1. Add the new record to the top of the records array,
+        //  Increment total_items (total count of records in database)
+        // Recalculate total_pages based on size
+        const updated_records       = [record, ...records];
+        const updated_total_items   = (total_items ?? 0) + 1;
+        const updated_total_pages   = Math.ceil(updated_total_items / size);
+
+        // 🟨 2. If we exceed the page size, remove the last record (FIFO behavior)
+        if (updated_records.length > size.value) { updated_records.pop(); }
+
+        this.updateControllerAttributes({ records: updated_records, total_items: updated_total_items, total_pages: updated_total_pages })
+        console.log("✅ New record added:", record);
+        console.log("📊 Updated pagination:", {
+            total_items: total_items,
+            total_pages: total_pages,
+            current_records_length: records.length,
+        });
+    }
+
     // Method to handle on record change of state
     public async handleOnRecordChangeState (event:MouseEvent | InputEvent): Promise<boolean> {
         await sleep(2000);
@@ -339,6 +368,48 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         catch(error: unknown) {
             return false
         }
+    }
+
+    // Method to handle on update a record in records
+    public async handleUpdateARecord (payload: RecordUpdatedPayloadInterface) {
+        const { record, record_id }     = payload;
+        const { records = [] }          = this.controller;
+        const record_to_update_index    = records.findIndex((obj: Record<string, any>) => { return obj.public_id === record_id });
+
+        if(record_to_update_index < 0) { return }
+
+        const existing_record   = records[record_to_update_index];
+        const updated_record    = { ...existing_record, ...record };
+        const updated_records   = [...records];
+
+        updated_records[record_to_update_index] = updated_record
+
+        this.updateControllerAttributes({ records: updated_records });
+        console.log("✅ Record updated successfully:", { record_id, updated_record });
+    }
+
+    // Method to handle on delete record in recods
+    public async handleDeleteARecord (payload: RecordDeletedPayloadInterface) {
+        const { record_id } = payload;
+        const { records = [], total_items = 0, total_pages = 0, size = 12 } = this.controller;
+
+        // 🟩 Find the index of the record to delete
+        const record_index = records.value.findIndex((obj: Record<string, any>) => obj.public_id === record_id);
+
+        if (record_index < 0) {
+            this.logger.warn(`⚠️ Record with ID '${record_id}' not found.`);
+            return;
+        }
+
+        // 🔴 Remove record completely from array and Recalculate total items and pages
+        const updated_records       = records.value.filter((obj: Record<string, any>) => obj.public_id !== record_id);
+        const updated_total_items   = Math.max(total_items - 1, 0);
+        const updated_total_pages   = Math.ceil(updated_total_items / size);
+
+        // 🟥 Update controller attributes
+        this.updateControllerAttributes({ records: updated_records, total_items: updated_total_items, total_pages: updated_total_pages });
+
+        console.log("🗑️ Deleted record successfully:", record_id);
     }
 
     // Method to handle fetching of records
@@ -379,7 +450,7 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         }
         finally { this.controller.state_refs.is_loading.value = false }
     }
-
+    
     // Method to handle on page change
     public async handleOnPageChange (event:MouseEvent | InputEvent, new_page_value: number): Promise<boolean> {
         try {

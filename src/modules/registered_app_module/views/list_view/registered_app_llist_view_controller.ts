@@ -2,10 +2,6 @@ import { ref, }                                 from "vue";
 import { Router, useRouter }                    from "vue-router";
 import { LOCAT_STORAGE_FIELDS }                 from "@/enums/constants.enums";
 import { EventBus }                             from "@/utils/gloabal_event_bus";
-import { 
-    ButtonUIPropsInterface, 
-    MenuListUIPropsInterface, 
-    SortDirectionType }                         from "@ui/version_2/types/props_builder_type";
 import BaseListViewPropsBuilder                 from "@/modules/dashboard_module/base_logic/base_list_view_props_builder";
 import RegisteredAppEventHandler                from "@/modules/registered_app_module/views/list_view/registered_app_list_event_handler";
 import RegisteredAppService                     from "@/modules/registered_app_module/base_logic/registered_app_service";
@@ -18,6 +14,15 @@ import DataTableSectionUI                       from "@/ui_components/data_table
 import RegisteredAppMenuListConfig              from "@/configs/menu_list_configs/registered_app_menu_list_config";
 import RegisteredAppTableColumnConfig           from "@/configs/columns_config/registered_app_table_column_config";
 import PaginationUI                             from "@ui/version_2/components/NavigationUI/PaginationUI/pagination_ui.vue";
+import { 
+    ButtonUIPropsInterface, 
+    MenuListUIPropsInterface, 
+    SortDirectionType }                         from "@ui/version_2/types/props_builder_type";
+
+import { 
+    NewRecordPayloadInterface, 
+    RecordDeletedPayloadInterface, 
+    RecordUpdatedPayloadInterface }             from "@/types/app_event_type";
 
 
 
@@ -142,6 +147,18 @@ class RegisteredAppListViewController extends BaseController {
         if(!is_fully_authenticated) { await this.router.push("/logout") }
 
         await this.event_handler.handleFetchRecords();
+
+        this.event_bus.on("on_new_record_created", async (payload: NewRecordPayloadInterface) => {
+            this.event_handler.handleOnNewRecordCreated(payload);
+        });
+
+        this.event_bus.on("on_record_updated", async (payload: RecordUpdatedPayloadInterface) => {
+            this.event_handler.handleUpdateARecord(payload);
+        });
+
+         this.event_bus.on("on_record_deleted", async (payload: RecordDeletedPayloadInterface) => {
+            this.event_handler.handleDeleteARecord(payload);
+        });
     }
 
     // Method to get table action btn props

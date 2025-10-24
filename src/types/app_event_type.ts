@@ -4,7 +4,10 @@ export type AppEvents = {
     isLoading: boolean;
     statusChanged: StatusChangedPayloadInterface;
     open_new_modal: OpenNewModalPayloadInterface;
-    close_modal: CloseModalPayloadInterface
+    close_modal: CloseModalPayloadInterface;
+    on_new_record_created: NewRecordPayloadInterface;
+    on_record_updated: RecordUpdatedPayloadInterface;
+    on_record_deleted: RecordDeletedPayloadInterface
 };
 
 export interface StatusPayloadOptionsInterface { 
@@ -32,4 +35,17 @@ export interface OpenNewModalPayloadInterface {
 
 export interface CloseModalPayloadInterface {
     modal_index?: number
+}
+
+export interface NewRecordPayloadInterface {
+    record: Record<string, any>;
+}
+
+export interface RecordUpdatedPayloadInterface {
+    record_id: string;
+    record: Record<string, any>;
+}
+
+export interface RecordDeletedPayloadInterface {
+    record_id: string;
 }

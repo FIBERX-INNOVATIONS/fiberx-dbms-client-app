@@ -131,6 +131,7 @@ class RegisteredAppFormEventHandler extends BaseEventHandler {
         try {
             const record                = this.controller.props?.record ?? {}
             const record_id             = record?.public_id;
+            const event_name            = record_id ? "on_record_updated" : "on_new_record_created";
             const form_data             = this.form_data  as RegisterAppFormDataInterface;
             const { v_state, v_msg }    = RegisteredAppValidator.validateRegisteredAppInput(form_data, record);
 
@@ -141,13 +142,13 @@ class RegisteredAppFormEventHandler extends BaseEventHandler {
 
             if(!this.controller?.service) { return }
 
-            let s_state, s_msg, logout;
+            let s_state, s_msg, s_data, logout;
 
             if(record_id) {
-                ({ s_state, s_msg, logout } = await this.controller.service?.executeUpdateRegisteredApp(record_id, form_data))
+                ({ s_state, s_msg, s_data, logout } = await this.controller.service?.executeUpdateRegisteredApp(record_id, form_data))
             }
             else {
-                ({ s_state, s_msg, logout } = await this.controller.service?.executeRegisterNewApp(form_data))
+                ({ s_state, s_msg, s_data, logout } = await this.controller.service?.executeRegisterNewApp(form_data))
             }
 
             if(!s_state) {
@@ -156,8 +157,11 @@ class RegisteredAppFormEventHandler extends BaseEventHandler {
             }
 
             const status_alert_payload  = { status: "success", message: s_msg, options: this.status_alert_options };
+            const event_payload         = { record_id, record: {...form_data, ...s_data} }
 
-            return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit(event_name, event_payload);
+            return;
         }
         catch(error: unknown) {
             this.logger.error(`Failed to submit form`, { error })
