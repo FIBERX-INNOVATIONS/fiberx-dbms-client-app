@@ -134,7 +134,9 @@ class AuthEventhandler extends BaseEventHandler {
 
             const { s_state, s_msg, logout } = await this.controller.service?.executeTwoFactorLogIn?.(form_data);
 
+
             if(logout) {
+                this.controller.service?.deleteMemberdata()
                 return await this.controller.router.push("/logout");
             }
 

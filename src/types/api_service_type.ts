@@ -28,3 +28,15 @@ export interface RegisterAppFormDataInterface {
   logo_url?: string; 
   social_links?: Record<string, string>; 
 }
+
+export interface DatasourceFormDataInterface {
+    csrf_token: string, 
+    registered_app_public_id: string;
+    name: string; 
+    datasource_type: string;
+    host: string;
+    username: string; 
+    database_name: string;
+    port: string;
+    connection_info: Record<string, any>
+}

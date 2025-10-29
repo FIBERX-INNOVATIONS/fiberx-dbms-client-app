@@ -24,6 +24,7 @@ class RegisteredAppFormViewPropsBuilder {
         field_key: string, 
         existing_value: string | number | boolean = "",
         input_type: string = "text",
+        read_only: boolean = false
     ): InputGroupPropsInterface {
         const content_manager   = ContentManagerUtil.getInstance();
         const content_data      = content_manager?.get("content_resource.registered_app_view_ui.app_form.fieldset") ?? {};
@@ -36,7 +37,7 @@ class RegisteredAppFormViewPropsBuilder {
         const placeholder               = content_data[placeholder_text_key];
         const on_change                 = event_handler.handleOnInputchanged.bind(event_handler)
         const label_config              = { label_text, label_required_text: "" };
-        const input_config              = { id: field_key, type: input_type, placeholder, value: existing_value, required: true, on_change, rows: 8 }
+        const input_config              = { id: field_key, type: input_type, placeholder, value: existing_value, required: true, on_change, rows: 8, read_only }
 
         return InputGroupUIPropsBuilder.buildInputGroupProps(class_styles, label_config, input_config);
     }

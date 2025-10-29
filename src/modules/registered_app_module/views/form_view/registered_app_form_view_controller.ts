@@ -84,7 +84,9 @@ class RegisteredAppFormViewController extends BaseController {
 
     // Method to get ui state data
     protected getUIStateData(): Record<string, any> {  
-        const { social_link_obj } = this.prepareFormData();
+        const { social_link_obj, form_data }    = this.prepareFormData();
+        const { prefix = "" }                   = form_data;
+        const prefix_read_only_state            = prefix ? true : false;
 
         return {
             csrf_token: ref(null), social_links_obj: ref(social_link_obj),
@@ -93,7 +95,7 @@ class RegisteredAppFormViewController extends BaseController {
 
             app_name_input_group_prop: RegisteredAppFormViewPropsBuilder.getInputGroupProps(this.event_handler, "name", this?.props?.record?.name ?? ""),
 
-            app_prefix_input_group_prop: RegisteredAppFormViewPropsBuilder.getInputGroupProps(this.event_handler, "prefix", this?.props?.record?.prefix ?? ""),
+            app_prefix_input_group_prop: RegisteredAppFormViewPropsBuilder.getInputGroupProps(this.event_handler, "prefix", this?.props?.record?.prefix ?? "", "text", prefix_read_only_state),
 
             app_base_url_input_group_prop: RegisteredAppFormViewPropsBuilder.getInputGroupProps(this.event_handler, "base_url", this?.props?.record?.base_url ?? ""),
 
@@ -140,3 +142,4 @@ class RegisteredAppFormViewController extends BaseController {
 }
 
 export default RegisteredAppFormViewController;
+

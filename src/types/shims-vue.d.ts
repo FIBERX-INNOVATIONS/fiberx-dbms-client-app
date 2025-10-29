@@ -1,15 +1,5 @@
-import { ComponentPublicInstance } from "vue";
-
-declare module "@vue/runtime-core" {
-    interface ComponentCustomProperties {
-        $ENV: Record<string, any>;
-        $AUTH_ROUTES: string[];
-    }
-}
-
 // @ts-nocheck
 export {};
-
 
 ; declare global {
 	const __VLS_directiveBindingRestFields: { instance: null, oldValue: null, modifiers: any, dir: any };
