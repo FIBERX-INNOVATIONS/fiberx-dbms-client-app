@@ -12,7 +12,8 @@ export const LOCAT_STORAGE_FIELDS = {
 export const CSRF_TOKEN_FOR = {
     LOGIN: "login",
     TWO_FACTOR: "two_factor_login",
-    REGISTER_APP: "register_app"
+    REGISTER_APP: "register_app",
+    DATASOURCE: "datasource"
     
 }
 
