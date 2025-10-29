@@ -10,9 +10,8 @@ import { LOCAT_STORAGE_FIELDS }         from "@/enums/constants.enums";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
 
 
-
-class RegisteredAppMenuListConfig {
-    public readonly name = "registered_app_menu_list_config";
+class DatasourceMenuListConfig {
+    public readonly name = "datasource_menu_list_config";
 
     public static buildMenuItem (
         menu_id: string, 
@@ -39,7 +38,7 @@ class RegisteredAppMenuListConfig {
         const content_key               = content_field_key ? `content_resource.${content_field_key}.bulk_action_menu` : "content_resource.bulk_action_menu"
         const content_data              = content_manager?.get(content_key) ?? {};
         const member_authenticator      = MemberAuthManagerUtil.getInstance();
-        const can_member_bulk_delete    = member_authenticator.canMemberAccess("delete_registered_app", LOCAT_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY)
+        const can_member_bulk_delete    = member_authenticator.canMemberAccess("bulk_delete_datasource", LOCAT_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY)
 
         const menu_list: NavLinkUIPropsInterface[] = [];
 
@@ -48,7 +47,7 @@ class RegisteredAppMenuListConfig {
         if(can_member_bulk_delete) {
             const on_click = event_handler?.handleBulkDeleteActionClick?.bind(event_handler);
             menu_list.push(
-                this.buildMenuItem("BulkDeleteApps", bulk_delete_menu_text, "", bulk_delete_menu_svg_icon, on_click)
+                this.buildMenuItem("BulkDeleteDatasources", bulk_delete_menu_text, "", bulk_delete_menu_svg_icon, on_click)
             );
 
         }
@@ -68,31 +67,46 @@ class RegisteredAppMenuListConfig {
         const member_authenticator      = MemberAuthManagerUtil.getInstance();
         const member_perm_key           = LOCAT_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY;
 
-        const { is_active } = record;
+        const { is_active, is_created = false } = record;
 
         const { 
             view_menu_text, view_menu_svg_icon, select_menu_text, select_menu_svg_icon,
-            edit_menu_text, edit_menu_svg_icon, delete_menu_text, delete_menu_svg_icon 
+            edit_menu_text, edit_menu_svg_icon, delete_menu_text, delete_menu_svg_icon,
+            create_db_menu_text, create_db_menu_svg_icon, destroy_db_menu_text, destroy_db_menu_svg_icon
         } = content_data;
 
         const view_menu_on_click    = (event: MouseEvent) => { return event_handler.handleOpenProfileModal.bind(event_handler)(event, record); }
-        const view_menu             = this.buildMenuItem(`ViewApp-${record_index}`, view_menu_text, "", view_menu_svg_icon, view_menu_on_click);
+        const view_menu             = this.buildMenuItem(`ViewDatasource-${record_index}`, view_menu_text, "", view_menu_svg_icon, view_menu_on_click);
 
         const select_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOnRecordSelected.bind(event_handler)(event, record, true); }
-        const select_menu           = this.buildMenuItem(`SelectApp-${record_index}`, select_menu_text, "", select_menu_svg_icon, select_menu_on_click);
+        const select_menu           = this.buildMenuItem(`SelectDatasource-${record_index}`, select_menu_text, "", select_menu_svg_icon, select_menu_on_click);
 
         const menu_list: NavLinkUIPropsInterface[] = [view_menu, select_menu];
 
-        if(member_authenticator.canMemberAccess("update_registered_app", member_perm_key)) {
+        if(member_authenticator.canMemberAccess("update_datasource", member_perm_key) && !is_created) {
             const edit_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOpenFormModal.bind(event_handler)(event, record);}
-            const edit_menu           = this.buildMenuItem(`EditApp-${record_index}`, edit_menu_text, "", edit_menu_svg_icon, edit_menu_on_click);
+            const edit_menu           = this.buildMenuItem(`EditDatasource-${record_index}`, edit_menu_text, "", edit_menu_svg_icon, edit_menu_on_click);
 
             menu_list.push(edit_menu)
         }
 
-        if(member_authenticator.canMemberAccess("delete_registered_app", member_perm_key) && !is_active) {
+        if(member_authenticator.canMemberAccess("delete_datasource", member_perm_key) && !is_active && !is_created) {
             const delete_menu_on_click  = (event: MouseEvent) => { return event_handler.handleConfirmDelete.bind(event_handler)(event, record); }
-            const delete_menu           = this.buildMenuItem(`DeleteApp-${record_index}`, delete_menu_text, "", delete_menu_svg_icon, delete_menu_on_click);
+            const delete_menu           = this.buildMenuItem(`DeleteDatasource-${record_index}`, delete_menu_text, "", delete_menu_svg_icon, delete_menu_on_click);
+
+            menu_list.push(delete_menu)
+        }
+
+        if(member_authenticator.canMemberAccess("change_datasource_created_state", member_perm_key) && !is_created) {
+            const update_create_menu_on_click   = (event: MouseEvent) => { return event_handler.handleConfirmUpdateCreateInstance.bind(event_handler)(event, record); }
+            const delete_menu                   = this.buildMenuItem(`UpdateCreateDatasource-${record_index}`, create_db_menu_text, "", create_db_menu_svg_icon, update_create_menu_on_click);
+
+            menu_list.push(delete_menu)
+        }
+
+        if(member_authenticator.canMemberAccess("change_datasource_created_state", member_perm_key) && is_created) {
+            const update_create_menu_on_click   = (event: MouseEvent) => { return event_handler.handleConfirmUpdateCreateInstance.bind(event_handler)(event, record); }
+            const delete_menu                   = this.buildMenuItem(`UpdateCreateDatasource-${record_index}`, destroy_db_menu_text, "", destroy_db_menu_svg_icon, update_create_menu_on_click);
 
             menu_list.push(delete_menu)
         }
@@ -101,4 +115,4 @@ class RegisteredAppMenuListConfig {
     }
 }
 
-export default RegisteredAppMenuListConfig
+export default DatasourceMenuListConfig
