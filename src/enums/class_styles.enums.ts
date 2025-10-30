@@ -317,7 +317,7 @@ const ClassStyles = {
     form_view_ui: {
         section_wrapper_class_style: "w-full block my-2 space-y-6 px-4 h-full max-h-[70vh] overflow-y-auto",
         form_class_style: "space-y-6 py-4 w-full h-full",
-        social_links_class_style: {
+        object_input_section_class_styles: {
             wrapper_class_style: "w-full flex flex-col items-center justify-center my-4",
             header_class_style: "w-full flex items-center justify-between",
             header_label_class_style: "w-8/12 font-bold text-start truncate",

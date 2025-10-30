@@ -1,7 +1,7 @@
 import ClassStyles from "@/enums/class_styles.enums";
 
 const ui_class_styles           = ClassStyles.form_view_ui;
-const social_links_class_style  = ui_class_styles.social_links_class_style
+const social_links_class_style  = ui_class_styles.object_input_section_class_styles
 
 const RegisteredAppFormViewProps   = {
     record: { type: Object, default: () => {}, required: false },

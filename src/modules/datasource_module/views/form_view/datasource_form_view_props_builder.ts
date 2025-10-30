@@ -1,22 +1,21 @@
 
-import { reactive  }                from "vue";
-import ClassStyles                  from "@/enums/class_styles.enums";
-import ContentManagerUtil           from "@ui/version_2/utils/content_manager_util";
-import SVGIcons                     from "@ui/version_2/resources/svg_icon_resource";
-import RenderHtmlUtil               from "@ui/version_2/utils/render_html_util";
-import InputGroupUIPropsBuilder     from "@ui/version_2/props_builder/input_group_ui_props_builder";
-import { BaseEventHandlerInterface } from "@ui/version_2/types/component_type";
+import { reactive  }                    from "vue";
+import ClassStyles                      from "@/enums/class_styles.enums";
+import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
+import SVGIcons                         from "@ui/version_2/resources/svg_icon_resource";
+import RenderHtmlUtil                   from "@ui/version_2/utils/render_html_util";
+import InputGroupUIPropsBuilder         from "@ui/version_2/props_builder/input_group_ui_props_builder";
+import InputTransformerUtil             from "@ui/version_2/utils/input_formatter_util";
+import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type";
 
 import { 
     ButtonUIPropsInterface, 
     InputGroupPropsInterface,
 } from "@ui/version_2/types/props_builder_type";
-import InputTransformerUtil from "@ui/version_2/utils/input_formatter_util";
 
 
-
-class RegisteredAppFormViewPropsBuilder {
-    public readonly name = "registered_app_form_view_props_builder";
+class DatasourceFormViewPropsBuilder {
+    public readonly name = "datasource_form_view_props_builder";
 
     // Method to get app name input group props
     public static getInputGroupProps (
@@ -27,7 +26,7 @@ class RegisteredAppFormViewPropsBuilder {
         read_only: boolean = false
     ): InputGroupPropsInterface {
         const content_manager   = ContentManagerUtil.getInstance();
-        const content_data      = content_manager?.get("content_resource.registered_app_view_ui.app_form.fieldset") ?? {};
+        const content_data      = content_manager?.get("content_resource.datasource_view_ui.datasource_form.fieldset") ?? {};
         const class_styles      = ClassStyles?.input_ui ?? {};
 
         const { base, index }           = InputTransformerUtil.extractInputBaseAndIndexFieldKey(field_key);
@@ -43,14 +42,14 @@ class RegisteredAppFormViewPropsBuilder {
     }
 
     // Method to get add social link props
-    public static getAddSocialLinkProps (event_handler: BaseEventHandlerInterface,): ButtonUIPropsInterface {
+    public static getAddConnectionInfoProps (event_handler: BaseEventHandlerInterface,): ButtonUIPropsInterface {
         const class_styles          = ClassStyles?.social_link_btn_ui ?? {};
         const icon_class_style      = class_styles?.icon_class_style;
         const btn_class_style       = class_styles?.btn_class_style
         const btn_type              = "button";
         const content_text          = RenderHtmlUtil.renderHtml({ icon: SVGIcons.plus_circle_svg_icon, class_style: icon_class_style, icon_class_style })
         const loader_content_text   = RenderHtmlUtil.renderLoaderHtml({});
-        const on_click              = event_handler?.handleAddNewSocialLink.bind(event_handler);
+        const on_click              = event_handler?.handleAddNewConnectionInfo.bind(event_handler);
 
         return reactive({
             type: btn_type, disabled: false, show_loader: true, 
@@ -60,7 +59,7 @@ class RegisteredAppFormViewPropsBuilder {
     }
 
     // Method to get remove social link props
-    public static getRemoveSocialLinkProps(
+    public static getRemoveConnectionInfoProps(
         event_handler: BaseEventHandlerInterface,
         social_link_id: string, 
         social_link_key_input_id: string
@@ -71,7 +70,7 @@ class RegisteredAppFormViewPropsBuilder {
         const btn_type                      = "button";
         const content_text                  = RenderHtmlUtil.renderHtml({ icon: SVGIcons.delete_trash_svg_icon, class_style: icon_class_style, icon_class_style });
         const loader_content_text           = RenderHtmlUtil.renderLoaderHtml({});
-        const on_click                      = (event: MouseEvent) => { event_handler?.handleRemoveSocialLink?.bind(event_handler)(event, social_link_id, social_link_key_input_id) } ;
+        const on_click                      = (event: MouseEvent) => { event_handler?.handleRemoveConnectionInfo?.bind(event_handler)(event, social_link_id, social_link_key_input_id) } ;
 
         return reactive({
             id: social_link_id, type: btn_type, disabled: false, show_loader: false,
@@ -86,7 +85,7 @@ class RegisteredAppFormViewPropsBuilder {
         show_loader: boolean = true,
     ): ButtonUIPropsInterface {
         const content_manager       = ContentManagerUtil.getInstance();
-        const content_data          = content_manager?.get("content_resource.registered_app_view_ui.app_form.fieldset") ?? {};
+        const content_data          = content_manager?.get("content_resource.datasource_view_ui.datasource_form.fieldset") ?? {};
         const class_styles          = ClassStyles?.form_button_ui ?? {};
         const icon_class_style      = class_styles?.icon_class_style;
         const btn_class_style       = class_styles?.btn_class_style
@@ -102,7 +101,6 @@ class RegisteredAppFormViewPropsBuilder {
             content_text, loader_content_text, btn_class_style, on_click
         })
     }
-
 }
 
-export default RegisteredAppFormViewPropsBuilder
+export default DatasourceFormViewPropsBuilder

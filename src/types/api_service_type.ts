@@ -19,7 +19,7 @@ export interface RequestQueryInputInterface {
     preview_only?: string | boolean
 }
 
-export interface RegisterAppFormDataInterface {
+export interface RegisteredAppFormDataInterface {
   prefix: string;
   csrf_token: string, 
   name: string;

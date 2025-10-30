@@ -5,7 +5,7 @@ import { EventBus }                             from "@/utils/gloabal_event_bus"
 import BaseController                           from "@ui/version_2/base_classes/base_controller";
 import AuthService                              from "@/modules/auth_module/base_logic/auth_service";
 import RegisteredAppService                     from "@/modules/registered_app_module/base_logic/registered_app_service";
-import RegisteredAppFormEventHandler            from "@/modules/registered_app_module/views/form_view/registered_app_form_event_handler";
+import RegisteredAppFormViewEventHandler            from "@/modules/registered_app_module/views/form_view/registered_app_form_view_event_handler";
 import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";
 import ContentManagerUtil                       from "@ui/version_2/utils/content_manager_util";
 import InputTransformerUtil                     from "@ui/version_2/utils/input_formatter_util";
@@ -27,7 +27,7 @@ class RegisteredAppFormViewController extends BaseController {
     private member_auth_manager: MemberAuthManagerUtil;
     public service: RegisteredAppService;
     public auth_service: AuthService;
-    public event_handler: RegisteredAppFormEventHandler;
+    public event_handler: RegisteredAppFormViewEventHandler;
     public content_manager: ContentManagerUtil;
     public event_bus = EventBus;
 
@@ -40,7 +40,7 @@ class RegisteredAppFormViewController extends BaseController {
         this.content_manager            = ContentManagerUtil.getInstance();
         this.auth_service               = new AuthService (this);
         this.service                    = new RegisteredAppService(this);
-        this.event_handler              = new RegisteredAppFormEventHandler(this);
+        this.event_handler              = new RegisteredAppFormViewEventHandler(this);
     }
 
     // Method to populate form data with existing record

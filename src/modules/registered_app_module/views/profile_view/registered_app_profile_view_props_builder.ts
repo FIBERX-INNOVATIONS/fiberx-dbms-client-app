@@ -12,7 +12,7 @@ class RegisteredAppProfileViewPropsBuilder {
     public static getImgAvatarUIProps (
         record: Record<string, any>
     ): ImgAvatarUIPropsInterface {
-        const id = "RegisterAppProfileAvatar";
+        const id = "RegisteredAppProfileAvatar";
 
         if(!record?.public_id) { return { id } }
 

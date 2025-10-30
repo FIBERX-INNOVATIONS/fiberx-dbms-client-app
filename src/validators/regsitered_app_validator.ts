@@ -1,6 +1,6 @@
 import InputValidatorUtil from "@ui/version_2/utils/input_validator_util";
 import { 
-    RegisterAppFormDataInterface
+    RegisteredAppFormDataInterface
 } from "@/types/api_service_type";
 
 interface ValidationResult {
@@ -32,7 +32,7 @@ class RegisteredAppValidator {
 
     /** Validate registered app input */
     public static validateRegisteredAppInput(
-        registered_app_input: RegisterAppFormDataInterface,
+        registered_app_input: RegisteredAppFormDataInterface,
         old_record: Record<string, any>
     ): ValidationResult {
         const { csrf_token, name, prefix, base_url, logo_url, description, social_links = {} } = registered_app_input;
