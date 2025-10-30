@@ -28,7 +28,7 @@ import SVGIcons from "@ui/version_2/resources/svg_icon_resource";
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-class RegisteredAppEventHandler extends BaseEventHandler {
+class RegisteredAppListViewEventHandler extends BaseEventHandler {
     public content_manager: ContentManagerUtil;
     private redirect_timer: ReturnType<typeof setTimeout> | null = null;
     private status_alert_options: StatusPayloadOptionsInterface;
@@ -190,8 +190,8 @@ class RegisteredAppEventHandler extends BaseEventHandler {
     
     }
 
-    // Method to handle on record selected
-    public async afterRecordUpdated (updated_array: Record<string, any>[]) {
+    // Method to handle update table body props
+    public async updateTableBodyProps (updated_array: Record<string, any>[]) {
         const { state_refs, content_field_key, order_by, order_direction, record_id_key } = this.controller;
 
         if(!Array.isArray(updated_array)) { return }
@@ -284,11 +284,11 @@ class RegisteredAppEventHandler extends BaseEventHandler {
 
         if (!record_id_key || !Array.isArray(selected_records)) { return; }
 
-        const record_value          = record?.[record_id_key];
+        const record_value = record?.[record_id_key];
 
         if (!record_value) { return; }
 
-        let new_selected_records    = [...selected_records];
+        let new_selected_records = [...selected_records];
 
         if (checked && !new_selected_records.includes(record_value)) { 
             new_selected_records.push(record_value); 
@@ -347,6 +347,26 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         });
     }
 
+    // Method to handle on update a record in records
+    public async handleOnRecordUpdated (payload: RecordUpdatedPayloadInterface) {
+        const { record, record_id }             = payload;
+        const { record_id_key, records = [] }   = this.controller;
+        const record_to_update_index            = records.findIndex(
+            (obj: Record<string, any>) => { return obj[record_id_key] === record_id }
+        );
+
+        if(record_to_update_index < 0) { return }
+
+        const existing_record   = records[record_to_update_index];
+        const updated_record    = { ...existing_record, ...record };
+        const updated_records   = [...records];
+
+        updated_records[record_to_update_index] = updated_record
+
+        this.updateControllerAttributes({ records: updated_records });
+        this.logger.log("✅ Record updated successfully:", { record_id, updated_record });
+    }
+
     // Method to handle on record change of state
     public async handleOnRecordChangeState (event:MouseEvent | InputEvent, new_state_value: boolean): Promise<boolean> {
         await sleep(2000);
@@ -377,31 +397,13 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         }
     }
 
-    // Method to handle on update a record in records
-    public async handleOnRecordUpdated (payload: RecordUpdatedPayloadInterface) {
-        const { record, record_id }     = payload;
-        const { records = [] }          = this.controller;
-        const record_to_update_index    = records.findIndex((obj: Record<string, any>) => { return obj.public_id === record_id });
-
-        if(record_to_update_index < 0) { return }
-
-        const existing_record   = records[record_to_update_index];
-        const updated_record    = { ...existing_record, ...record };
-        const updated_records   = [...records];
-
-        updated_records[record_to_update_index] = updated_record
-
-        this.updateControllerAttributes({ records: updated_records });
-        this.logger.log("✅ Record updated successfully:", { record_id, updated_record });
-    }
-
     // Method to handle on delete record in recods
     public async handleOnRecordDeleted (payload: RecordDeletedPayloadInterface) {
         const { record_id } = payload;
-        const { records = [], total_items = 0, total_pages = 0, size = 12 } = this.controller;
+        const { record_id_key, records = [], total_items = 0, total_pages = 0, size = 12 } = this.controller;
 
         // 🟩 Find the index of the record to delete
-        const record_index = records.findIndex((obj: Record<string, any>) => obj.public_id === record_id);
+        const record_index = records.findIndex((obj: Record<string, any>) => obj[record_id_key] === record_id);
 
         if (record_index < 0) {
             this.logger.warn(`⚠️ Record with ID '${record_id}' not found.`);
@@ -409,7 +411,7 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         }
 
         // 🔴 Remove record completely from array and Recalculate total items and pages
-        const updated_records       = records.filter((obj: Record<string, any>) => obj.public_id !== record_id);
+        const updated_records       = records.filter((obj: Record<string, any>) => obj[record_id_key] !== record_id);
         const updated_total_items   = Math.max(total_items - 1, 0);
         const updated_total_pages   = Math.ceil(updated_total_items / size);
 
@@ -562,8 +564,8 @@ class RegisteredAppEventHandler extends BaseEventHandler {
             this.controller.event_bus.emit("open_new_modal", open_modal_payload);
         }
         catch(error: unknown) {
-            const formatted_api_msg     = this.content_manager?.getAPIResponseValue("app_record_not_found");
-            const status_alert_payload  = { status: "error", message: formatted_api_msg, options: this.status_alert_options };
+            const formatted_api_msg     = this.content_manager?.getAPIResponseValue("form_open_failed_refresh_page");
+            const status_alert_payload  = { status: "error", message: formatted_api_msg, options: { duration: 0 } };
             this.controller.event_bus.emit("statusChanged", status_alert_payload);
         }
     }
@@ -573,7 +575,8 @@ class RegisteredAppEventHandler extends BaseEventHandler {
         if(record.is_active) { return };
 
         try {
-            const record_id             = record?.public_id;
+            const { record_id_key }     = this.controller;
+            const record_id             = record?.[record_id_key];
             const event_name            = "on_record_deleted";
             const status_alert_payload  = { status: "error", message: "", options: this.status_alert_options };
 
@@ -608,4 +611,4 @@ class RegisteredAppEventHandler extends BaseEventHandler {
 
 }
 
-export default RegisteredAppEventHandler;
+export default RegisteredAppListViewEventHandler;

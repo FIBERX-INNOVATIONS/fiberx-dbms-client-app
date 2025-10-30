@@ -52,7 +52,7 @@ class AppRootEventHandler extends BaseEventHandler {
         if (duration > 0) { await new Promise((resolve) => setTimeout(resolve, duration)); }
 
         // Hide alert after duration
-        this.controller.state_refs.status_alert_props.visible = false;
+        // this.controller.state_refs.status_alert_props.visible = false;
 
         // Handle post-alert actions
         if(!this.controller.router) { return }

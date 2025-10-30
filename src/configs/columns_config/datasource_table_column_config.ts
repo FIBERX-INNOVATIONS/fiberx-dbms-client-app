@@ -21,9 +21,9 @@ class DatasourceTableColumnConfig {
 
     // Method to get is_active ui props
     private static getIsActiveUIProps (event_handler: BaseEventHandlerInterface, record: Record<string, any>): InputUIPropsInterface {
-        const { public_id, is_active } = record;
+        const { id, is_active }     = record;
         const is_active_boolean     = is_active ? true : false
-        const switch_props          = BaseTableColumnConfig.geIsActiveSwitchProps(public_id, is_active_boolean);
+        const switch_props          = BaseTableColumnConfig.geIsActiveSwitchProps(id.toString(), is_active_boolean);
         switch_props.on_click       = event_handler.handleOnRecordChangeState.bind(event_handler);
 
         return switch_props;
@@ -77,7 +77,7 @@ class DatasourceTableColumnConfig {
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
                 content_wrapper_class_style: sortable_cell_content_wrapper_class_style,
-                col_class_style: "",
+                col_class_style: "font-black uppercase",
             },
             {
                 label_content: type_text,
@@ -89,7 +89,7 @@ class DatasourceTableColumnConfig {
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
                 content_wrapper_class_style: sortable_cell_content_wrapper_class_style,
-                col_class_style: "",
+                col_class_style: "font-black uppercase",
             },
             {
                 label_content: host_text,
@@ -108,13 +108,13 @@ class DatasourceTableColumnConfig {
                 label_content: database_name_text,
                 sortable: true,
                 sort_direction: "none" as SortDirectionType,
-                field_key: "databsae_name",
+                field_key: "database_name",
                 on_sort,
                 content_type: "plain" as const,
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
                 content_wrapper_class_style: sortable_cell_content_wrapper_class_style,
-                col_class_style: "",
+                col_class_style: ClassStyles.profile_img_avatar_ui.right_slot_sub_title_class_style,
             },
             {
                 label_content: created_at_text,

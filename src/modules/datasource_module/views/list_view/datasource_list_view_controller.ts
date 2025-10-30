@@ -3,16 +3,16 @@ import { Router, useRouter }                    from "vue-router";
 import { LOCAT_STORAGE_FIELDS }                 from "@/enums/constants.enums";
 import { EventBus }                             from "@/utils/gloabal_event_bus";
 import BaseListViewPropsBuilder                 from "@/modules/dashboard_module/base_logic/base_list_view_props_builder";
-import RegisteredAppListViewEventHandler                from "@/modules/registered_app_module/views/list_view/registered_app_list_view_event_handler";
-import RegisteredAppService                     from "@/modules/registered_app_module/base_logic/registered_app_service";
+import DatasourceEventHandler                   from "@/modules/datasource_module/views/list_view/datasource_list_view_event_handler";
+import DatasourceService                        from "@/modules/datasource_module/base_logic/datasource_service";
 import BaseController                           from "@ui/version_2/base_classes/base_controller";
 import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";
 import PageTitleAndBreadcrumbSectionUI          from "@/ui_components/page_title_and_breadcrumb_section_ui/page_title_and_breadcrumb_section_ui.vue";
 import SearchAndActionBtnSectionUI              from "@/ui_components/search_and_action_btn_section_ui/search_and_action_btn_section_ui.vue";
 import PaginationResultAndBulkActionSectionUI   from "@/ui_components/pagination_result_and_bulk_action_section_ui/pagination_result_and_bulk_action_section_ui.vue";
 import DataTableSectionUI                       from "@/ui_components/data_table_section_ui/data_table_section_ui.vue";
-import RegisteredAppMenuListConfig              from "@/configs/menu_list_configs/registered_app_menu_list_config";
-import RegisteredAppTableColumnConfig           from "@/configs/columns_config/registered_app_table_column_config";
+import DatasourceMenuListConfig                 from "@/configs/menu_list_configs/datasource_menu_list_config";
+import DatasourceTableColumnConfig              from "@/configs/columns_config/datasource_table_column_config";
 import PaginationUI                             from "@ui/version_2/components/NavigationUI/PaginationUI/pagination_ui.vue";
 import { 
     ButtonUIPropsInterface, 
@@ -26,12 +26,12 @@ import {
 
 
 
-class RegisteredAppListViewController extends BaseController {
+class DatasourceListViewController extends BaseController {
     public router: Router;
     private member_auth_manager: MemberAuthManagerUtil;
     public content_field_key: string;
-    public event_handler: RegisteredAppListViewEventHandler;
-    public service: RegisteredAppService;
+    public event_handler: DatasourceEventHandler;
+    public service: DatasourceService;
     public event_bus = EventBus;
     public bulk_action_btn_id: string;
     public bulk_action_menu_id: string;
@@ -45,19 +45,19 @@ class RegisteredAppListViewController extends BaseController {
     public records: Record<string, any>[];
     public selected_record: Record<string, any> | null;
     public selected_records: string[] | number [];
-    public record_id_key = "public_id";
+    public record_id_key = "id";
 
 
     constructor(props: Record<string, any> = {}) {
-        super("registered_app_list_view", props);
+        super("datasource_list_view", props);
 
         this.router                     = useRouter();
         this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
-        this.event_handler              = new RegisteredAppListViewEventHandler(this);
-        this.service                    = new RegisteredAppService(this);
-        this.content_field_key          = "registered_app_view_ui";
-        this.bulk_action_btn_id         = "RegisteredAppBulkActionBtn";
-        this.bulk_action_menu_id        = "RegisteredAppBulkActionMenu";
+        this.event_handler              = new DatasourceEventHandler(this);
+        this.service                    = new DatasourceService(this);
+        this.content_field_key          = "datasource_view_ui";
+        this.bulk_action_btn_id         = "DatasourceBulkActionBtn";
+        this.bulk_action_menu_id        = "DatasourceBulkActionMenu";
         this.current_page               = 1;
         this.total_pages                = 0;
         this.total_items                = 0;
@@ -127,11 +127,11 @@ class RegisteredAppListViewController extends BaseController {
 
             bulk_action_btn_props: BaseListViewPropsBuilder.getEllipsisBtnProps(this.bulk_action_btn_id, this.event_handler, false),
 
-            bulk_action_dropdown_menu_props: BaseListViewPropsBuilder.getBulkActionMenuListProps(this.bulk_action_btn_id, this.bulk_action_menu_id, this.event_handler, this.content_field_key, RegisteredAppMenuListConfig),
+            bulk_action_dropdown_menu_props: BaseListViewPropsBuilder.getBulkActionMenuListProps(this.bulk_action_btn_id, this.bulk_action_menu_id, this.event_handler, this.content_field_key, DatasourceMenuListConfig),
 
-            table_header_props: BaseListViewPropsBuilder.getDataTableHeaderProps(this.event_handler, this.content_field_key, RegisteredAppTableColumnConfig, this.order_by, this.order_direction, this.records.length, this.selected_records),
+            table_header_props: BaseListViewPropsBuilder.getDataTableHeaderProps(this.event_handler, this.content_field_key, DatasourceTableColumnConfig, this.order_by, this.order_direction, this.records.length, this.selected_records),
 
-            table_body_props: BaseListViewPropsBuilder.getDataTableBodyProps(this.event_handler, this.content_field_key, RegisteredAppTableColumnConfig, this.record_id_key, this.order_by, this.order_direction, this.records, this.selected_records),
+            table_body_props: BaseListViewPropsBuilder.getDataTableBodyProps(this.event_handler, this.content_field_key, DatasourceTableColumnConfig, this.record_id_key, this.order_by, this.order_direction, this.records, this.selected_records),
 
             pagination_props: BaseListViewPropsBuilder.getPaginationProps(this.event_handler, this.content_field_key),
         } 
@@ -171,11 +171,11 @@ class RegisteredAppListViewController extends BaseController {
         return BaseListViewPropsBuilder.getDataTableMenuListProps(
             this.event_handler, 
             this.content_field_key, 
-            RegisteredAppMenuListConfig, 
+            DatasourceMenuListConfig, 
             record_index, 
             record
         );
     }
 }
 
-export default RegisteredAppListViewController;
+export default DatasourceListViewController;

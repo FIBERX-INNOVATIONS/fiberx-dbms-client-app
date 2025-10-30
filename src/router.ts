@@ -16,7 +16,7 @@ const TwoFactorLoginView        = () => import("@/modules/auth_module/views/two_
 const LogoutView                = () => import("@/modules/auth_module/views/logout_view/logout_view.vue");
 const DashboardView             = () => import("@/modules/dashboard_module/views/main_dashboard_view/main_dashboard_view.vue");
 const RegisteredAppListView     = () => import("@/modules/registered_app_module/views/list_view/registered_app_list_view.vue");
-// const DatasourceView            = () => import("@/modules/datasource_module/views/list_view_ui.vue");
+const DatasourceListView        = () => import("@/modules/datasource_module/views/list_view/datasource_list_view.vue");
 // const SchemaView                = () => import("@/modules/schema_module/views/schemas_view.vue");
 // const AppSchemaView             = () => import("@/modules/app_schema_module/views/app_schemas_view.vue");
 // const MemberView                = () => import("@/modules/member_module/views/members_view.vue");
@@ -155,7 +155,7 @@ class RouterManager {
             },
             { 
                 path: "/registered-apps", 
-                name: "RegisteredApps", 
+                name: "RegisteredAppListView", 
                 component: RegisteredAppListView,
                 meta: {
                     title_key: "registered-app-page", 
@@ -163,17 +163,16 @@ class RouterManager {
                     requires_full_auth: true
                 }
             },
-
-        //     { 
-        //         path: "/datasources", 
-        //         name: "DatasourceView", 
-        //         component: DatasourceView, 
-        //         meta: {
-        //             title_key: "datasource-page", 
-        //             permission_name: "view_all_datasources" , 
-        //             requires_full_auth: true
-        //         }
-        //     },
+            { 
+                path: "/datasources", 
+                name: "DatasourceListView", 
+                component: DatasourceListView, 
+                meta: {
+                    title_key: "datasource-page", 
+                    permission_name: "view_all_datasources" , 
+                    requires_full_auth: true
+                }
+            },
 
         //     { 
         //         path: "/schemas",  
