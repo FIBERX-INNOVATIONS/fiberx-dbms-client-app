@@ -95,7 +95,12 @@ class DatasourceValidator {
         .filter(
             ([key, value]) => {
                 const is_placeholder_key = /^Key_\d+$/.test(key);
-                return ((!InputValidatorUtil.isEmpty(value) ) || is_placeholder_key || !InputValidatorUtil.isLowerSnakeCase(key))
+                return (
+                    (InputValidatorUtil.isEmpty(value.toString()) ) || 
+                    (InputValidatorUtil.isEmpty(key)) || 
+                    (!InputValidatorUtil.isLowerSnakeCase(key)) ||
+                    is_placeholder_key
+                )
             }
         ).map(([key]) => key);
 

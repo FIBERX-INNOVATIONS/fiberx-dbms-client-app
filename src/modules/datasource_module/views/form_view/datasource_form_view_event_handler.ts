@@ -1,12 +1,17 @@
 
 import { markRaw }                      from "vue";
 import AuthPropsBuilder                 from "@/modules/auth_module/base_logic/auth_props_builder";
+import RegisteredAppAPIService          from "@/api_services/registered_app_api_service";
 import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
 import InputTransformerUtil             from "@ui/version_2/utils/input_formatter_util";
 import DatasourceValidator              from "@/validators/datasource_validator";
 import BaseEventHandler                 from "@ui/version_2/base_classes/base_event_handler";
 import { BaseControllerInterface }      from "@ui/version_2/types/component_type";
-import { DatasourceFormDataInterface } from "@/types/api_service_type";
+
+import { 
+    DatasourceFormDataInterface, 
+    RequestQueryInputInterface }        from "@/types/api_service_type";
+    
 import { 
     OpenNewModalPayloadInterface, 
     StatusPayloadOptionsInterface }     from "@/types/app_event_type";
@@ -16,6 +21,7 @@ class DatasourceFormViewEventHandler extends BaseEventHandler {
     public content_manager: ContentManagerUtil;
     private redirect_timer: ReturnType<typeof setTimeout> | null = null;
     private status_alert_options: StatusPayloadOptionsInterface;
+    private registereda_app_api_service: RegisteredAppAPIService;
 
 
     constructor(controller: BaseControllerInterface) {
@@ -23,6 +29,7 @@ class DatasourceFormViewEventHandler extends BaseEventHandler {
 
         this.content_manager                = ContentManagerUtil.getInstance();
         this.status_alert_options           = { duration: 3000, close_modal: true };
+        this.registereda_app_api_service    = new RegisteredAppAPIService();
     }
     
 
@@ -125,12 +132,17 @@ class DatasourceFormViewEventHandler extends BaseEventHandler {
         if(this.form_data?.connection_info) { this.handleUpdateConnectionInfoObjects(); }
     }
 
+    // Method to fetch preview registered apps
+    public async fetchPreviewRegisteredApps (params: RequestQueryInputInterface) {
+       return this.registereda_app_api_service.getAllRegisteredApps(params);
+    }
+
     // Method to handle login submit btn click
     public async handleSubmitBtnClick (event: MouseEvent) {
         this.hideErrorAlert()
         try {
             const record                = this.controller.props?.record ?? {}
-            const record_id             = record?.public_id;
+            const record_id             = record?.id;
             const event_name            = record_id ? "on_record_updated" : "on_new_record_created";
             const form_data             = this.form_data  as DatasourceFormDataInterface;
             const { v_state, v_msg }    = DatasourceValidator.validateDatasourceInput(form_data, record);
@@ -151,14 +163,13 @@ class DatasourceFormViewEventHandler extends BaseEventHandler {
                 ({ s_state, s_msg, s_data, logout } = await this.controller.service?.executeRegisterNewDatasource(form_data))
             }
 
+            const formmated_status_msg = this.content_manager?.getAPIResponseValue(s_msg);
+
             if(logout) { return await this.controller.router.push("/logout"); }
 
-            if(!s_state) {
-                const error_msg = this.content_manager?.getAPIResponseValue(s_msg);
-                return this.showErrorAlert("error", error_msg)
-            }
+            if(!s_state) { return this.showErrorAlert("error", formmated_status_msg); }
 
-            const status_alert_payload  = { status: "success", message: s_msg, options: this.status_alert_options };
+            const status_alert_payload  = { status: "success", message: formmated_status_msg, options: this.status_alert_options };
             const event_payload         = { record_id, record: {...form_data, ...s_data} }
 
             this.controller.event_bus.emit("statusChanged", status_alert_payload);

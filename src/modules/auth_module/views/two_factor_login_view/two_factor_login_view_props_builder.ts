@@ -38,11 +38,14 @@ class TwoFactorLoginViewPropsBuilder {
 
         const on_change     = event_handler.handleOnInputchanged.bind(event_handler)
         const label_config  = { label_text: otp_label_text, label_required_text: "" };
-        const input_config  = { 
-            id: "otp_code", type: "otp", placeholder: otp_placeholder_text,
-            value: [], required: true, on_change, length: 6,
-            wrapper_class_style: class_styles.otp_wrapper_class_style
-        }
+        const input_config  = InputGroupUIPropsBuilder.getInputUIConfig(
+            "otp_code", "otp", otp_placeholder_text, [], 
+            { required: true },
+            {},
+            { length: 6, min: 0, max: 9 },
+            { on_change },
+            { ...class_styles, wrapper_class_style: class_styles.otp_wrapper_class_style }
+        ) 
 
         return InputGroupUIPropsBuilder.buildInputGroupProps(class_styles, label_config, input_config);
     }

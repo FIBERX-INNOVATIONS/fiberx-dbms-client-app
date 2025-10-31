@@ -347,7 +347,7 @@ class DatasourceListViewEventHandler extends BaseEventHandler {
         const { record, record_id }             = payload;
         const { record_id_key, records = [] }   = this.controller;
         const record_to_update_index            = records.findIndex(
-            (obj: Record<string, any>) => { return obj[record_id_key] === record_id }
+            (obj: Record<string, any>) => { return obj[record_id_key].toString() === record_id.toString() }
         );
 
         if(record_to_update_index < 0) { return }

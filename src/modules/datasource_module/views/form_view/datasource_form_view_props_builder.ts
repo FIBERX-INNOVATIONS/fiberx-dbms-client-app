@@ -11,19 +11,32 @@ import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type
 import { 
     ButtonUIPropsInterface, 
     InputGroupPropsInterface,
+    InputUIPropsInterface,
 } from "@ui/version_2/types/props_builder_type";
 
 
 class DatasourceFormViewPropsBuilder {
     public readonly name = "datasource_form_view_props_builder";
 
+    // Method to render registered app label in select search
+    private static renderRegisteredAppLabel (record: Record<string, any>): string {
+        if(!record || !record?.public_id || !record?.name) { return "" }
+
+        const { public_id, name, logo_utl } = record;
+        return `[${public_id}] ${name}`;
+    }
+
+    // Method to get registered app value
+    private static getRegisteredAppValue (record: Record<string, any>): string { return record?.public_id ?? "" }
+ 
     // Method to get app name input group props
     public static getInputGroupProps (
         event_handler: BaseEventHandlerInterface,
         field_key: string, 
         existing_value: string | number | boolean = "",
         input_type: string = "text",
-        read_only: boolean = false
+        read_only: boolean = false,
+        record: Record<string, any> = {}
     ): InputGroupPropsInterface {
         const content_manager   = ContentManagerUtil.getInstance();
         const content_data      = content_manager?.get("content_resource.datasource_view_ui.datasource_form.fieldset") ?? {};
@@ -34,9 +47,20 @@ class DatasourceFormViewPropsBuilder {
         const placeholder_text_key      = `${base}_placeholder_text`;
         const label_text                = content_data[label_text_key];
         const placeholder               = content_data[placeholder_text_key];
-        const on_change                 = event_handler.handleOnInputchanged.bind(event_handler)
+        const on_change                 = event_handler.handleOnInputchanged.bind(event_handler);
+        const fetch_method              = event_handler.fetchPreviewRegisteredApps.bind(event_handler);
+        const render_option_label       = this.renderRegisteredAppLabel;
+        const get_option_value          = this.getRegisteredAppValue;
         const label_config              = { label_text, label_required_text: "" };
-        const input_config              = { id: field_key, type: input_type, placeholder, value: existing_value, required: true, on_change, rows: 8, read_only }
+        const input_boolean_config      = { required: true, cache_enabled: true, read_only };
+        const input_content_config      = { no_options_content: content_data?.no_registered_apps_text, label_text: this.renderRegisteredAppLabel(record) };
+        const input_number_config       = { rows: 8 };
+        const input_event_methods       = { on_change, fetch_method, render_option_label, get_option_value };
+        const input_config              = InputGroupUIPropsBuilder.getInputUIConfig(
+            field_key, input_type, placeholder, existing_value, 
+            input_boolean_config, input_content_config, 
+            input_number_config, input_event_methods, class_styles
+        )
 
         return InputGroupUIPropsBuilder.buildInputGroupProps(class_styles, label_config, input_config);
     }

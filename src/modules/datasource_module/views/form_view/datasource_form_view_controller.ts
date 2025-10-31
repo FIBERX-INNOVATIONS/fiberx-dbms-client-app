@@ -89,17 +89,26 @@ class DatasourceFormViewController extends BaseController {
 
             connection_info_label_text: this.content_manager.get("content_resource.datasource_view_ui.datasource_form.fieldset.connection_info_label_text"),
 
-            app_name_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "name", this?.props?.record?.name ?? ""),
+            registered_app_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(
+                this.event_handler, 
+                "registered_app_public_id", 
+                this?.props?.record?.datasource_app?.public_id ?? "", 
+                "select_search", 
+                false, 
+                this?.props?.record?.datasource_app
+            ),
 
-            app_datasource_type_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "datasource_type", this?.props?.record?.datasource_type ?? ""),
+            name_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "name", this?.props?.record?.name ?? ""),
 
-            app_host_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "host", this?.props?.record?.host ?? ""),
+            datasource_type_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "datasource_type", this?.props?.record?.datasource_type ?? ""),
 
-            app_port_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "port", this?.props?.record?.port ?? ""),
+            host_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "host", this?.props?.record?.host ?? ""),
 
-            app_username_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "username", this?.props?.record?.username ?? ""),
+            port_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "port", this?.props?.record?.port ?? ""),
 
-            app_database_name_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "database_name", this?.props?.record?.database_name ?? ""),
+            username_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "username", this?.props?.record?.username ?? ""),
+
+            database_name_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "database_name", this?.props?.record?.database_name ?? ""),
 
             add_connection_info_props: DatasourceFormViewPropsBuilder.getAddConnectionInfoProps(this.event_handler),
 

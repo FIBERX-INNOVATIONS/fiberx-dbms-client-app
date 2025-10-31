@@ -59,7 +59,18 @@ const ClassStyles = {
         otp_wrapper_class_style: "flex gap-2 justify-center",
         label_class_style: "text-sm font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
         label_required_class_style: "italic font-medium",
-        input_class_style: "w-full min-h-10 flex w-full rounded-md border px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2  bg-gray-200 border-blue-600/70 text-black placeholder-gray-400 focus:ring-sky-500"
+        input_class_style: "w-full min-h-10 flex w-full rounded-md border px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2  bg-gray-200 border-blue-600/70 text-black placeholder-gray-400 focus:ring-sky-500",
+        loader_class_style: "",
+        switch_btn_class_style: "",
+        label_text_class_style: "",
+        knob_class_style: "",
+        active_class_style: "",
+        inactive_class_style: "",
+        caret_icon_class: "w-6 h-10 flex items-center absolute right-2 top-1/3 -translate-y-1/2 text-gray-500 cursor-pointer",
+        dropdown_wrapper_class_style: "w-full min-h-[120px] h-auto max-h-[270px] overflow-x-hidden overflow-y-auto absolute top-11 rounded-lg shadow-2xl border-2 bg-white border-gray-200",
+        options_wrapper_class_style: "w-full flex flex-col items-center justify-center space-y-2",
+        option_class_style: "w-full flex items-center justify-start px-[5%] py-4 hover:bg-gray-200 cursor-pointer border-b-2 border-[#6f7e8d6e] last:border-b-0",
+        option_content_class_style: "",
     },
     toast_alert_ui: {
         wrapper_class_style: "w-full flex items-stretch justify-start border-l-4 rounded-lg",
@@ -165,7 +176,7 @@ const ClassStyles = {
             active_menu_class_style: "bg-[#6f7e8d6e]",
             icon_img_wrapper_class_style: "flex items-center justify-center overflow-hidden  w-3/12 p-2",
             icon_img_class_style: "w-full h-auto text-white",
-            content_class_style: "flex items-center justify-start text-white text-[16px] text-start w-full"
+            content_class_style: "flex items-center justify-start text-white text-[12px] text-start w-full"
         }
     },
     sidebar_ui: {
@@ -194,7 +205,7 @@ const ClassStyles = {
             active_menu_class_style: "bg-[#6f7e8d6e]",
             icon_img_wrapper_class_style: "flex items-center justify-center overflow-hidden  w-3/12 p-2",
             icon_img_class_style: "w-full h-auto text-white",
-            content_class_style: "flex items-center justify-start text-white text-[16px] text-start w-full"
+            content_class_style: "flex items-center justify-start text-white text-[12px] text-start w-full"
         }
     },
     main_dashboard_ui: {
@@ -252,9 +263,9 @@ const ClassStyles = {
             menu_list_item_ui: {
                 wrapper_class_style: "flex items-center cursor-pointer px-4 py-2 flex justify-between items-center group/link w-full hover:bg-[#6f7e8d6e]",
                 active_menu_class_style: "bg-[#6f7e8d6e]",
-                icon_img_wrapper_class_style: "flex items-center justify-center overflow-hidden  w-3/12 p-1.5",
+                icon_img_wrapper_class_style: "flex items-center justify-center overflow-hidden  w-3/12 p-2",
                 icon_img_class_style: "w-full h-auto text-gray-900",
-                content_class_style: "flex items-center justify-start text-gray-900 text-[16px] text-start w-full"
+                content_class_style: "flex items-center justify-start text-gray-900 text-[12px] text-start w-9/12"
             }
         },
         data_table_ui: {

@@ -1,12 +1,13 @@
 <template>
     <section id="DatasourceFormView" :class="props?.section_wrapper_class_style">
         <form @submit.prevent :class="props?.form_class_style">
-            <InputGroupUI v-bind="app_name_input_group_prop" />
-            <InputGroupUI v-bind="app_datasource_type_input_group_prop" />
-            <InputGroupUI v-bind="app_host_input_group_prop" />
-            <InputGroupUI v-bind="app_port_input_group_prop" /> 
-            <InputGroupUI v-bind="app_username_input_group_prop" /> 
-            <InputGroupUI v-bind="app_database_name_input_group_prop" /> 
+            <InputGroupUI v-bind="registered_app_input_group_prop" />
+            <InputGroupUI v-bind="name_input_group_prop" />
+            <InputGroupUI v-bind="datasource_type_input_group_prop" />
+            <InputGroupUI v-bind="host_input_group_prop" />
+            <InputGroupUI v-bind="port_input_group_prop" /> 
+            <InputGroupUI v-bind="username_input_group_prop" /> 
+            <InputGroupUI v-bind="database_name_input_group_prop" /> 
             <div :class="props.connection_info_wrapper_class_style">
                 <div :class="props.connection_info_header_class_style">
                     <span :class="props.connection_info_header_label_class_style">
@@ -67,12 +68,13 @@ const {  InputGroupUI, ToastAlertUI, ButtonUI  } = components;
 
 const {
     connection_info_obj,
-    app_name_input_group_prop,
-    app_datasource_type_input_group_prop,
-    app_host_input_group_prop,
-    app_port_input_group_prop,
-    app_username_input_group_prop,
-    app_database_name_input_group_prop,
+    registered_app_input_group_prop,
+    name_input_group_prop,
+    datasource_type_input_group_prop,
+    host_input_group_prop,
+    port_input_group_prop,
+    username_input_group_prop,
+    database_name_input_group_prop,
     add_connection_info_props,
     connection_info_label_text,
     toast_alert_props,

@@ -151,14 +151,13 @@ class RegisteredAppFormViewEventHandler extends BaseEventHandler {
                 ({ s_state, s_msg, s_data, logout } = await this.controller.service?.executeRegisterNewApp(form_data))
             }
 
+            const formmated_status_msg = this.content_manager?.getAPIResponseValue(s_msg);
+
             if(logout) { return await this.controller.router.push("/logout"); }
 
-            if(!s_state) {
-                const error_msg = this.content_manager?.getAPIResponseValue(s_msg);
-                return this.showErrorAlert("error", error_msg)
-            }
+            if(!s_state) { return this.showErrorAlert("error", formmated_status_msg) }
 
-            const status_alert_payload  = { status: "success", message: s_msg, options: this.status_alert_options };
+            const status_alert_payload  = { status: "success", message: formmated_status_msg, options: this.status_alert_options };
             const event_payload         = { record_id, record: {...form_data, ...s_data} }
 
             this.controller.event_bus.emit("statusChanged", status_alert_payload);
