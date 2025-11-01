@@ -98,14 +98,14 @@ class DatasourceMenuListConfig {
         }
 
         if(member_authenticator.canMemberAccess("change_datasource_created_state", member_perm_key) && !is_created && is_active) {
-            const update_create_menu_on_click   = (event: MouseEvent) => { return event_handler.handleConfirmUpdateCreateInstance.bind(event_handler)(event, record); }
+            const update_create_menu_on_click   = (event: MouseEvent) => { return event_handler.handleConfirmCreateInstance.bind(event_handler)(event, record); }
             const delete_menu                   = this.buildMenuItem(`UpdateCreateDatasource-${record_index}`, create_db_menu_text, "", create_db_menu_svg_icon, update_create_menu_on_click);
 
             menu_list.push(delete_menu)
         }
 
         if(member_authenticator.canMemberAccess("change_datasource_created_state", member_perm_key) && is_created && !is_active) {
-            const update_create_menu_on_click   = (event: MouseEvent) => { return event_handler.handleConfirmUpdateCreateInstance.bind(event_handler)(event, record); }
+            const update_create_menu_on_click   = (event: MouseEvent) => { return event_handler.handleConfirmDestroyInstance.bind(event_handler)(event, record); }
             const delete_menu                   = this.buildMenuItem(`UpdateCreateDatasource-${record_index}`, destroy_db_menu_text, "", destroy_db_menu_svg_icon, update_create_menu_on_click);
 
             menu_list.push(delete_menu)

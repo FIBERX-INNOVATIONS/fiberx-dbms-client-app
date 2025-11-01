@@ -398,7 +398,7 @@ class DatasourceListViewEventHandler extends BaseEventHandler {
         const { record_id_key, records = [], total_items = 0, total_pages = 0, size = 12 } = this.controller;
 
         // 🟩 Find the index of the record to delete
-        const record_index = records.findIndex((obj: Record<string, any>) => obj[record_id_key] === record_id);
+        const record_index = records.findIndex((obj: Record<string, any>) => obj[record_id_key].toString() === record_id.toString());
 
         if (record_index < 0) {
             this.logger.warn(`⚠️ Record with ID '${record_id}' not found.`);
@@ -406,7 +406,7 @@ class DatasourceListViewEventHandler extends BaseEventHandler {
         }
 
         // 🔴 Remove record completely from array and Recalculate total items and pages
-        const updated_records       = records.filter((obj: Record<string, any>) => obj[record_id_key] !== record_id);
+        const updated_records       = records.filter((obj: Record<string, any>) => obj[record_id_key].toString() !== record_id.toString());
         const updated_total_items   = Math.max(total_items - 1, 0);
         const updated_total_pages   = Math.ceil(updated_total_items / size);
 
@@ -471,51 +471,38 @@ class DatasourceListViewEventHandler extends BaseEventHandler {
 
     // Method to handle delete confim
     public async handleConfirmDelete (event: Event | InputEvent, record: Record<string, any> = {}) {
-        try {
+        const { is_active, is_created, name } = record;
 
-            if(record.is_active) { return };
+        if(is_active || is_created) { return };
 
-            const class_styles = ClassStyles.confirm_action_ui;
-            const content_data = this.content_manager?.get("content_resource.datasource_view_ui.confirm_delete_modal");
+        const on_confirm_click = (event: MouseEvent) => { this.handleDeleteARecord(event, record); }
 
-            const { title_text, question_text, cancel_btn_text, confirm_btn_text }    = content_data;
-            const { 
-                wrapper_class_style, 
-                content_text_wrapper_class_style, 
-                content_class_style, 
-                action_btn_wrapper_class_style,
-                cancel_action_btn_ui,
-                confirm_action_btn_ui
-            } = class_styles
+        this.handleOpenConfirmModal("confirm_delete_modal", name, on_confirm_click);
+        return;
+    }
 
-            const cancel_btn_class_style        = cancel_action_btn_ui.content_class_style;
-            const cancel_btn_icon_class_style   = cancel_action_btn_ui.icon_class_style;
-            const confirm_btn_class_style       = confirm_action_btn_ui.content_class_style;
-            const confirm_btn_icon_class_style  = cancel_action_btn_ui.icon_class_style
-            const title_content                 = title_text;
-            const question_content              = question_text.replace("%", record?.name);
-            const component                     = markRaw(ConfirmActionUI);
-            const cancel_btn_content            = RenderHtmlUtil.renderHtml({ text: cancel_btn_text, icon: SVGIcons.delete_trash_svg_icon, class_style: cancel_btn_class_style, icon_class_style: cancel_btn_icon_class_style});
-            const confirm_btn_content           = RenderHtmlUtil.renderHtml({ text: confirm_btn_text, icon: SVGIcons.check_circle_svg_icon, class_style: confirm_btn_class_style, icon_class_style: confirm_btn_icon_class_style });
-            const on_cancel_click               = (event: MouseEvent) => { this.controller.event_bus.emit("close_modal", {}); };
-            const on_confirm_click              = (event: MouseEvent) => { this.handleDeleteARecord(event, record ); }
-            const component_props       = { 
-                question_text: question_content, confirm_btn_content, cancel_btn_content,
-                wrapper_class_style, content_text_wrapper_class_style, content_class_style, 
-                action_btn_wrapper_class_style, on_cancel_click, on_confirm_click
-            };
+    // Method to handle delete confim
+    public async handleConfirmCreateInstance (event: Event | InputEvent, record: Record<string, any> = {}) {
+        const { is_active, is_created, name } = record;
 
-            const open_modal_payload: OpenNewModalPayloadInterface = {
-                position: "center", width_class: "w-lg", title_content,
-                component, component_props, 
-            }
-            this.controller.event_bus.emit("open_new_modal", open_modal_payload);
-        }
-        catch(error: unknown) {
-            const formatted_api_msg     = this.content_manager?.getAPIResponseValue("app_record_not_found");
-            const status_alert_payload  = { status: "error", message: formatted_api_msg, options: this.status_alert_options };
-            this.controller.event_bus.emit("statusChanged", status_alert_payload);
-        }
+        if(!is_active || is_created) { return };
+
+        const on_confirm_click = (event: MouseEvent) => { this.handleDeleteARecord(event, record); }
+        
+        this.handleOpenConfirmModal("confirm_create_instance_modal", name, on_confirm_click);
+        return;
+    }
+
+    // Method to handle delete confim
+    public async handleConfirmDestroyInstance (event: Event | InputEvent, record: Record<string, any> = {}) {
+        const { is_active, is_created, name } = record;
+
+        if(is_active || !is_created) { return };
+
+        const on_confirm_click = (event: MouseEvent) => { this.handleDeleteARecord(event, record); }
+        
+        this.handleOpenConfirmModal("confirm_destroy_instance_modal", name, on_confirm_click);
+        return;
     }
 
     // Method to handle opening registered app profile modal
@@ -563,6 +550,55 @@ class DatasourceListViewEventHandler extends BaseEventHandler {
             const status_alert_payload  = { status: "error", message: formatted_api_msg, options: { duration: 0 } };
             this.controller.event_bus.emit("statusChanged", status_alert_payload);
             return;
+        }
+    }
+
+    // Method to handle open confirm modal
+    public async handleOpenConfirmModal (
+        content_data_key: string,
+        question_name: string,
+        on_confirm_click: (event: MouseEvent) => void
+    ) {
+        try {
+            const class_styles = ClassStyles.confirm_action_ui;
+            const content_data = this.content_manager?.get(`content_resource.datasource_view_ui.${content_data_key}`);
+
+            const { title_text, question_text, cancel_btn_text, confirm_btn_text }    = content_data;
+            const { 
+                wrapper_class_style, 
+                content_text_wrapper_class_style, 
+                content_class_style, 
+                action_btn_wrapper_class_style,
+                cancel_action_btn_ui,
+                confirm_action_btn_ui
+            } = class_styles
+
+            const cancel_btn_class_style        = cancel_action_btn_ui.content_class_style;
+            const cancel_btn_icon_class_style   = cancel_action_btn_ui.icon_class_style;
+            const confirm_btn_class_style       = confirm_action_btn_ui.content_class_style;
+            const confirm_btn_icon_class_style  = cancel_action_btn_ui.icon_class_style
+            const title_content                 = title_text;
+            const question_content              = question_text.replace("%", question_name);
+            const component                     = markRaw(ConfirmActionUI);
+            const cancel_btn_content            = RenderHtmlUtil.renderHtml({ text: cancel_btn_text, icon: SVGIcons.delete_trash_svg_icon, class_style: cancel_btn_class_style, icon_class_style: cancel_btn_icon_class_style});
+            const confirm_btn_content           = RenderHtmlUtil.renderHtml({ text: confirm_btn_text, icon: SVGIcons.check_circle_svg_icon, class_style: confirm_btn_class_style, icon_class_style: confirm_btn_icon_class_style });
+            const on_cancel_click               = (event: MouseEvent) => { this.controller.event_bus.emit("close_modal", {}); };
+            const component_props       = { 
+                question_text: question_content, confirm_btn_content, cancel_btn_content,
+                wrapper_class_style, content_text_wrapper_class_style, content_class_style, 
+                action_btn_wrapper_class_style, on_cancel_click, on_confirm_click
+            };
+
+            const open_modal_payload: OpenNewModalPayloadInterface = {
+                position: "center", width_class: "w-lg", title_content,
+                component, component_props, 
+            }
+            this.controller.event_bus.emit("open_new_modal", open_modal_payload);
+        }
+        catch(error: unknown) {
+            const formatted_api_msg     = this.content_manager?.getAPIResponseValue("form_open_failed_refresh_page");
+            const status_alert_payload  = { status: "error", message: formatted_api_msg, options: this.status_alert_options };
+            this.controller.event_bus.emit("statusChanged", status_alert_payload);
         }
     }
 

@@ -22,7 +22,7 @@ class DatasourceTableColumnConfig {
     // Method to get is_active ui props
     private static getIsActiveUIProps (event_handler: BaseEventHandlerInterface, record: Record<string, any>): InputUIPropsInterface {
         const { id, is_active }     = record;
-        const is_active_boolean     = is_active ? true : false
+        const is_active_boolean     = is_active ? true : false;
         const switch_props          = BaseTableColumnConfig.geIsActiveSwitchProps(id.toString(), is_active_boolean);
         switch_props.on_click       = event_handler.handleOnRecordChangeState.bind(event_handler);
 
