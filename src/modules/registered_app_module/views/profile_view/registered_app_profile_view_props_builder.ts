@@ -6,7 +6,7 @@ import { ImgAvatarUIPropsInterface } from "@ui/version_2/types/props_builder_typ
 
 
 class RegisteredAppProfileViewPropsBuilder {
-    public readonly name = "registered_aoo_profile_view_props_builder";
+    public readonly name = "registered_app_profile_view_props_builder";
 
      // Method to get img avatar ui props
     public static getImgAvatarUIProps (

@@ -508,7 +508,7 @@ class DatasourceListViewEventHandler extends BaseEventHandler {
     // Method to handle opening registered app profile modal
     public async handleOpenProfileModal (event: Event | InputEvent, record: Record<string, any>) {
         try {
-            const content_data      = this.content_manager?.get("content_resource.datasource_view_ui.app_profile");
+            const content_data      = this.content_manager?.get("content_resource.datasource_view_ui.datasource_profile");
             const { title_text }    = content_data;
             const title_content     = title_text.replace("%", record?.name);
             const component         = markRaw(DatasourceProfileView);

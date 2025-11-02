@@ -52,6 +52,23 @@
             </span>
         </div>
 
+         <!-- creator / updator -->
+        <div v-if="props.record?.creator?.public_id" :class="props.timestamp_section_wrapper_class_style">
+            <span :class="props.key_text_class_style">
+                {{ profile_content_data?.creator_key_text }}:
+            </span>
+            <span :class="props.value_text_class_style" v-html="formatted_creator">
+            </span>
+        </div>
+
+        <div v-if="props.record?.updator?.public_id" :class="props.timestamp_section_wrapper_class_style">
+            <span :class="props.key_text_class_style">
+                {{ profile_content_data?.updator_key_text }}:
+            </span>
+            <span :class="props.value_text_class_style" v-html="formatted_updator">
+            </span>
+        </div>
+
         <!-- description -->
         <div :class="props.description_section_wrapper_class_style">
             <span :class="props.description_key_text_class_style">
@@ -82,7 +99,9 @@ const {
     formatted_base_url,
     formatted_social_links,
     formatted_created_at,
-    formatted_updated_at
+    formatted_updated_at,
+    formatted_creator,
+    formatted_updator
 } = computed_refs;
 
 const { ImgAvatarUI } = components;

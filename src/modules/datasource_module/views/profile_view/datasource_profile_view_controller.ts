@@ -6,12 +6,11 @@ import BaseController                           from "@ui/version_2/base_classes
 import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";
 import ContentManagerUtil                       from "@ui/version_2/utils/content_manager_util";
 import InputTransformerUtil                     from "@ui/version_2/utils/input_formatter_util";
-import ImgAvatarUI                              from "@ui/version_2/components/ImgAvatarUI/img_avatar_ui.vue";
-import RegisteredAppProfileViewPropsBuilder from "./registered_app_profile_view_props_builder";
+import DatasourceProfileViewPropsBuilder        from "./datasource_profile_view_props_builder";
 
 
 
-class RegisteredAppProfileViewController extends BaseController {
+class DatasourceProfileViewController extends BaseController {
     public router: Router;
     private member_auth_manager: MemberAuthManagerUtil;
     public content_field_key: string;
@@ -20,12 +19,12 @@ class RegisteredAppProfileViewController extends BaseController {
 
 
     constructor(props: Record<string, any> = {}) {
-        super("registered_app_profile_view", props);
+        super("datasource_profile_view", props);
 
         this.router                     = useRouter();
         this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
         this.content_manager            = ContentManagerUtil.getInstance();
-        this.content_field_key          = "registered_app_view_ui";
+        this.content_field_key          = "datasource_view_ui";
     }
 
     // Method to format member render
@@ -39,38 +38,49 @@ class RegisteredAppProfileViewController extends BaseController {
         return InputTransformerUtil.formatURLToAnchorHtml(member_text, member_link);
     }
 
-    // Method to get ui components
-    protected getUIComponents(): Record<string, any> { 
-        return  { ImgAvatarUI }; 
+    // Method to format member render
+    private renderRegisteredAppLink (app_record: { public_id?: string, name?: string}): string {
+        const { public_id = "", name = "" } = app_record;
+
+        if(!public_id) { return "" }
+
+        const member_text   = `(${public_id}) ${name}`;
+        const member_link   = `/registered-apps`;
+        return InputTransformerUtil.formatURLToAnchorHtml(member_text, member_link);
     }
 
     // Method to get ui state data
     protected getUIStateData(): Record<string, any> {        
         return {
-            profile_content_data: this.content_manager.get("content_resource.registered_app_view_ui.app_profile"),
-
-            img_avatar_ui_props: RegisteredAppProfileViewPropsBuilder.getImgAvatarUIProps(this.props.record),
+            profile_content_data: this.content_manager.get("content_resource.datasource_view_ui.datasource_profile"),
         } 
     }
 
     // Method to to get ui computed data
     protected getUIComputedData(): Record<string, () => any> { 
         const { 
-            base_url = "" , social_links = {}, 
-            created_at = null, updated_at = null ,
-            creator = {}, updator = {}
+            connection_info = {}, host = "", database_name, datasource_type = "",
+            created_at = null, updated_at = null, creator = {}, updator = {},
+            datasource_app = {}
         } = this.props.record ?? {};
 
         return {
-            formatted_base_url: () => { return InputTransformerUtil.formatURLToAnchorHtml(base_url, base_url); },
+            formatted_databse_name_type: () => { return `${database_name} (${datasource_type?.toUpperCase()})` },
 
-            formatted_social_links: () => { 
-                return Object.keys(social_links)
+            formatted_host: () => { return InputTransformerUtil.formatURLToAnchorHtml(host, host); },
+
+            formatted_connection_info: () => { 
+                return Object.keys(connection_info)
                 .map(
-                    (social_key: string) => { 
-                        return InputTransformerUtil.formatURLToAnchorHtml(social_key, social_links[social_key]); 
+                    (connection_info_key: string) => { 
+                        return `
+                        <strong>${connection_info_key.toUpperCase()}:</strong> 
+                        <span>${connection_info[connection_info_key]}</span>
+                        `
                     }
             )},
+
+            formatted_registered_app: () => { return this.renderRegisteredAppLink(datasource_app) },
 
             formatted_created_at: () => { return InputTransformerUtil.formatReadableDateTime(created_at); },
 
@@ -93,4 +103,4 @@ class RegisteredAppProfileViewController extends BaseController {
     }
 }
 
-export default RegisteredAppProfileViewController;
+export default DatasourceProfileViewController;

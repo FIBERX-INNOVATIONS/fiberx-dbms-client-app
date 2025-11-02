@@ -324,6 +324,11 @@ const ClassStyles = {
         description_key_text_class_style: "text-center text-xs font-black uppercase",
 
         description_value_text_class_style: "text-center text-md font-bold",
+
+        grid_two_section_wrapper_class_style: "w-full grid grid-cols-2 gap-x-4 px-[4%]",
+
+        grid_item_class_style: "w-full truncate text-[12px] flex flex-col justify-center items-center",
+
     },
     form_view_ui: {
         section_wrapper_class_style: "w-full block my-2 space-y-6 px-4 h-full max-h-[70vh] overflow-y-auto",
