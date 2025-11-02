@@ -464,9 +464,6 @@
   .min-h-10 {
     min-height: calc(var(--spacing) * 10);
   }
-  .min-h-12 {
-    min-height: calc(var(--spacing) * 12);
-  }
   .min-h-\[114px\] {
     min-height: 114px;
   }
@@ -550,12 +547,6 @@
   }
   .w-\[170px\] {
     width: 170px;
-  }
-  .w-\[190px\] {
-    width: 190px;
-  }
-  .w-\[210px\] {
-    width: 210px;
   }
   .w-\[600px\] {
     width: 600px;
@@ -950,9 +941,6 @@
   .p-1 {
     padding: calc(var(--spacing) * 1);
   }
-  .p-1\.5 {
-    padding: calc(var(--spacing) * 1.5);
-  }
   .p-2 {
     padding: calc(var(--spacing) * 2);
   }
@@ -1064,9 +1052,6 @@
   }
   .text-\[12px\] {
     font-size: 12px;
-  }
-  .text-\[16px\] {
-    font-size: 16px;
   }
   .text-\[20px\] {
     font-size: 20px;

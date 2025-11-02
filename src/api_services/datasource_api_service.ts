@@ -53,7 +53,7 @@ class DatasourceAPIService extends BaseAPIService {
 
     // Service method to query update datasource record created endpoint
     public async changeDatasourceCreateState (datasource_id: number) : Promise<APIResponseInterface<any>> {
-        const url           = `/datasource/${datasource_id}/change-create-state`;
+        const url           = `/datasource/${datasource_id}/change-created-state`;
         const config        = { url, method: "PATCH" };
 
         return await this.queryAPI(config);

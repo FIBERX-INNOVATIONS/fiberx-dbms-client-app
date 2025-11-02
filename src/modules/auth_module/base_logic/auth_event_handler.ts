@@ -99,16 +99,17 @@ class AuthEventhandler extends BaseEventHandler {
 
             if(!this.controller?.service) { return }
 
-            const { s_state, s_msg } = await this.controller.service?.executeLogIn?.(form_data);
+            const { s_state, s_msg }    = await this.controller.service?.executeLogIn?.(form_data);
+            const formmated_status_msg  = this.content_manager?.getAPIResponseValue(s_msg);
 
             if(!s_state) {
-                const error_msg = this.content_manager?.getAPIResponseValue(s_msg);
+                const error_msg = formmated_status_msg
                 return this.showErrorAlert("error", error_msg)
             }
 
             this.logger.log("Login successful, triggering statusChanged event", { s_msg });
             const status_alert_options  = { duration: 3000, redirect_url: "/two-factor-login"}
-            const status_alert_payload  = { status: "success", message: s_msg, options: status_alert_options };
+            const status_alert_payload  = { status: "success", message: formmated_status_msg, options: status_alert_options };
 
             return this.controller.event_bus.emit("statusChanged", status_alert_payload);
         }
@@ -132,7 +133,8 @@ class AuthEventhandler extends BaseEventHandler {
 
             if(!this.controller?.service) { return }
 
-            const { s_state, s_msg, logout } = await this.controller.service?.executeTwoFactorLogIn?.(form_data);
+            const { s_state, s_msg, logout }    = await this.controller.service?.executeTwoFactorLogIn?.(form_data);
+            const formmated_status_msg          = this.content_manager?.getAPIResponseValue(s_msg);
 
 
             if(logout) {
@@ -141,13 +143,13 @@ class AuthEventhandler extends BaseEventHandler {
             }
 
             else if(!s_state) {
-                const error_msg = this.content_manager?.getAPIResponseValue(s_msg);
+                const error_msg = formmated_status_msg;
                 return this.showErrorAlert("error", error_msg)
             }
 
             this.logger.log("Two factor Login successful, triggering statusChanged event", { s_msg });
             const status_alert_options  = { duration: 3000, redirect_url: "/dashboard"}
-            const status_alert_payload  = { status: "success", message: s_msg, options: status_alert_options };
+            const status_alert_payload  = { status: "success", message: formmated_status_msg, options: status_alert_options };
 
             return this.controller.event_bus.emit("statusChanged", status_alert_payload);
         }
