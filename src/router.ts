@@ -7,17 +7,17 @@ import {
   RouteMeta
 } from "vue-router";
 
-import { LOCAT_STORAGE_FIELDS }      from "@/enums/constants.enums";
+import { LOCAT_STORAGE_FIELDS }     from "@/enums/constants.enums";
 import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manager_util";
 import GlobalVariableManager        from "@ui/version_2/utils/global_variable_manager_util";
 
-const LoginView                 = () => import("@/modules/auth_module/views/login_view/login_view.vue");
-const TwoFactorLoginView        = () => import("@/modules/auth_module/views/two_factor_login_view/two_factor_login_view.vue");
-const LogoutView                = () => import("@/modules/auth_module/views/logout_view/logout_view.vue");
-const DashboardView             = () => import("@/modules/dashboard_module/views/main_dashboard_view/main_dashboard_view.vue");
-const RegisteredAppListView     = () => import("@/modules/registered_app_module/views/list_view/registered_app_list_view.vue");
-const DatasourceListView        = () => import("@/modules/datasource_module/views/list_view/datasource_list_view.vue");
-// const SchemaView                = () => import("@/modules/schema_module/views/schemas_view.vue");
+const LoginView                         = () => import("@/modules/auth_module/views/login_view/login_view.vue");
+const TwoFactorLoginView                = () => import("@/modules/auth_module/views/two_factor_login_view/two_factor_login_view.vue");
+const LogoutView                        = () => import("@/modules/auth_module/views/logout_view/logout_view.vue");
+const DashboardView                     = () => import("@/modules/dashboard_module/views/main_dashboard_view/main_dashboard_view.vue");
+const RegisteredAppListView             = () => import("@/modules/registered_app_module/views/list_view/registered_app_list_view.vue");
+const DatasourceListView                = () => import("@/modules/datasource_module/views/list_view/datasource_list_view.vue");
+const RegisteredAppSchemaListView       = () => import("@/modules/registered_app_schema_module/views/list_view/registered_app_schema_list_view.vue");
 // const AppSchemaView             = () => import("@/modules/app_schema_module/views/app_schemas_view.vue");
 // const MemberView                = () => import("@/modules/member_module/views/members_view.vue");
 
@@ -173,17 +173,16 @@ class RouterManager {
                     requires_full_auth: true
                 }
             },
-
-        //     { 
-        //         path: "/schemas",  
-        //         name: "SchemaView", 
-        //         component: SchemaView, 
-        //         meta: {
-        //             title_key: "schema-page",
-        //             permission_name: "view_all_fiberx_dbms_schemas" , 
-        //             requires_full_auth: true
-        //         }
-        //     },
+            { 
+                path: "/registered-app-schemas",  
+                name: "RegisteredAppSchemaListView", 
+                component: RegisteredAppSchemaListView, 
+                meta: {
+                    title_key: "schema-page",
+                    permission_name: "view_all_app_schemas" , 
+                    requires_full_auth: true
+                }
+            },
 
         //     { 
         //         path: "/app-schemas", 
