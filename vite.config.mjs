@@ -22,7 +22,7 @@ export default defineConfig({
     resolve: {
         alias: { 
             "@": fileURLToPath(new URL("./src", import.meta.url)),
-            "@ui": fileURLToPath(new URL("../fi-ui-toolkit", import.meta.url)),
+            "@ui": fileURLToPath(new URL("../../fi-ui-toolkit", import.meta.url)),
         }
     },
     appType: "spa",
@@ -34,7 +34,7 @@ export default defineConfig({
     },
     optimizeDeps: {  
         include: []
-        // include: ['src/**/*.vue', "../fi-ui-toolkit/**/*.vue"] 
+        // include: ['src/**/*.vue', "../../fi-ui-toolkit/**/*.vue"] 
     },
 
     server: {

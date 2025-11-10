@@ -19,7 +19,7 @@
     "baseUrl": ".", // important for aliases
     "paths": {
       "@/*": ["src/*"],
-      "@ui/*": ["../fi-ui-toolkit/*"]
+      "@ui/*": ["../../fi-ui-toolkit/*"]
     },
     "experimentalDecorators": true
   },
@@ -30,9 +30,9 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.vue",
-    "../fi-ui-toolkit/**/*.ts",
-    "../fi-ui-toolkit/**/*.d.ts",
-    "../fi-ui-toolkit/**/*.vue"
+    "../../fi-ui-toolkit/**/*.ts",
+    "../../fi-ui-toolkit/**/*.d.ts",
+    "../../fi-ui-toolkit/**/*.vue"
   ],
   "exclude": ["node_modules", "dist", "test"]
 }

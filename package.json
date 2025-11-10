@@ -4,7 +4,7 @@
     "description": "FiberX DBMS Admin Panel – A modern, responsive dashboard for managing applications, roles, permissions, and users within the FiberX ecosystem. Built for performance and flexibility.",
     "private": true,
     "scripts": {
-        "env-manager": "tsx ../fi-ui-toolkit/version_2/cli_scripts/dev_env_manager.ts",
+        "env-manager": "tsx ../../fi-ui-toolkit/version_2/cli_scripts/dev_env_manager.ts",
         "dev": "vite --config ./vite.config.mjs",
         "devcss": "npx @tailwindcss/cli -i ./public/assets/css/input.css -o ./public/assets/css/output.css --watch",
         "build": "vite build --config ./vite.config.mjs",
