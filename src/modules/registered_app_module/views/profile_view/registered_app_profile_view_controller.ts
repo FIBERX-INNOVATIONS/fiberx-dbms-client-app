@@ -47,7 +47,7 @@ class RegisteredAppProfileViewController extends BaseController {
     // Method to get ui state data
     protected getUIStateData(): Record<string, any> {        
         return {
-            profile_content_data: this.content_manager.get("content_resource.registered_app_view_ui.app_profile"),
+            profile_content_data: this.content_manager.get("content_resource.registered_app_view_ui.profile_view_ui"),
 
             img_avatar_ui_props: RegisteredAppProfileViewPropsBuilder.getImgAvatarUIProps(this.props.record),
         } 

@@ -87,7 +87,7 @@ class DatasourceFormViewController extends BaseController {
         return {
             csrf_token: ref(null), connection_info_obj: ref(connection_info_obj),
 
-            connection_info_label_text: this.content_manager.get("content_resource.datasource_view_ui.datasource_form.fieldset.connection_info_label_text"),
+            connection_info_label_text: this.content_manager.get("content_resource.datasource_view_ui.form_view_ui.fieldset.connection_info_label_text"),
 
             registered_app_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(
                 this.event_handler, 

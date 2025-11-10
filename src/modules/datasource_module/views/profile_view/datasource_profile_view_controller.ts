@@ -52,7 +52,7 @@ class DatasourceProfileViewController extends BaseController {
     // Method to get ui state data
     protected getUIStateData(): Record<string, any> {        
         return {
-            profile_content_data: this.content_manager.get("content_resource.datasource_view_ui.datasource_profile"),
+            profile_content_data: this.content_manager.get("content_resource.datasource_view_ui.profile_view_ui"),
         } 
     }
 

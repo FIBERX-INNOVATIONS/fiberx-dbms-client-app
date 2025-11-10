@@ -127,7 +127,7 @@ class RegisteredAppService extends BaseService {
     }
 
     // Method to execute delete reord
-    public async executeDeleteRegisteredApp(record_id: string): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeDeleteRecord(record_id: string): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.deleteApp(record_id)
 

@@ -91,7 +91,7 @@ class RegisteredAppFormViewController extends BaseController {
         return {
             csrf_token: ref(null), social_links_obj: ref(social_link_obj),
 
-            social_links_label_text: this.content_manager.get("content_resource.registered_app_view_ui.app_form.fieldset.social_links_label_text"),
+            social_links_label_text: this.content_manager.get("content_resource.registered_app_view_ui.form_view_ui.fieldset.social_links_label_text"),
 
             app_name_input_group_prop: RegisteredAppFormViewPropsBuilder.getInputGroupProps(this.event_handler, "name", this?.props?.record?.name ?? ""),
 

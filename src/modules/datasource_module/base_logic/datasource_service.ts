@@ -127,7 +127,7 @@ class DatasourceService extends BaseService {
     }
 
     // Method to execute delete record
-    public async executeDeleteDatasource(record_id: number): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeDeleteRecord(record_id: number): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.deleteDatasource(record_id)
 

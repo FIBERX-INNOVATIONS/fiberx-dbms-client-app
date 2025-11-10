@@ -39,7 +39,7 @@ class DatasourceFormViewPropsBuilder {
         record: Record<string, any> = {}
     ): InputGroupPropsInterface {
         const content_manager   = ContentManagerUtil.getInstance();
-        const content_data      = content_manager?.get("content_resource.datasource_view_ui.datasource_form.fieldset") ?? {};
+        const content_data      = content_manager?.get("content_resource.datasource_view_ui.form_view_ui.fieldset") ?? {};
         const class_styles      = ClassStyles?.input_ui ?? {};
 
         const { base, index }           = InputTransformerUtil.extractInputBaseAndIndexFieldKey(field_key);
@@ -109,7 +109,7 @@ class DatasourceFormViewPropsBuilder {
         show_loader: boolean = true,
     ): ButtonUIPropsInterface {
         const content_manager       = ContentManagerUtil.getInstance();
-        const content_data          = content_manager?.get("content_resource.datasource_view_ui.datasource_form.fieldset") ?? {};
+        const content_data          = content_manager?.get("content_resource.datasource_view_ui.form_view_ui.fieldset") ?? {};
         const class_styles          = ClassStyles?.form_button_ui ?? {};
         const icon_class_style      = class_styles?.icon_class_style;
         const btn_class_style       = class_styles?.btn_class_style

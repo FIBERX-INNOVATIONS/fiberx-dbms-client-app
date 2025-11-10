@@ -12,7 +12,7 @@ import SearchAndActionBtnSectionUI              from "@/ui_components/search_and
 import PaginationResultAndBulkActionSectionUI   from "@/ui_components/pagination_result_and_bulk_action_section_ui/pagination_result_and_bulk_action_section_ui.vue";
 import DataTableSectionUI                       from "@/ui_components/data_table_section_ui/data_table_section_ui.vue";
 import RegisteredAppMenuListConfig              from "@/configs/menu_list_configs/registered_app_menu_list_config";
-import RegisteredAppTableColumnConfig           from "@/configs/columns_config/registered_app_table_column_config";
+import RegisteredAppTableColumnConfig           from "@/configs/table_column_config/registered_app_table_column_config";
 import PaginationUI                             from "@ui/version_2/components/NavigationUI/PaginationUI/pagination_ui.vue";
 import { 
     ButtonUIPropsInterface, 
