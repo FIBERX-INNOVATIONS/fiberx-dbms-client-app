@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import RegisteredAppListViewProps       from "./registered_app_list_view_props";
-import RegisteredAppListViewController  from "./registered_app_llist_view_controller";
+import RegisteredAppListViewController  from "./registered_app_list_view_controller";
 
 const props            = defineProps(RegisteredAppListViewProps);
 const controller       = new RegisteredAppListViewController(props)
