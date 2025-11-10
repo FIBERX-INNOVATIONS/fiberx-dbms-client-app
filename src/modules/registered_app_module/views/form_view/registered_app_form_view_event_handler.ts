@@ -1,42 +1,9 @@
 
-import { markRaw }                      from "vue";
-import AuthPropsBuilder                 from "@/modules/auth_module/base_logic/auth_props_builder";
-import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
-import InputTransformerUtil             from "@ui/version_2/utils/input_formatter_util";
-import RegisteredAppValidator           from "@/validators/regsitered_app_validator";
-import BaseEventHandler                 from "@ui/version_2/base_classes/base_event_handler";
-import { BaseControllerInterface }      from "@ui/version_2/types/component_type";
-import { RegisteredAppFormDataInterface } from "@/types/api_service_type";
-import { 
-    OpenNewModalPayloadInterface, 
-    StatusPayloadOptionsInterface }     from "@/types/app_event_type";
+import BaseFormViewEventHandler             from "@/base_classes/form_view/base_form_view_event_handler";
+import { RegisteredAppFormDataInterface }   from "@/types/api_service_type";
+import RegisteredAppValidator               from "@/validators/regsitered_app_validator";
 
-
-class RegisteredAppFormViewEventHandler extends BaseEventHandler {
-    public content_manager: ContentManagerUtil;
-    private redirect_timer: ReturnType<typeof setTimeout> | null = null;
-    private status_alert_options: StatusPayloadOptionsInterface;
-
-
-    constructor(controller: BaseControllerInterface) {
-        super(controller, controller.component_name);
-
-        this.content_manager                = ContentManagerUtil.getInstance();
-        this.status_alert_options           = { duration: 3000, close_modal: true };
-    }
-    
-
-    // Method to hide error alert
-    private hideErrorAlert() {
-        const new_toast_alert_props = AuthPropsBuilder.getToastAlertProps(this);
-        Object.assign(this.controller.state_refs.toast_alert_props, new_toast_alert_props)
-    }
-
-    // Method to show error alert
-    private showErrorAlert(status: string, message: string) {
-        const new_toast_alert_props = AuthPropsBuilder.getToastAlertProps(this, status, message);
-        Object.assign(this.controller.state_refs.toast_alert_props, new_toast_alert_props)
-    }
+class RegisteredAppFormViewEventHandler extends BaseFormViewEventHandler {
 
     // Method to update controller social links object with form data
     private handleUpdateSocialLinksObjects (): boolean {
@@ -49,6 +16,24 @@ class RegisteredAppFormViewEventHandler extends BaseEventHandler {
         this.controller.state_refs.social_links_obj.value = updated_social_link;
 
         return true;
+    }
+
+    protected onFormDataUpdated() {
+        if (this.form_data?.social_links) { this.handleUpdateSocialLinksObjects(); }
+    }
+
+    protected validateFormData(form_data: RegisteredAppFormDataInterface, record: Record<string, any>) {
+        return RegisteredAppValidator.validateRegisteredAppInput(form_data, record);
+    }
+
+    protected async executeSubmitAction(record_id: string, form_data: RegisteredAppFormDataInterface) {
+       if (!this.controller.service) { return {}; }
+
+        if (record_id) {
+            return await this.controller.service.executeUpdateRegisteredApp(record_id, form_data);
+        }
+
+        return await this.controller.service.executeRegisterNewApp(form_data);
     }
 
     // Method to add new social link on btn clicked
@@ -103,70 +88,6 @@ class RegisteredAppFormViewEventHandler extends BaseEventHandler {
         social_links[social_link_id].is_deleted = true;
 
        this.controller.state_refs.social_links_obj.value = social_links;
-    }
-
-    // Method to handle on toast alert close button
-    public handleOnCloseToastAlertClick (event: MouseEvent) {
-        this.controller.state_refs.toast_alert_props.status = "";
-        this.controller.state_refs.toast_alert_props.message = "";
-    }
-
-    // Method to handle on input changed
-    public handleOnInputchanged (event: Event | InputEvent, input_model_value: any) {
-        const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
-
-        if (!target) { return; }
-
-        const input_id          = target.id;
-        const input_value       = input_model_value ?? target.value;
-        const new_form_data     = InputTransformerUtil.buildFormDataRecord(input_id, input_value, this.form_data );
-        this.form_data          = JSON.parse(JSON.stringify(new_form_data));
-
-        if(this.form_data?.social_links) { this.handleUpdateSocialLinksObjects(); }
-    }
-
-    // Method to handle login submit btn click
-    public async handleSubmitBtnClick (event: MouseEvent) {
-        this.hideErrorAlert()
-        try {
-            const record                = this.controller.props?.record ?? {}
-            const record_id             = record?.public_id;
-            const event_name            = record_id ? "on_record_updated" : "on_new_record_created";
-            const form_data             = this.form_data  as RegisteredAppFormDataInterface;
-            const { v_state, v_msg }    = RegisteredAppValidator.validateRegisteredAppInput(form_data, record);
-
-            if(!v_state) {
-                const error_msg = this.content_manager?.getAPIResponseValue(v_msg);
-                return this.showErrorAlert("error", error_msg)
-            }
-
-            if(!this.controller?.service) { return }
-
-            let s_state, s_msg, s_data, logout;
-
-            if(record_id) {
-                ({ s_state, s_msg, s_data, logout } = await this.controller.service?.executeUpdateRegisteredApp(record_id, form_data))
-            }
-            else {
-                ({ s_state, s_msg, s_data, logout } = await this.controller.service?.executeRegisterNewApp(form_data))
-            }
-
-            const formmated_status_msg = this.content_manager?.getAPIResponseValue(s_msg);
-
-            if(logout) { return await this.controller.router.push("/logout"); }
-
-            if(!s_state) { return this.showErrorAlert("error", formmated_status_msg) }
-
-            const status_alert_payload  = { status: "success", message: formmated_status_msg, options: this.status_alert_options };
-            const event_payload         = { record_id, record: {...form_data, ...s_data} }
-
-            this.controller.event_bus.emit("statusChanged", status_alert_payload);
-            this.controller.event_bus.emit(event_name, event_payload);
-            return;
-        }
-        catch(error: unknown) {
-            this.logger.error(`Failed to submit form`, { error })
-        }
     }
 }
 

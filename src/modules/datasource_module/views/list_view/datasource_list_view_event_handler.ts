@@ -1,5 +1,5 @@
 
-import BaseListViewEventHandler     from "@/base_classes/base_list_view_event_handler";
+import BaseListViewEventHandler     from "@/base_classes/list_view/base_list_view_event_handler";
 import DatasourceTableColumnConfig  from "@/configs/table_column_config/datasource_table_column_config";
 import DatasourceFormView           from "../form_view/datasource_form_view.vue";
 import DatasourceProfileView        from "../profile_view/datasource_profile_view.vue";

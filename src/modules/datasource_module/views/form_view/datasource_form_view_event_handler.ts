@@ -1,49 +1,14 @@
 
-import { markRaw }                      from "vue";
-import AuthPropsBuilder                 from "@/modules/auth_module/base_logic/auth_props_builder";
-import RegisteredAppAPIService          from "@/api_services/registered_app_api_service";
-import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
-import InputTransformerUtil             from "@ui/version_2/utils/input_formatter_util";
-import DatasourceValidator              from "@/validators/datasource_validator";
-import BaseEventHandler                 from "@ui/version_2/base_classes/base_event_handler";
-import { BaseControllerInterface }      from "@ui/version_2/types/component_type";
 
+import BaseFormViewEventHandler         from "@/base_classes/form_view/base_form_view_event_handler";
+import DatasourceValidator              from "@/validators/datasource_validator";
 import { 
     DatasourceFormDataInterface, 
-    RequestQueryInputInterface }        from "@/types/api_service_type";
-    
-import { 
-    OpenNewModalPayloadInterface, 
-    StatusPayloadOptionsInterface }     from "@/types/app_event_type";
+    RequestQueryInputInterface 
+} from "@/types/api_service_type";
 
 
-class DatasourceFormViewEventHandler extends BaseEventHandler {
-    public content_manager: ContentManagerUtil;
-    private redirect_timer: ReturnType<typeof setTimeout> | null = null;
-    private status_alert_options: StatusPayloadOptionsInterface;
-    private registereda_app_api_service: RegisteredAppAPIService;
-
-
-    constructor(controller: BaseControllerInterface) {
-        super(controller, controller.component_name);
-
-        this.content_manager                = ContentManagerUtil.getInstance();
-        this.status_alert_options           = { duration: 3000, close_modal: true };
-        this.registereda_app_api_service    = new RegisteredAppAPIService();
-    }
-    
-
-    // Method to hide error alert
-    private hideErrorAlert() {
-        const new_toast_alert_props = AuthPropsBuilder.getToastAlertProps(this);
-        Object.assign(this.controller.state_refs.toast_alert_props, new_toast_alert_props)
-    }
-
-    // Method to show error alert
-    private showErrorAlert(status: string, message: string) {
-        const new_toast_alert_props = AuthPropsBuilder.getToastAlertProps(this, status, message);
-        Object.assign(this.controller.state_refs.toast_alert_props, new_toast_alert_props)
-    }
+class DatasourceFormViewEventHandler extends BaseFormViewEventHandler {
 
     // Method to update controller social links object with form data
     private handleUpdateConnectionInfoObjects (): boolean {
@@ -56,6 +21,24 @@ class DatasourceFormViewEventHandler extends BaseEventHandler {
         this.controller.state_refs.connection_info_obj.value = updated_connection_info;
 
         return true;
+    }
+
+    protected onFormDataUpdated() {
+        if (this.form_data?.connection_info) { this.handleUpdateConnectionInfoObjects(); }
+    }
+
+    protected validateFormData(form_data: DatasourceFormDataInterface, record: Record<string, any>) {
+        return DatasourceValidator.validateDatasourceInput(form_data, record);
+    }
+
+    protected async executeSubmitAction(record_id: string, form_data: DatasourceFormDataInterface) {
+        if (!this.controller.service) { return {}; }
+
+        if (record_id) {
+            return await this.controller.service.executeUpdateDatasource(Number(record_id), form_data);
+        }
+
+        return await this.controller.service.executeRegisterNewDatasource(form_data);
     }
 
     // Method to add new social link on btn clicked
@@ -112,29 +95,9 @@ class DatasourceFormViewEventHandler extends BaseEventHandler {
        this.controller.state_refs.connection_info_obj.value = connection_info;
     }
 
-    // Method to handle on toast alert close button
-    public handleOnCloseToastAlertClick (event: MouseEvent) {
-        this.controller.state_refs.toast_alert_props.status = "";
-        this.controller.state_refs.toast_alert_props.message = "";
-    }
-
-    // Method to handle on input changed
-    public handleOnInputchanged (event: Event | InputEvent, input_model_value: any) {
-        const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
-
-        if (!target) { return; }
-
-        const input_id          = target.id;
-        const input_value       = input_model_value ?? target.value;
-        const new_form_data     = InputTransformerUtil.buildFormDataRecord(input_id, input_value, this.form_data );
-        this.form_data          = JSON.parse(JSON.stringify(new_form_data));
-
-        if(this.form_data?.connection_info) { this.handleUpdateConnectionInfoObjects(); }
-    }
-
     // Method to fetch preview registered apps
     public async fetchPreviewRegisteredApps (params: RequestQueryInputInterface) {
-       return this.registereda_app_api_service.getAllRegisteredApps(params);
+       return this.registered_app_api_service.getAllRegisteredApps(params);
     }
 
     // Method to handle login submit btn click

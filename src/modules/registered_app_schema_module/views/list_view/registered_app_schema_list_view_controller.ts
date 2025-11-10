@@ -1,4 +1,4 @@
-import BaseListViewController                       from "@/base_classes/base_list_view_controller";
+import BaseListViewController                       from "@/base_classes/list_view/base_list_view_controller";
 import RegisteredAppSchemaListViewEventHandler      from "@/modules/registered_app_schema_module/views/list_view/registered_app_schema_list_view_event_hanlder";
 import RegisteredAppSchemaMenuListConfig            from "@/configs/menu_list_configs/registered_app_schema_menu_list_config";
 import RegisteredAppSchemaTableColumnConfig         from "@/configs/table_column_config/registered_app_schema_table_column_config";

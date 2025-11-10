@@ -1,4 +1,4 @@
-import BaseListViewController               from "@/base_classes/base_list_view_controller";
+import BaseListViewController               from "@/base_classes/list_view/base_list_view_controller";
 import DatasourceListViewEventHandler       from "@/modules/datasource_module/views/list_view/datasource_list_view_event_handler";
 import DatasourceMenuListConfig             from "@/configs/menu_list_configs/datasource_menu_list_config";
 import DatasourceTableColumnConfig          from "@/configs/table_column_config/datasource_table_column_config";
