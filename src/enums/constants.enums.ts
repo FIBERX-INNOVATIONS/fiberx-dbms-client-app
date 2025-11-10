@@ -13,7 +13,8 @@ export const CSRF_TOKEN_FOR = {
     LOGIN: "login",
     TWO_FACTOR: "two_factor_login",
     REGISTER_APP: "register_app",
-    DATASOURCE: "datasource"
+    DATASOURCE: "datasource",
+    REGISTERED_APP_SCHEMA: "registered_app_schema"
     
 }
 

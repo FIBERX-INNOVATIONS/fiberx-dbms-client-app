@@ -63,17 +63,18 @@ export interface TwoFactorFormDataInterface  {
 }
 
 export interface RequestQueryInputInterface {
-    page: number, 
-    size: number, 
-    order_by: string, 
-    order_direction: string, 
-    keyword?: string | null, 
-    preview_only?: string | boolean
+    page: number;
+    size: number;
+    order_by: string;
+    order_direction: string;
+    keyword?: string | null;
+    preview_only?: string | boolean;
+    app_id?: string;
 }
 
 export interface RegisteredAppFormDataInterface {
   prefix: string;
-  csrf_token: string, 
+  csrf_token: string;
   name: string;
   description?: string;
   base_url?: string; 
@@ -82,7 +83,7 @@ export interface RegisteredAppFormDataInterface {
 }
 
 export interface DatasourceFormDataInterface {
-    csrf_token: string, 
+    csrf_token: string;
     registered_app_public_id: string;
     name: string; 
     datasource_type: string;
@@ -94,7 +95,7 @@ export interface DatasourceFormDataInterface {
 }
 
 export interface RegisteredAppSchemaFormDataInterface {
-    csrf_token: string, 
+    csrf_token: string;
     app_public_id: string;
 	model_name: string;
 	datasource_id: number
