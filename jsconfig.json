@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./src/*"],
+            "@ui/*": ["../../fi-ui-toolkit/*"],
         }
     },
     "exclude": ["node_modules", "dist"]
