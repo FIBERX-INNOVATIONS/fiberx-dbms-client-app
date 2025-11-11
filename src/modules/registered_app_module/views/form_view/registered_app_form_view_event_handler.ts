@@ -37,7 +37,7 @@ class RegisteredAppFormViewEventHandler extends BaseFormViewEventHandler {
     }
 
     // Method to add new social link on btn clicked
-    public handleAddNewSocialLink (event: MouseEvent) {
+    public handleAddNewObjectField (event: MouseEvent) {
         this.hideErrorAlert();
 
         const social_links              = { ...this.controller.state_refs.social_links_obj.value };
@@ -69,7 +69,7 @@ class RegisteredAppFormViewEventHandler extends BaseFormViewEventHandler {
     }
 
     // Method to remove social link on btn clicked
-    public handleRemoveSocialLink (event: MouseEvent, social_link_id: string, social_link_key_input_id: string) {
+    public handleRemoveObjectField (event: MouseEvent, social_link_id: string, social_link_key_input_id: string) {
         const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
 
         if (!social_link_id || !social_link_key_input_id) { return; }

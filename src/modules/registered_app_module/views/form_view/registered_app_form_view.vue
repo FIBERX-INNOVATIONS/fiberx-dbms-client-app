@@ -6,6 +6,7 @@
             <InputGroupUI v-bind="app_base_url_input_group_prop" />
             <InputGroupUI v-bind="app_logo_url_input_group_prop" /> 
             <InputGroupUI v-bind="app_description_input_group_prop" /> 
+
             <div :class="props.social_links_wrapper_class_style">
                 <div :class="props.social_links_header_class_style">
                     <span :class="props.social_links_header_label_class_style">
@@ -26,21 +27,21 @@
                     <!-- Link Name Input -->
                     <div :class="props.social_links_body_link_name_class_style">
                         <InputGroupUI
-                            v-bind="controller.getSocialLinkInputGroupProps(`social_links_key_${index}`, link_value?.key)"
+                            v-bind="controller.getObjectInputGroupProps(`social_links_key_${index}`, link_value?.key)"
                         />
                     </div>
 
                     <!-- Link URL Input -->
                     <div :class="props.social_links_body_link_value_class_style">
                         <InputGroupUI
-                            v-bind="controller.getSocialLinkInputGroupProps(`social_links_value_${index}`, link_value?.url_value)"
+                            v-bind="controller.getObjectInputGroupProps(`social_links_value_${index}`, link_value?.url_value)"
                         />
                     </div>
 
                     <!-- Remove Button -->
                     <div :class="props.social_links_body_delete_btn_class_style">
                         <ButtonUI
-                            v-bind="controller.getDeleteSocialLinkBtnProps(link_id, `social_links_key_${index}`)"
+                            v-bind="controller.getObjectDeleteBtnProps(link_id, `social_links_key_${index}`)"
                         />
                     </div>
 

@@ -12,6 +12,8 @@ import DataTableSectionUI                       from "@/ui_components/data_table
 import PaginationUI                             from "@ui/version_2/components/NavigationUI/PaginationUI/pagination_ui.vue";
 
 import { MenuListConfigInterface }              from "@/types/menu_list_config_type";
+import { TableColumnConfigInterface }           from "@/types/table_column_config_type";
+import { BaseEventHandlerInterface }            from "@ui/version_2/types/component_type";
 
 import { 
     ButtonUIPropsInterface, 
@@ -24,7 +26,7 @@ import {
     RecordDeletedPayloadInterface, 
     RecordUpdatedPayloadInterface 
 } from "@/types/app_event_type";
-import { TableColumnConfigInterface } from "@/types/table_column_config_type";
+
 
 
 class BaseListViewController extends BaseController {

@@ -28,21 +28,21 @@
                     <!-- Link Name Input -->
                     <div :class="props.connection_info_body_link_name_class_style">
                         <InputGroupUI
-                            v-bind="controller.getConnectionInfoInputGroupProps(`connection_info_key_${index}`, key_value?.key)"
+                            v-bind="controller.getObjectInputGroupProps(`connection_info_key_${index}`, key_value?.key)"
                         />
                     </div>
 
                     <!-- Link URL Input -->
                     <div :class="props.connection_info_body_link_value_class_style">
                         <InputGroupUI
-                            v-bind="controller.getConnectionInfoInputGroupProps(`connection_info_value_${index}`, key_value?.value)"
+                            v-bind="controller.getObjectInputGroupProps(`connection_info_value_${index}`, key_value?.value)"
                         />
                     </div>
 
                     <!-- Remove Button -->
                     <div :class="props.connection_info_body_delete_btn_class_style">
                         <ButtonUI
-                            v-bind="controller.getDeleteConnectionInfoBtnProps(key_id, `connection_info_key_${index}`)"
+                            v-bind="controller.getObjectDeleteBtnProps(key_id, `connection_info_key_${index}`)"
                         />
                     </div>
 

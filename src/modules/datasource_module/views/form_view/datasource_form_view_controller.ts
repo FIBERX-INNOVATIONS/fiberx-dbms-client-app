@@ -1,59 +1,27 @@
-import { ref, }                                 from "vue";
-import { Router, useRouter }                    from "vue-router";
-import { CSRF_TOKEN_FOR, LOCAT_STORAGE_FIELDS } from "@/enums/constants.enums";
-import { EventBus }                             from "@/utils/gloabal_event_bus";
-import BaseController                           from "@ui/version_2/base_classes/base_controller";
-import AuthService                              from "@/modules/auth_module/base_logic/auth_service";
-import DatasourceService                        from "@/modules/datasource_module/base_logic/datasource_service";
-import DatasourceFormEventHandler               from "@/modules/datasource_module/views/form_view/datasource_form_view_event_handler";
-import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";
-import ContentManagerUtil                       from "@ui/version_2/utils/content_manager_util";
-import InputTransformerUtil                     from "@ui/version_2/utils/input_formatter_util";
-import AuthPropsBuilder                         from "@/modules/auth_module/base_logic/auth_props_builder";
-import DatasourceFormViewPropsBuilder           from "./datasource_form_view_props_builder";
-import InputGroupUI                             from "@ui/version_2/components/InputGroupUI/input_group_ui.vue";
-import ToastAlertUI                             from "@ui/version_2/components/AlertUI/ToastAlertUI/toast_alert_ui.vue";
-import ButtonUI                                 from "@ui/version_2/components/ButtonUI/button_ui.vue";
-import { 
-    ButtonUIPropsInterface, 
-    InputGroupPropsInterface,
-} from "@ui/version_2/types/props_builder_type";
+import { ref, }                             from "vue";
+import BaseFormViewController               from "@/base_classes/form_view/base_form_view_controller";
+import DatasourceService                    from "@/modules/datasource_module/base_logic/datasource_service";
+import DatasourceFormEventHandler           from "@/modules/datasource_module/views/form_view/datasource_form_view_event_handler";
+import { CSRF_TOKEN_FOR }                   from "@/enums/constants.enums";
 
 
-class DatasourceFormViewController extends BaseController {
-    public router: Router;
-    private member_auth_manager: MemberAuthManagerUtil;
+class DatasourceFormViewController extends BaseFormViewController {
     public service: DatasourceService;
-    public auth_service: AuthService;
     public event_handler: DatasourceFormEventHandler;
-    public content_manager: ContentManagerUtil;
-    public event_bus = EventBus;
-
 
     constructor(props: Record<string, any> = {}) {
-        super("datasource_form_view", props);
+        super("datasource_form_view_ui", props);
 
-        this.router                     = useRouter();
-        this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
-        this.content_manager            = ContentManagerUtil.getInstance();
-        this.auth_service               = new AuthService (this);
-        this.service                    = new DatasourceService(this);
-        this.event_handler              = new DatasourceFormEventHandler(this);
+        this.service            = new DatasourceService(this);
+        this.event_handler      = new DatasourceFormEventHandler(this);
+
+        this.initializeDependencies();
     }
 
-    // Method to populate form data with existing record
-    private prepareFormData (): Record<string, any> {
-        const { 
-            name, datasource_type,  host, username, database_name, 
-            port, connection_info = {}
-        } = this.props?.record || {};
-
-        const connection_info_obj           = this.buildConnectionInfoObject(connection_info);
-        const form_data                     = { name, datasource_type,  host, username, database_name, port, connection_info };
-        this.event_handler.form_data        = JSON.parse(JSON.stringify(form_data));
-
-        return { form_data, connection_info_obj };
-    }
+    protected initializeDependencies(): void {
+        this.csrf_token_for         = CSRF_TOKEN_FOR.DATASOURCE;
+        this.form_content_data =     this.content_manager?.get("content_resource.datasource_view_ui.form_view_ui.fieldset") ?? {};
+    };
 
     // Method to build social links object
     public buildConnectionInfoObject(
@@ -75,75 +43,45 @@ class DatasourceFormViewController extends BaseController {
         return connection_info_obj;
     }
 
-    // Method to get ui components
-    protected getUIComponents(): Record<string, any> { 
-        return  { InputGroupUI, ToastAlertUI, ButtonUI };
-    }
-
     // Method to get ui state data
-    protected getUIStateData(): Record<string, any> {  
-        const { connection_info_obj, form_data }    = this.prepareFormData();
+    protected getFormUIStateData (): Record<string, any> {  
+        const { record = {} } = this.props;
+        const { 
+            name = "", datasource_type = "",  host = "", username = "", 
+            database_name = "", port = 0, connection_info = {}, datasource_app = {}
+        } =  record
+
+        const registered_app_public_id  = datasource_app?.public_id ?? "";
+        const connection_info_obj       = this.buildConnectionInfoObject(connection_info);
+        const on_change                 = this.event_handler.handleOnInputchanged.bind(this.event_handler);
+        const fetch_method              = this.event_handler?.fetchPreviewRegisteredApps?.bind(this.event_handler);
+        const render_option_label       = this.event_handler?.renderRegisteredAppLabel?.bind(this.event_handler);
+        const get_option_value          = this.event_handler?.getRegisteredAppValue?.bind(this.event_handler);
+        const event_methods             = { on_change, render_option_label, get_option_value, fetch_method };
+        this.form_data                  = { name, datasource_type,  host, username, database_name, port, connection_info };
+        this.event_handler.form_data    = JSON.parse(JSON.stringify(this.form_data));
 
         return {
             csrf_token: ref(null), connection_info_obj: ref(connection_info_obj),
 
-            connection_info_label_text: this.content_manager.get("content_resource.datasource_view_ui.form_view_ui.fieldset.connection_info_label_text"),
+            connection_info_label_text: this.form_content_data["connection_info_label_text"],
 
-            registered_app_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(
-                this.event_handler, 
-                "registered_app_public_id", 
-                this?.props?.record?.datasource_app?.public_id ?? "", 
-                "select_search", 
-                false, 
-                this?.props?.record?.datasource_app
-            ),
+            registered_app_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "registered_app_public_id", registered_app_public_id, "select_search", false, datasource_app, event_methods),
 
-            name_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "name", this?.props?.record?.name ?? ""),
+            name_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "name", name, "text", false, record, event_methods),
 
-            datasource_type_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "datasource_type", this?.props?.record?.datasource_type ?? ""),
+            datasource_type_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "datasource_type", datasource_type, "text", false, record, event_methods),
 
-            host_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "host", this?.props?.record?.host ?? ""),
+            host_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "host", host, "text", false, record, event_methods),
 
-            port_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "port", this?.props?.record?.port ?? ""),
+            port_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "port", port, "text", false, record, event_methods),
 
-            username_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "username", this?.props?.record?.username ?? ""),
+            username_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "username", username, "text", false, record, event_methods),
 
-            database_name_input_group_prop: DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, "database_name", this?.props?.record?.database_name ?? ""),
+            database_name_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "database_name", database_name, "text", false, record, event_methods),
 
-            add_connection_info_props: DatasourceFormViewPropsBuilder.getAddConnectionInfoProps(this.event_handler),
-
-            toast_alert_props: AuthPropsBuilder.getToastAlertProps(this.event_handler),
-
-            btn_props: DatasourceFormViewPropsBuilder.getBtnProps(this.event_handler, true)
+            add_connection_info_props: this.props_builder.getObjectAddNewFieldBtnProps(this.event_handler),
         } 
-    }
-
-    // Method to handle on mount logic
-    protected async handleOnMountedLogic(): Promise<void> {
-        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
-        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
-
-        if(is_partially_authenticated) { await this.router.push("/two-factor-login") }
-
-        if(!is_fully_authenticated) { await this.router.push("/logout") }
-
-        // get csrf token
-        await this.auth_service.getFormCsrfToken(CSRF_TOKEN_FOR.DATASOURCE);
-    }
-
-    // Methhod to handle on mount logic
-    protected async handleBeforeUnmountedLogic(): Promise<void> {
-        InputTransformerUtil.resetTempObjectMap();
-    }
-
-    // Method to get input group props for social links
-    public getConnectionInfoInputGroupProps (field_key: string, existing_value: string | number | boolean = "",): InputGroupPropsInterface {
-        return DatasourceFormViewPropsBuilder.getInputGroupProps(this.event_handler, field_key, existing_value)
-    }
-
-    // Method to get input group props for social links
-    public getDeleteConnectionInfoBtnProps (connection_info_id: string, connection_info_key_input_id: string): ButtonUIPropsInterface {
-        return DatasourceFormViewPropsBuilder.getRemoveConnectionInfoProps(this.event_handler, connection_info_id, connection_info_key_input_id)
     }
 
 }

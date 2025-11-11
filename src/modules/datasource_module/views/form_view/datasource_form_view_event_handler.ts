@@ -42,7 +42,7 @@ class DatasourceFormViewEventHandler extends BaseFormViewEventHandler {
     }
 
     // Method to add new social link on btn clicked
-    public handleAddNewConnectionInfo (event: MouseEvent) {
+    public handleAddNewObjectField (event: MouseEvent) {
         this.hideErrorAlert();
 
         const connection_info               = { ...this.controller.state_refs.connection_info_obj.value };
@@ -74,7 +74,7 @@ class DatasourceFormViewEventHandler extends BaseFormViewEventHandler {
     }
 
     // Method to remove social link on btn clicked
-    public handleRemoveConnectionInfo (event: MouseEvent, connection_info_id: string, connection_info_key_input_id: string) {
+    public handleRemoveObjectField (event: MouseEvent, connection_info_id: string, connection_info_key_input_id: string) {
         const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
 
         if (!connection_info_id || !connection_info_key_input_id) { return; }
@@ -96,9 +96,20 @@ class DatasourceFormViewEventHandler extends BaseFormViewEventHandler {
     }
 
     // Method to fetch preview registered apps
-    public async fetchPreviewRegisteredApps (params: RequestQueryInputInterface) {
-       return this.registered_app_api_service.getAllRegisteredApps(params);
+    public async fetchPreviewRegisteredApps (params: Record<string, any>): Promise<any> {
+       return this.registered_app_api_service.getAllRegisteredApps(params as RequestQueryInputInterface);
     }
+
+    // Method to render registered app label in select search
+    public renderRegisteredAppLabel (record: Record<string, any>): string {
+        if(!record || !record?.public_id || !record?.name) { return "" }
+
+        const { public_id, name, logo_utl } = record;
+        return `[${public_id}] ${name}`;
+    }
+
+    // Method to get registered app value
+    public getRegisteredAppValue (record: Record<string, any>): string { return record?.public_id ?? "" }
 
     // Method to handle login submit btn click
     public async handleSubmitBtnClick (event: MouseEvent) {
