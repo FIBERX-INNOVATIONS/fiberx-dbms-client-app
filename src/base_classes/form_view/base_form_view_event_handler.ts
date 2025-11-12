@@ -4,6 +4,7 @@ import ContentManagerUtil                   from "@ui/version_2/utils/content_ma
 import InputTransformerUtil                 from "@ui/version_2/utils/input_formatter_util";
 import BaseEventHandler                     from "@ui/version_2/base_classes/base_event_handler";
 import RegisteredAppAPIService              from "@/api_services/registered_app_api_service";
+import DatasourceAPIService                 from "@/api_services/datasource_api_service";
 import { BaseControllerInterface }          from "@ui/version_2/types/component_type";
 import { 
     OpenNewModalPayloadInterface, 
@@ -14,14 +15,16 @@ class BaseFormViewEventHandler extends BaseEventHandler {
     public content_manager: ContentManagerUtil;
     protected redirect_timer: ReturnType<typeof setTimeout> | null = null;
     protected status_alert_options: StatusPayloadOptionsInterface;
-    public registered_app_api_service: RegisteredAppAPIService
+    public registered_app_api_service: RegisteredAppAPIService;
+    public datasource_api_service: DatasourceAPIService;
 
     constructor(controller: BaseControllerInterface) {
         super(controller, controller.component_name);
 
         this.content_manager                = ContentManagerUtil.getInstance();
         this.status_alert_options           = { duration: 3000, close_modal: true };
-        this.registered_app_api_service     = new RegisteredAppAPIService()
+        this.registered_app_api_service     = new RegisteredAppAPIService();
+        this.datasource_api_service         = new DatasourceAPIService();
     }
 
     /** Hook to allow derived classes to react to form updates */
@@ -32,14 +35,21 @@ class BaseFormViewEventHandler extends BaseEventHandler {
         throw new Error("validateFormData() must be implemented by subclass");
     }
 
-    protected async executeSubmitAction(record_id: any, form_data: any): Promise<any> {
-        throw new Error("executeSubmitAction() must be implemented by subclass");
+    protected async executeSubmitAction(record_id: string, form_data: Record<string, any>) {
+       if (!this.controller.service) { return {}; }
+
+        if (record_id) {
+            return await this.controller.service.executeUpdateRecord(record_id, form_data);
+        }
+
+        return await this.controller.service.executeCreateRecord(form_data);
     }
 
     protected getRecordId(record: any): any { 
         const { record_id_key = "id" } = this.controller;
         return record?.id ?? record?.public_id ?? record?.[record_id_key]
     }
+    
 
     // Method to hide error alert
     public hideErrorAlert() {
@@ -64,10 +74,12 @@ class BaseFormViewEventHandler extends BaseEventHandler {
         const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
         if (!target) return;
 
-        const input_id = target.id;
-        const input_value = input_model_value ?? target.value;
-        const new_form_data = InputTransformerUtil.buildFormDataRecord(input_id, input_value, this.form_data);
-        this.form_data = JSON.parse(JSON.stringify(new_form_data));
+        const input_id          = target.id;
+        const input_value       = input_model_value ?? target.value;
+        const new_form_data     = InputTransformerUtil.buildFormDataObject(input_id, input_value, this.form_data);
+        this.form_data          = { ...this.form_data, ...new_form_data };
+
+        console.log({ data: this.form_data })
 
         this.onFormDataUpdated();
     }

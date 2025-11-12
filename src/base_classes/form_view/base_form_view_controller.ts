@@ -84,8 +84,8 @@ class BaseFormViewController extends BaseController {
     }
 
     // Method to get input group props for social links
-    public getObjectDeleteBtnProps (id: string, key_input_id: string): ButtonUIPropsInterface {
-        return BaseFormViewPropsBuilder.getObjectRemoveFieldBtnProps(this.event_handler, id, key_input_id)
+    public getObjectDeleteBtnProps (id: string | number, key_input_id: string): ButtonUIPropsInterface {
+        return BaseFormViewPropsBuilder.getObjectRemoveFieldBtnProps(this.event_handler, id.toString(), key_input_id)
     }
 
 }

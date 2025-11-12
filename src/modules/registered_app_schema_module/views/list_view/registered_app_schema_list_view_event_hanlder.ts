@@ -9,6 +9,8 @@ class RegisteredAppSchemaListViewEventHandler extends BaseListViewEventHandler {
 
     constructor(controller: BaseControllerInterface) {
         super(controller, RegisteredAppSchemaTableColumnConfig, RegisteredAppSchemaProfileView, RegisteredAppSchemaFormView);
+
+        this.form_modal_config = { position: "center", width_class: "w-[95%]" }
     }
 }
 

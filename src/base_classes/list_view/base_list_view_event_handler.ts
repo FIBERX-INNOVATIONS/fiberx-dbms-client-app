@@ -36,6 +36,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
     public table_column_config: TableColumnConfigInterface;
     public profile_view_component: Component;
     public form_view_component: Component;
+    public form_modal_config = { position: "center", width_class: "w-lg" }
 
     constructor(
         controller: BaseControllerInterface,
@@ -530,7 +531,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
             const component_props   = { record };
 
             const open_modal_payload: OpenNewModalPayloadInterface = {
-                position: "center", width_class: "w-lg", title_content,
+                ...this.form_modal_config, title_content,
                 component, component_props
             }
             this.controller.event_bus.emit("open_new_modal", open_modal_payload);

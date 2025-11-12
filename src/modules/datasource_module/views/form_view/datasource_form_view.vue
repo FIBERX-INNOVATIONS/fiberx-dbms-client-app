@@ -8,46 +8,44 @@
             <InputGroupUI v-bind="port_input_group_prop" /> 
             <InputGroupUI v-bind="username_input_group_prop" /> 
             <InputGroupUI v-bind="database_name_input_group_prop" /> 
-            <div :class="props.connection_info_wrapper_class_style">
-                <div :class="props.connection_info_header_class_style">
-                    <span :class="props.connection_info_header_label_class_style">
+
+            <div :class="props.object_section_wrapper_class_style">
+                <!-- Object header -->
+                <div :class="props.object_section_header_class_style">
+                    <span :class="props.object_section_header_label_text_class_style">
                         {{ connection_info_label_text }}
                     </span>
-                    <div :class="props.connection_info_header_add_btn_class_style">
-                        <ButtonUI v-bind="add_connection_info_props" />
+                    <div :class="props.object_section_header_add_btn_class_style">
+                        <ButtonUI v-bind="add_connection_info_btn_props" />
                     </div>
                 </div>
-                <div
-                    v-for="([key_id, key_value], index) in Object.entries(
-                        (connection_info_obj as Record<string, { key: string; value: string; is_deleted?: boolean }>)
-                    ).filter(([_, value]) => !value.is_deleted)"
-                    :key="key_id"
-                    :class="props.connection_info_body_class_stle"
-                >
-                
-                    <!-- Link Name Input -->
-                    <div :class="props.connection_info_body_link_name_class_style">
-                        <InputGroupUI
-                            v-bind="controller.getObjectInputGroupProps(`connection_info_key_${index}`, key_value?.key)"
-                        />
+
+                <!-- Object body -->
+                <div v-if="connection_info_array.length === 0" :class="props.object_section_body_class_style">
+                    <span>{{ no_info_text }}</span>
+                </div>
+
+                <div v-for="(conn, index) in connection_info_array" :class="props.object_section_body_class_style">
+                    <div :class="props.object_section_body_row_class_style">
+                        <span :class="props.object_section_body_row_label_text_class_style">
+                            {{ connection_info_label_text }} {{ index + 1 }}
+                        </span>
+                        <ButtonUI v-bind="controller.getObjectDeleteBtnProps(index, `connection_info_array.${index}`)" />
                     </div>
 
-                    <!-- Link URL Input -->
-                    <div :class="props.connection_info_body_link_value_class_style">
-                        <InputGroupUI
-                            v-bind="controller.getObjectInputGroupProps(`connection_info_value_${index}`, key_value?.value)"
-                        />
-                    </div>
+                    <div :class="props.object_section_body_row_class_style">
+                        <div :class="props.object_body_key_class_style">
+                            <InputGroupUI v-bind="controller.getObjectInputGroupProps(`connection_info_array.${index}.key`, conn?.key)" />
+                        </div>
 
-                    <!-- Remove Button -->
-                    <div :class="props.connection_info_body_delete_btn_class_style">
-                        <ButtonUI
-                            v-bind="controller.getObjectDeleteBtnProps(key_id, `connection_info_key_${index}`)"
-                        />
+                        <div :class="props.object_body_value_class_style">
+                            <InputGroupUI v-bind="controller.getObjectInputGroupProps(`connection_info_array.${index}.value`, conn?.value)" />
+                        </div>
                     </div>
 
                 </div>
             </div>
+            
             <ToastAlertUI v-bind="toast_alert_props" />
             <ButtonUI v-bind="btn_props" />
         </form>
@@ -67,7 +65,7 @@ const { state_refs, computed_refs, components} = controller.getComponentDefiniti
 const {  InputGroupUI, ToastAlertUI, ButtonUI  } = components;
 
 const {
-    connection_info_obj,
+    connection_info_array,
     registered_app_input_group_prop,
     name_input_group_prop,
     datasource_type_input_group_prop,
@@ -75,8 +73,9 @@ const {
     port_input_group_prop,
     username_input_group_prop,
     database_name_input_group_prop,
-    add_connection_info_props,
+    add_connection_info_btn_props,
     connection_info_label_text,
+    no_info_text,
     toast_alert_props,
     btn_props
 } = state_refs

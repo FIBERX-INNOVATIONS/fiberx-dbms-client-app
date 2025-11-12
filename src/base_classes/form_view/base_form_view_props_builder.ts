@@ -28,20 +28,21 @@ class BaseFormViewPropsBuilder {
         read_only: boolean = false,
         record: Record<string, any> = {},
         event_methods: InputUIEventMethodsPropsInterface = {},
-
+        other_configs: Record<string, any> = {}
     ): InputGroupPropsInterface {
-        const { on_change, fetch_method, render_option_label, get_option_value } = event_methods
+        const { on_change, fetch_method, render_option_label, get_option_value } = event_methods;
+        const { min, max, length, } = other_configs;
 
         const class_styles              = ClassStyles?.input_ui ?? {};
-        const { base, index }           = InputTransformerUtil.extractInputBaseAndIndexFieldKey(field_key);
-        const label_text_key            = `${base}_label_text`;
-        const placeholder_text_key      = `${base}_placeholder_text`;
+        const normalized_field_key      = InputTransformerUtil.normalizeFieldKey(field_key);
+        const label_text_key            = `${normalized_field_key}_label_text`;
+        const placeholder_text_key      = `${normalized_field_key}_placeholder_text`;
         const label_text                = content_data[label_text_key];
         const placeholder               = content_data[placeholder_text_key];
         const label_config              = { label_text, label_required_text: "" };
         const input_boolean_config      = { required: true, cache_enabled: true, read_only };
         const input_content_config      = { no_options_content: content_data?.no_registered_apps_text, label_text: render_option_label?.(record) ?? "" };
-        const input_number_config       = { rows: 8 };
+        const input_number_config       = { rows: 8, min, max, length };
         const input_event_methods       = { on_change, fetch_method, render_option_label, get_option_value };
         const input_config              = InputGroupUIPropsBuilder.getInputUIConfig(
             field_key, input_type, placeholder, existing_value, 
@@ -78,7 +79,7 @@ class BaseFormViewPropsBuilder {
 
     // Method to get add social link props
     public static getObjectAddNewFieldBtnProps (event_handler: BaseEventHandlerInterface,): ButtonUIPropsInterface {
-        const class_styles          = ClassStyles?.social_link_btn_ui ?? {};
+        const class_styles          = ClassStyles?.form_object_btn_ui ?? {};
         const icon_class_style      = class_styles?.icon_class_style;
         const btn_class_style       = class_styles?.btn_class_style
         const btn_type              = "button";
@@ -96,19 +97,19 @@ class BaseFormViewPropsBuilder {
     // Method to get remove social link props
     public static getObjectRemoveFieldBtnProps (
         event_handler: BaseEventHandlerInterface,
-        social_link_id: string, 
-        social_link_key_input_id: string
+        object_id: string, 
+        object_key_input_id: string
     ): ButtonUIPropsInterface {
-        const class_styles                  = ClassStyles?.social_link_btn_ui ?? {};
+        const class_styles                  = ClassStyles?.form_object_btn_ui ?? {};
         const icon_class_style              = class_styles?.icon_class_style;
         const btn_class_style               = class_styles?.delete_btn_class_style;
         const btn_type                      = "button";
         const content_text                  = RenderHtmlUtil.renderHtml({ icon: SVGIcons.delete_trash_svg_icon, class_style: icon_class_style, icon_class_style });
         const loader_content_text           = RenderHtmlUtil.renderLoaderHtml({});
-        const on_click                      = (event: MouseEvent) => { event_handler?.handleRemoveObjectField?.bind(event_handler)(event, social_link_id, social_link_key_input_id) } ;
+        const on_click                      = (event: MouseEvent) => { event_handler?.handleRemoveObjectField?.bind(event_handler)(event, object_id, object_key_input_id) } ;
 
         return reactive({
-            id: social_link_id, type: btn_type, disabled: false, show_loader: false,
+            id: object_id, type: btn_type, disabled: false, show_loader: false,
             content_text, loader_content_text, btn_class_style, on_click
         });
     }

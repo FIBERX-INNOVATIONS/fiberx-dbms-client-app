@@ -93,7 +93,7 @@ class DatasourceService extends BaseService {
     }
 
     // Method to execute change record state
-    public async executeRegisterNewDatasource(form_data: DatasourceFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeCreateRecord(form_data: DatasourceFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.createNewDatasource(form_data);
 
@@ -110,7 +110,7 @@ class DatasourceService extends BaseService {
     }
 
     // Method to execute update record
-    public async executeUpdateDatasource(record_id: number, form_data: DatasourceFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeUpdateRecord(record_id: number, form_data: DatasourceFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.updateDatasource(record_id, form_data);
 

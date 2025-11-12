@@ -5,89 +5,87 @@ import RegisteredAppValidator               from "@/validators/regsitered_app_va
 
 class RegisteredAppFormViewEventHandler extends BaseFormViewEventHandler {
 
-    // Method to update controller social links object with form data
-    private handleUpdateSocialLinksObjects (): boolean {
-        const form_data_social_links = this.form_data?.social_links;
+    private buildSocialLinksObject (social_links_array: { key: string; value: string; }[]): Record<string, string> {
+        if(!social_links_array || !social_links_array.length) { return {} }
 
-        if(!form_data_social_links || !Object.keys(form_data_social_links).length) { return false }
+        const social_link_obj: Record<string, string> = {};
 
-        const updated_social_link = this.controller.buildSocialLinkObject(form_data_social_links);
+        for (const link of social_links_array) {
+            const { key = "", value = "" } = link;
 
-        this.controller.state_refs.social_links_obj.value = updated_social_link;
+            if(!key || !value) { continue };
 
-        return true;
+            social_link_obj[key] = value; 
+        }
+
+        return social_link_obj
     }
 
     protected onFormDataUpdated() {
-        if (this.form_data?.social_links) { this.handleUpdateSocialLinksObjects(); }
+        if(!this.form_data?.social_links_array?.length) { return }
+        
+        this.controller.state_refs.social_links_array.value = [ ...this.form_data?.social_links_array ]
     }
 
     protected validateFormData(form_data: RegisteredAppFormDataInterface, record: Record<string, any>) {
-        return RegisteredAppValidator.validateRegisteredAppInput(form_data, record);
+        form_data.social_links = this.buildSocialLinksObject(form_data?.social_links_array || []);
+
+        const validation_result = RegisteredAppValidator.validateRegisteredAppInput(form_data, record);
+
+        if(validation_result.v_state) { this.form_data.social_links = { ...this.form_data.social_links, ...form_data.social_links }}
+
+        return validation_result;
     }
 
-    protected async executeSubmitAction(record_id: string, form_data: RegisteredAppFormDataInterface) {
-       if (!this.controller.service) { return {}; }
+    // Method to build connection info array
+    public buildSocialLinkArray( social_links: Record<string, string> = {}): Record<string, string>[] {
 
-        if (record_id) {
-            return await this.controller.service.executeUpdateRegisteredApp(record_id, form_data);
+        if (!social_links || Object.keys(social_links).length === 0) {
+            return [];
         }
 
-        return await this.controller.service.executeRegisterNewApp(form_data);
+        const social_links_array: Record<string, string>[] = [];
+
+        // Correct iteration using for...of
+        Object.entries(social_links).forEach(([key, value], index) => {
+            social_links_array.push({ key, value })
+        });
+
+        return social_links_array;
     }
 
     // Method to add new social link on btn clicked
     public handleAddNewObjectField (event: MouseEvent) {
         this.hideErrorAlert();
 
-        const social_links              = { ...this.controller.state_refs.social_links_obj.value };
-        const all_social_links_keys     = Object.keys(social_links)
-        const active_social_links_keys  = all_social_links_keys.filter(key => !social_links[key]?.is_deleted);
-        const all_keys_length           = all_social_links_keys.length;
-        const active_keys_length        = active_social_links_keys.length;
-        const keys_last_index           = active_keys_length > 0 ? active_keys_length - 1 : 0;
+        const social_links_array = this.controller.state_refs?.social_links_array?.value || [];
 
-
-        if(active_keys_length > 0) {
-            const last_link_id = active_social_links_keys[keys_last_index];
-
-            const { key, url_value } = social_links[last_link_id];
-
-            const { v_state, v_msg } = RegisteredAppValidator.validateSocialLinkRecord(key, url_value);
+        if(social_links_array.length) {
+            const last_index                = (social_links_array?.length - 1);
+            const { key = "", value = "" }  = social_links_array?.[last_index];
+            const { v_state, v_msg }        = RegisteredAppValidator.validateSocialLinkRecord(key, value);
 
             if(!v_state) {
                 const error_msg = this.content_manager?.getAPIResponseValue(v_msg);
                 return this.showErrorAlert("error", error_msg)
             }
         }
-
-        const new_link_id           = `Link_${all_keys_length + 1}`;
-        social_links[new_link_id]   = { key: "", url_value: "", is_deleted: false }
-
-        // update reactive ref
-        this.controller.state_refs.social_links_obj.value = social_links;
+        
+        this.controller.state_refs.social_links_array.value.push({ key: "", value: ""});
     }
 
     // Method to remove social link on btn clicked
-    public handleRemoveObjectField (event: MouseEvent, social_link_id: string, social_link_key_input_id: string) {
+    public handleRemoveObjectField (event: MouseEvent, social_links_index: string, social_links_key_input_id: string) {
+        this.hideErrorAlert();
+
         const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
 
-        if (!social_link_id || !social_link_key_input_id) { return; }
+        const number_social_links_index = Number(social_links_index);
 
-        const social_links          = { ...this.controller.state_refs.social_links_obj.value };
-        const link_to_delete        = social_links[social_link_id];
+        if (!social_links_index || !social_links_key_input_id || !Number.isInteger(number_social_links_index)) { return; }
 
-        if(!link_to_delete) { return }
-
-        const { key, url_value } = link_to_delete
-
-        if (this.form_data?.social_links?.[key]) { 
-            delete this.form_data?.social_links[key]
-        }
-
-        social_links[social_link_id].is_deleted = true;
-
-       this.controller.state_refs.social_links_obj.value = social_links;
+       this.controller.state_refs.social_links_array.value.splice(number_social_links_index, 1);
+       this.form_data.social_links_array.splice(number_social_links_index, 1);
     }
 }
 

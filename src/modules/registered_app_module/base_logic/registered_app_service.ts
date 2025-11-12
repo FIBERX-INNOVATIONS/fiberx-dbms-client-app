@@ -93,7 +93,7 @@ class RegisteredAppService extends BaseService {
     }
 
     // Method to execute change record state
-    public async executeRegisterNewApp(form_data: RegisteredAppFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeCreateRecord(form_data: RegisteredAppFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.createNewApp(form_data);
 
@@ -110,7 +110,7 @@ class RegisteredAppService extends BaseService {
     }
 
     // Method to execute update record
-    public async executeUpdateRegisteredApp(record_id: string, form_data: RegisteredAppFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeUpdateRecord(record_id: string, form_data: RegisteredAppFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.updateApp(record_id, form_data);
 

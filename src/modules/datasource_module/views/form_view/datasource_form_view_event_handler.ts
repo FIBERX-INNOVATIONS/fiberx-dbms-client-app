@@ -10,89 +10,96 @@ import {
 
 class DatasourceFormViewEventHandler extends BaseFormViewEventHandler {
 
-    // Method to update controller social links object with form data
-    private handleUpdateConnectionInfoObjects (): boolean {
-        const form_data_connection_info = this.form_data?.connection_info;
+    private buildConnectionInfoObject (connection_info_array: { key: string; value: string; }[]): Record<string, string> {
+        if(!connection_info_array || !connection_info_array.length) { return {} }
 
-        if(!form_data_connection_info || !Object.keys(form_data_connection_info).length) { return false }
+        const connection_info_obj: Record<string, string> = {};
 
-        const updated_connection_info = this.controller.buildConnectionInfoObject(form_data_connection_info);
+        for (const conn of connection_info_array) {
+            const { key = "", value = "" } = conn;
 
-        this.controller.state_refs.connection_info_obj.value = updated_connection_info;
+            if(!key || !value) { continue };
 
-        return true;
+            connection_info_obj[key] = value; 
+        }
+
+        return connection_info_obj
     }
 
     protected onFormDataUpdated() {
-        if (this.form_data?.connection_info) { this.handleUpdateConnectionInfoObjects(); }
+        if(!this.form_data?.connection_info_array?.length) { return }
+
+        this.controller.state_refs.connection_info_array.value = [ ...this.form_data?.connection_info_array ]
     }
 
     protected validateFormData(form_data: DatasourceFormDataInterface, record: Record<string, any>) {
-        return DatasourceValidator.validateDatasourceInput(form_data, record);
+        form_data.connection_info = this.buildConnectionInfoObject(form_data?.connection_info_array || []);
+
+        const validation_result = DatasourceValidator.validateDatasourceInput(form_data, record);
+
+        if(validation_result.v_state) { this.form_data.connection_info = { ...this.form_data.connection_info, ...form_data.connection_info }}
+
+        return validation_result
     }
 
     protected async executeSubmitAction(record_id: string, form_data: DatasourceFormDataInterface) {
         if (!this.controller.service) { return {}; }
 
         if (record_id) {
-            return await this.controller.service.executeUpdateDatasource(Number(record_id), form_data);
+            return await this.controller.service.executeUpdateRecord(Number(record_id), form_data);
         }
 
-        return await this.controller.service.executeRegisterNewDatasource(form_data);
+        return await this.controller.service.executeCreateRecord(form_data);
+    }
+
+    // Method to build connection info array
+    public buildConnectionInfoArray( connection_info: Record<string, string> = {}): Record<string, string>[] {
+
+        if (!connection_info || Object.keys(connection_info).length === 0) {
+            return [];
+        }
+
+        const connection_info_array: Record<string, string>[] = [];
+
+        // Correct iteration using for...of
+        Object.entries(connection_info).forEach(([key, value], index) => {
+            connection_info_array.push({ key, value })
+        });
+
+        return connection_info_array;
     }
 
     // Method to add new social link on btn clicked
     public handleAddNewObjectField (event: MouseEvent) {
         this.hideErrorAlert();
 
-        const connection_info               = { ...this.controller.state_refs.connection_info_obj.value };
-        const all_connection_info_keys      = Object.keys(connection_info)
-        const active_connection_info_keys   = all_connection_info_keys.filter(key => !connection_info[key]?.is_deleted);
-        const all_keys_length               = all_connection_info_keys.length;
-        const active_keys_length            = active_connection_info_keys.length;
-        const keys_last_index               = active_keys_length > 0 ? active_keys_length - 1 : 0;
+        const connection_info_array     = this.controller.state_refs?.connection_info_array?.value || [];
 
-
-        if(active_keys_length > 0) {
-            const last_link_id = active_connection_info_keys[keys_last_index];
-
-            const { key, value } = connection_info[last_link_id];
-
-            const { v_state, v_msg } = DatasourceValidator.validateConnectionInfoRecord(key, value);
+        if(connection_info_array.length) {
+            const last_index                = (connection_info_array?.length - 1);
+            const { key = "", value = "" }  = connection_info_array?.[last_index];
+            const { v_state, v_msg }        = DatasourceValidator.validateConnectionInfoRecord(key, value);
 
             if(!v_state) {
                 const error_msg = this.content_manager?.getAPIResponseValue(v_msg);
                 return this.showErrorAlert("error", error_msg)
             }
         }
-
-        const new_link_id               = `Connection_Info_${all_keys_length + 1}`;
-        connection_info[new_link_id]   = { key: "", value: "", is_deleted: false }
-
-        // update reactive ref
-        this.controller.state_refs.connection_info_obj.value = connection_info;
+        
+        this.controller.state_refs.connection_info_array.value.push({ key: "", value: ""});
     }
 
     // Method to remove social link on btn clicked
-    public handleRemoveObjectField (event: MouseEvent, connection_info_id: string, connection_info_key_input_id: string) {
+    public handleRemoveObjectField (event: MouseEvent, connection_info_index: string, connection_info_key_input_id: string) {
+        this.hideErrorAlert();
         const target = event.target as HTMLInputElement | HTMLTextAreaElement | null;
 
-        if (!connection_info_id || !connection_info_key_input_id) { return; }
+        const number_connection_info_index = Number(connection_info_index);
 
-        const connection_info       = { ...this.controller.state_refs.connection_info_obj.value };
-        const link_to_delete        = connection_info[connection_info_id];
+        if (!connection_info_index || !connection_info_key_input_id || !Number.isInteger(number_connection_info_index)) { return; }
 
-        if(!link_to_delete) { return }
-
-        const { key, value } = link_to_delete
-
-        if (this.form_data?.connection_info?.[key]) { 
-            delete this.form_data?.connection_info[key]
-        }
-
-        connection_info[connection_info_id].is_deleted = true;
-
-       this.controller.state_refs.connection_info_obj.value = connection_info;
+       this.controller.state_refs.connection_info_array.value.splice(number_connection_info_index, 1);
+       this.form_data.connection_info_array.splice(number_connection_info_index, 1);
     }
 
     // Method to fetch preview registered apps
@@ -110,50 +117,6 @@ class DatasourceFormViewEventHandler extends BaseFormViewEventHandler {
 
     // Method to get registered app value
     public getRegisteredAppValue (record: Record<string, any>): string { return record?.public_id ?? "" }
-
-    // Method to handle login submit btn click
-    public async handleSubmitBtnClick (event: MouseEvent) {
-        this.hideErrorAlert()
-        try {
-            const record                = this.controller.props?.record ?? {}
-            const record_id             = record?.id;
-            const event_name            = record_id ? "on_record_updated" : "on_new_record_created";
-            const form_data             = this.form_data  as DatasourceFormDataInterface;
-            const { v_state, v_msg }    = DatasourceValidator.validateDatasourceInput(form_data, record);
-
-            if(!v_state) {
-                const error_msg = this.content_manager?.getAPIResponseValue(v_msg);
-                return this.showErrorAlert("error", error_msg)
-            }
-
-            if(!this.controller?.service) { return }
-
-            let s_state, s_msg, s_data, logout;
-
-            if(record_id) {
-                ({ s_state, s_msg, s_data, logout } = await this.controller.service?.executeUpdateDatasource(Number(record_id), form_data))
-            }
-            else {
-                ({ s_state, s_msg, s_data, logout } = await this.controller.service?.executeRegisterNewDatasource(form_data))
-            }
-
-            const formmated_status_msg = this.content_manager?.getAPIResponseValue(s_msg);
-
-            if(logout) { return await this.controller.router.push("/logout"); }
-
-            if(!s_state) { return this.showErrorAlert("error", formmated_status_msg); }
-
-            const status_alert_payload  = { status: "success", message: formmated_status_msg, options: this.status_alert_options };
-            const event_payload         = { record_id, record: {...form_data, ...s_data} }
-
-            this.controller.event_bus.emit("statusChanged", status_alert_payload);
-            this.controller.event_bus.emit(event_name, event_payload);
-            return;
-        }
-        catch(error: unknown) {
-            this.logger.error(`Failed to submit form`, { error })
-        }
-    }
 }
 
 export default DatasourceFormViewEventHandler;
