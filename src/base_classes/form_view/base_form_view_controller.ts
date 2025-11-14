@@ -12,6 +12,7 @@ import AuthPropsBuilder                         from "@/modules/auth_module/base
 import InputGroupUI                             from "@ui/version_2/components/InputGroupUI/input_group_ui.vue";
 import ToastAlertUI                             from "@ui/version_2/components/AlertUI/ToastAlertUI/toast_alert_ui.vue";
 import ButtonUI                                 from "@ui/version_2/components/ButtonUI/button_ui.vue";
+import SchemaDesignerUI                         from "@/ui_components/schema_designer_ui/schema_designer_ui.vue";
 
 import { 
     ButtonUIPropsInterface, 
@@ -45,7 +46,7 @@ class BaseFormViewController extends BaseController {
     protected getFormUIStateData(): Record<string, any> { return {} };
 
     protected getUIComponents(): Record<string, any> {
-        return { InputGroupUI, ToastAlertUI, ButtonUI };
+        return { InputGroupUI, ToastAlertUI, ButtonUI, SchemaDesignerUI };
     }
 
     // Method to get ui state data
@@ -59,9 +60,12 @@ class BaseFormViewController extends BaseController {
 
             toast_alert_props: AuthPropsBuilder.getToastAlertProps(this.event_handler),
 
-            btn_props: BaseFormViewPropsBuilder.getBtnProps(this.event_handler, true)
+            btn_props: BaseFormViewPropsBuilder.getBtnProps(this.event_handler, true, true, this.form_content_data["btn_text"])
         } 
     }
+
+    // Method to handle on mount logic
+    protected async formMountedLogic (): Promise<void> { }
 
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
@@ -74,13 +78,36 @@ class BaseFormViewController extends BaseController {
 
         // get csrf token
         await this.auth_service.getFormCsrfToken(this.csrf_token_for);
+
+        await this?.formMountedLogic?.()
     }
 
     // Method to get input group props for social links
-    public getObjectInputGroupProps (field_key: string, existing_value: string | number | boolean = "",): InputGroupPropsInterface {
+    public getObjectInputGroupProps (
+        field_key: string, 
+        existing_value: string | number | boolean = "",
+        input_type: string = "text",
+        input_configs: Record<string, any> = {}
+    ): InputGroupPropsInterface {
+        const { min, options_key } = input_configs;
+
         const on_change                 = this.event_handler.handleOnInputchanged.bind(this.event_handler);
         const event_methods             = { on_change };
-        return BaseFormViewPropsBuilder.getInputGroupProps(this.form_content_data, field_key, existing_value, "text", false, {}, event_methods)
+        const options                   = this.event_handler.getSelectOptions(options_key);
+
+        
+
+        return BaseFormViewPropsBuilder.getInputGroupProps(
+            this.form_content_data, 
+            field_key, 
+            existing_value, 
+            input_type, 
+            false, 
+            this.props?.record || {}, 
+            event_methods,
+            { min, options }
+
+        )
     }
 
     // Method to get input group props for social links

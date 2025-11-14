@@ -186,7 +186,7 @@ class BaseListViewController extends BaseController {
             this.event_handler.handleOnRecordUpdated(payload);
         });
 
-         this.event_bus.on("on_record_deleted", async (payload: RecordDeletedPayloadInterface) => {
+        this.event_bus.on("on_record_deleted", async (payload: RecordDeletedPayloadInterface) => {
             this.event_handler.handleOnRecordDeleted(payload);
         });
     }

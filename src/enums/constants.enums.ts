@@ -18,4 +18,33 @@ export const CSRF_TOKEN_FOR = {
     
 }
 
-export const DEFAULT_PROFILE_PHOTO = "https://newprofilepic.photo-cdn.net//assets/images/article/profile.jpg?90af0c8"
+export const DEFAULT_PROFILE_PHOTO = "https://newprofilepic.photo-cdn.net//assets/images/article/profile.jpg?90af0c8";
+
+export const COLUMN_NAME_TYPE_OPTIONS = [
+  { value: "STRING", label_text: "STRING" },
+  { value: "CHAR", label_text: "CHAR" },
+  { value: "TEXT", label_text: "TEXT" },
+  { value: "INTEGER", label_text: "INTEGER" },
+  { value: "FLOAT", label_text: "FLOAT" },
+  { value: "DECIMAL", label_text: "DECIMAL" },
+  { value: "DATE", label_text: "DATE" },
+  { value: "BOOLEAN", label_text: "BOOLEAN" },
+  { value: "ENUM", label_text: "ENUM" },
+  { value: "UUID", label_text: "UUID" },
+  { value: "BIGINT", label_text: "BIGINT" },
+  { value: "NUMBER", label_text: "NUMBER" },
+];
+
+export const COLUMN_TYPE_VARIANT_OPTIONS = [
+  { value: "tiny", label_text: "Tiny" },
+  { value: "medium", label_text: "Medium" },
+  { value: "long", label_text: "Long" },
+];
+
+export const REFERENCE_TABLE_ACTIONS = [
+  { value: "CASCADE", label_text: "CASCADE" },
+  { value: "SET NULL", label_text: "SET NULL" },
+  { value: "SET DEFAULT", label_text: "SET DEFAULT" },
+  { value: "RESTRICT", label_text: "RESTRICT" },
+  { value: "NO ACTION", label_text: "NO ACTION" },
+]

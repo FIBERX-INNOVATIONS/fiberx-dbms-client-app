@@ -4,7 +4,7 @@ import RegisteredAppSchemaService           from "@/modules/registered_app_schem
 import RegisteredAppSchemaFormEventHandler  from "@/modules/registered_app_schema_module/views/form_view/registered_app_schema_form_view_event_handler";
 import { CSRF_TOKEN_FOR }                   from "@/enums/constants.enums";
 import { InputUIEventMethodsPropsInterface } from "@ui/version_2/types/props_builder_type";
-import { ColumnDefinitionInterface } from "@/types/schema_type";
+import { ColumnsArrayUpdatedPayloadInterface } from "@/types/app_event_type";
 
 
 class RegisteredAppSchemaFormViewController extends BaseFormViewController {
@@ -42,7 +42,6 @@ class RegisteredAppSchemaFormViewController extends BaseFormViewController {
         return { on_change, render_option_label, get_option_value, fetch_method };
     }
 
-    
     // Method initialize dependencies
     protected initializeDependencies(): void {
         this.csrf_token_for         = CSRF_TOKEN_FOR.DATASOURCE;
@@ -59,22 +58,21 @@ class RegisteredAppSchemaFormViewController extends BaseFormViewController {
 
         const app_public_id                         = schema_app?.public_id ?? "";
         const datasource_id                         = schema_datasource?.id ?? 0;
-        this.form_data                              = { app_public_id, datasource_id, model_name, primary_key, migration_priority, permissions, columns, indexes };
+        const columns_array                         = this.event_handler.buildColumnsArray(columns);
+        this.form_data                              = { app_public_id, datasource_id, model_name, primary_key, migration_priority, permissions, columns, indexes, columns_array };
         this.event_handler.form_data                = JSON.parse(JSON.stringify(this.form_data));
         const text_input_event_methods              = { on_change: this.event_handler.handleOnInputchanged.bind(this.event_handler) };
         const schema_app_input_event_methods        = this.getSchemaAppEventMethods();
         const schema_datasource_input_event_methods = this.getSchemaDatasourceEventMethods();
-        const columns_obj                           = this.buildColumnsObject(columns);
-
 
         return {
             csrf_token: ref(null), 
 
-            columns_label_text: this.form_content_data["columns_label_text"],
+            columns_array: ref(columns_array),
 
-            no_columns_text: this.form_content_data["no_columns_text"],
+            indexes_array: ref(indexes),
 
-            columns_obj: ref(columns_obj),
+            schema_designer_content_data: ref(this.form_content_data?.schema_designer_ui ?? {}),
 
             schema_app_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "app_public_id", app_public_id, "select_search", false, schema_app, schema_app_input_event_methods),
 
@@ -89,24 +87,11 @@ class RegisteredAppSchemaFormViewController extends BaseFormViewController {
         } 
     }
 
-    // Method to build columns objects
-    public buildColumnsObject(
-        columns_record: Record<string, ColumnDefinitionInterface> = {}
-    ): ColumnDefinitionInterface[] {
-
-        if (!columns_record || Object.keys(columns_record).length === 0) {
-            return [];
-        }
-
-        const columns_obj: ColumnDefinitionInterface[]  = [];
-
-        // Correct iteration using for...of
-        Object.entries(columns_record).forEach(([key, value], index) => {
-            const col_obj: ColumnDefinitionInterface = { ...value, name: key, };
-            columns_obj.push(col_obj);
+    // Method to handle on mount logic
+    protected async formMountedLogic (): Promise<void> { 
+        this.event_bus.on("on_columns_array_updated", async (payload: ColumnsArrayUpdatedPayloadInterface) => {
+            this.event_handler.handleColumnsArrayUpdate(payload);
         });
-
-        return columns_obj;
     }
 
 }

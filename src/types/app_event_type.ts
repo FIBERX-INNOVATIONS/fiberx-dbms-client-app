@@ -1,4 +1,5 @@
 import { Component } from "vue";
+import { ColumnDefinitionInterface } from "./schema_type";
 
 export type AppEvents = {
     isLoading: boolean;
@@ -7,7 +8,8 @@ export type AppEvents = {
     close_modal: CloseModalPayloadInterface;
     on_new_record_created: NewRecordPayloadInterface;
     on_record_updated: RecordUpdatedPayloadInterface;
-    on_record_deleted: RecordDeletedPayloadInterface
+    on_record_deleted: RecordDeletedPayloadInterface;
+    on_columns_array_updated: ColumnsArrayUpdatedPayloadInterface;
 };
 
 export interface StatusPayloadOptionsInterface { 
@@ -48,4 +50,8 @@ export interface RecordUpdatedPayloadInterface {
 
 export interface RecordDeletedPayloadInterface {
     record_id: string;
+}
+
+export interface ColumnsArrayUpdatedPayloadInterface {
+    columns_array: ColumnDefinitionInterface[]
 }

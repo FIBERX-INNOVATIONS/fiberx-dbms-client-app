@@ -31,7 +31,7 @@ class BaseFormViewPropsBuilder {
         other_configs: Record<string, any> = {}
     ): InputGroupPropsInterface {
         const { on_change, fetch_method, render_option_label, get_option_value } = event_methods;
-        const { min, max, length, } = other_configs;
+        const { min, max, length, options } = other_configs;
 
         const class_styles              = ClassStyles?.input_ui ?? {};
         const normalized_field_key      = InputTransformerUtil.normalizeFieldKey(field_key);
@@ -41,7 +41,7 @@ class BaseFormViewPropsBuilder {
         const placeholder               = content_data[placeholder_text_key];
         const label_config              = { label_text, label_required_text: "" };
         const input_boolean_config      = { required: true, cache_enabled: true, read_only };
-        const input_content_config      = { no_options_content: content_data?.no_registered_apps_text, label_text: render_option_label?.(record) ?? "" };
+        const input_content_config      = { options, no_options_content: content_data?.no_registered_apps_text, label_text: render_option_label?.(record) ?? "" };
         const input_number_config       = { rows: 8, min, max, length };
         const input_event_methods       = { on_change, fetch_method, render_option_label, get_option_value };
         const input_config              = InputGroupUIPropsBuilder.getInputUIConfig(
@@ -58,15 +58,13 @@ class BaseFormViewPropsBuilder {
         event_handler: BaseEventHandlerInterface,
         disabled: boolean = false,
         show_loader: boolean = true,
+        btn_text: string = "Submit",
     ): ButtonUIPropsInterface {
-        const content_manager       = ContentManagerUtil.getInstance();
-        const content_data          = content_manager?.get("content_resource.datasource_view_ui.form_view_ui.fieldset") ?? {};
         const class_styles          = ClassStyles?.form_button_ui ?? {};
         const icon_class_style      = class_styles?.icon_class_style;
         const btn_class_style       = class_styles?.btn_class_style
 
         const btn_type              = "button";
-        const { btn_text }          = content_data;
         const content_text          = RenderHtmlUtil.renderHtml({ text: btn_text, icon: SVGIcons.paper_airplane_send_svg_icon, icon_class_style, order: "text-first" })
         const loader_content_text   = RenderHtmlUtil.renderLoaderHtml({});
         const on_click              = event_handler?.handleSubmitBtnClick.bind(event_handler);

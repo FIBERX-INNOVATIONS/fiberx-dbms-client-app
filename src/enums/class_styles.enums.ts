@@ -340,6 +340,8 @@ const ClassStyles = {
             header_add_btn_class_style: "w-4/12 flex items-center justify-end",
             body_class_style: "w-full grid grid-cols-1 gap-4 items-center my-2 justify-center",
             body_row_class_style: "flex justify-between items-center w-full space-x-2",
+            body_grid_row_class_style: "grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4",
+
             body_row_label_text_class_style: "font-medium text-gray-700",
             body_key_wrapper_class_style: "w-4/12 flex items-center justify-center",
             body_value_wrapper_class_style: "w-8/12 flex items-center justify-center",
@@ -361,6 +363,40 @@ const ClassStyles = {
             icon_class_style: "w-4 h-4 ml-2 flex items-center",
             content_class_style: "flex items-center",
             btn_class_style: "w-full  cursor-pointer inline-flex mt-4 items-center justify-center rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-10 px-4 bg-gradient-to-r from-blue-500 to-blue-900 hover:from-blue-500 hover:to-blue-400 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed text-md text-white font-semibold tracking-wider py-3",
+        }
+    },
+    schema_designer_ui: {
+        wrapper_class_style: "w-full flex flex-col justify-center items-center space-y-8 border rounded-lg",
+        columns_section_ui: {
+            wrapper_class_style: "w-full flex flex-col justify-center items-center rounded-2xl shadow p-6 space-y-6",
+            header_section: {
+                wrapper_class_style: "w-full flex justify-between items-center border-b pb-3",
+                label_class_style: "text-lg font-semibold text-gray-800 w-8/12 truncate",
+                btn_class_style: "w-4/12 flex items-center gap-2 text-sm px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50",
+                btn_icon_class_style: "w-4 h-4",
+            },
+            body_section: {
+                wrapper_class_style: "w-full border rounded-xl p-5 bg-gray-50 space-y-4",
+                label_class_style: "text-gray-900 text-sm",
+                row_header: {
+                    wrapper_class_style: "w-full flex justify-between items-center",
+                    label_class_style: "font-medium text-gray-700 truncate w-8/12",
+                    delete_btn_class_style: "w-4/12 text-red-500 hover:text-red-600",
+                    delete_btn_svg_class_style: "w-5 h-5"
+                },
+                row_body: {
+                    wrapper_class_style: "w-full block",
+                    details_wrapper_class_style: "w-full border rounded-md bg-white px-4 py-2",
+                    summary_wrapper_class_style: "cursor-pointer text-sm font-medium text-gray-700",
+                    responsive_grid_2_class_style: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4",
+                    responsive_grid_3_class_style: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-2",
+
+
+                }
+            }
+            
+            
+
         }
     }
 
