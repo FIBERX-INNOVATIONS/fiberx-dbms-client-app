@@ -56,10 +56,12 @@ const ClassStyles = {
     },
     input_ui: {
         wrapper_class_style: "w-full my-4 flex flex-col space-y-2",
+        same_row_wrapper_class_style: "my-4 flex items-center space-x-2",
         otp_wrapper_class_style: "flex gap-2 justify-center",
         label_class_style: "text-sm font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
         label_required_class_style: "italic font-medium",
-        input_class_style: "w-full min-h-10 flex w-full rounded-md border px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2  bg-gray-200 border-blue-600/70 text-black placeholder-gray-400 focus:ring-sky-500",
+        input_class_style: "w-full min-h-10 flex rounded-md border px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2  bg-gray-200 border-blue-600/70 text-black placeholder-gray-400 focus:ring-sky-500",
+        checkbox_input_class_style: "min-h-6 flex rounded-md border px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2  bg-gray-200 border-blue-600/70 text-black placeholder-gray-400 focus:ring-sky-500",
         loader_class_style: "",
         switch_btn_class_style: "",
         label_text_class_style: "",
@@ -388,7 +390,7 @@ const ClassStyles = {
                     wrapper_class_style: "w-full block",
                     details_wrapper_class_style: "w-full border rounded-md bg-white px-4 py-2",
                     summary_wrapper_class_style: "cursor-pointer text-sm font-medium text-gray-700",
-                    responsive_grid_2_class_style: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4",
+                    responsive_grid_2_class_style: "grid grid-cols-1 sm:grid-cols-2 gap-4",
                     responsive_grid_3_class_style: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-2",
 
 

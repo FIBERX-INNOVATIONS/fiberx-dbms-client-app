@@ -31,7 +31,7 @@ class BaseFormViewPropsBuilder {
         other_configs: Record<string, any> = {}
     ): InputGroupPropsInterface {
         const { on_change, fetch_method, render_option_label, get_option_value } = event_methods;
-        const { min, max, length, options } = other_configs;
+        const { min, max, length, options, checkbox_value } = other_configs;
 
         const class_styles              = ClassStyles?.input_ui ?? {};
         const normalized_field_key      = InputTransformerUtil.normalizeFieldKey(field_key);
@@ -41,7 +41,7 @@ class BaseFormViewPropsBuilder {
         const placeholder               = content_data[placeholder_text_key];
         const label_config              = { label_text, label_required_text: "" };
         const input_boolean_config      = { required: true, cache_enabled: true, read_only };
-        const input_content_config      = { options, no_options_content: content_data?.no_registered_apps_text, label_text: render_option_label?.(record) ?? "" };
+        const input_content_config      = { options, checkbox_value, no_options_content: content_data?.no_registered_apps_text, label_text: render_option_label?.(record) ?? "" };
         const input_number_config       = { rows: 8, min, max, length };
         const input_event_methods       = { on_change, fetch_method, render_option_label, get_option_value };
         const input_config              = InputGroupUIPropsBuilder.getInputUIConfig(

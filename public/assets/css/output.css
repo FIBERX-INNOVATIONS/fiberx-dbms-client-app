@@ -473,6 +473,9 @@
   .max-h-\[270px\] {
     max-height: 270px;
   }
+  .min-h-6 {
+    min-height: calc(var(--spacing) * 6);
+  }
   .min-h-10 {
     min-height: calc(var(--spacing) * 10);
   }
@@ -665,6 +668,9 @@
   }
   .items-center {
     align-items: center;
+  }
+  .items-end {
+    align-items: flex-end;
   }
   .items-start {
     align-items: flex-start;

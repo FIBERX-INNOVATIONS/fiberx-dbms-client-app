@@ -4,7 +4,7 @@ import RegisteredAppSchemaService           from "@/modules/registered_app_schem
 import RegisteredAppSchemaFormEventHandler  from "@/modules/registered_app_schema_module/views/form_view/registered_app_schema_form_view_event_handler";
 import { CSRF_TOKEN_FOR }                   from "@/enums/constants.enums";
 import { InputUIEventMethodsPropsInterface } from "@ui/version_2/types/props_builder_type";
-import { ColumnsArrayUpdatedPayloadInterface } from "@/types/app_event_type";
+import { ColumnsArrayUpdatedPayloadInterface, IndexesArrayUpdatedPayloadInterface } from "@/types/app_event_type";
 
 
 class RegisteredAppSchemaFormViewController extends BaseFormViewController {
@@ -70,7 +70,7 @@ class RegisteredAppSchemaFormViewController extends BaseFormViewController {
 
             columns_array: ref(columns_array),
 
-            indexes_array: ref(indexes),
+            indexes: ref(indexes),
 
             schema_designer_content_data: ref(this.form_content_data?.schema_designer_ui ?? {}),
 
@@ -91,6 +91,10 @@ class RegisteredAppSchemaFormViewController extends BaseFormViewController {
     protected async formMountedLogic (): Promise<void> { 
         this.event_bus.on("on_columns_array_updated", async (payload: ColumnsArrayUpdatedPayloadInterface) => {
             this.event_handler.handleColumnsArrayUpdate(payload);
+        });
+
+        this.event_bus.on("on_indexes_array_updated", async (payload: IndexesArrayUpdatedPayloadInterface) => {
+            this.event_handler.handleIndexesArrayUpdate(payload);
         });
     }
 

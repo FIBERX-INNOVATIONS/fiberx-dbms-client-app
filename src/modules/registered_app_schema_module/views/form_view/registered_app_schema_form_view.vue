@@ -8,7 +8,7 @@
 
             <SchemaDesignerUI 
                 :columns_defintion="columns_array"
-                :indexes_definition="indexes_array"
+                :indexes_definition="indexes"
                 :content_data="schema_designer_content_data"
             />
 
@@ -32,7 +32,7 @@ const { InputGroupUI, ToastAlertUI, ButtonUI, SchemaDesignerUI } = components;
 
 const {
     columns_array,
-    indexes_array,
+    indexes,
     schema_designer_content_data,
     schema_app_input_group_prop,
     schema_datasource_input_group_prop,

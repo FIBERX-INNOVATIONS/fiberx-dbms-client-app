@@ -1,7 +1,7 @@
 <template>
     <div :class="props.section_wrapper_class_style">
         <ColumnsSectionUI :content_data="props.content_data" :columns="props.columns_defintion" />
-        <IndexesSectionUI :content_data="props.content_data" :columns="props.columns_defintion" />
+        <IndexesSectionUI :content_data="props.content_data" :columns="props.columns_defintion" :indexes="props.indexes_definition" />
     </div>
 </template>
 

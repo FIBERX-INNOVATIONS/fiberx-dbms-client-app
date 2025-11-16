@@ -1,5 +1,8 @@
 import { Component } from "vue";
-import { ColumnDefinitionInterface } from "./schema_type";
+import { 
+    ColumnDefinitionInterface, 
+    IndexDefinitionInterface 
+} from "./schema_type";
 
 export type AppEvents = {
     isLoading: boolean;
@@ -10,6 +13,7 @@ export type AppEvents = {
     on_record_updated: RecordUpdatedPayloadInterface;
     on_record_deleted: RecordDeletedPayloadInterface;
     on_columns_array_updated: ColumnsArrayUpdatedPayloadInterface;
+    on_indexes_array_updated: IndexesArrayUpdatedPayloadInterface
 };
 
 export interface StatusPayloadOptionsInterface { 
@@ -55,3 +59,8 @@ export interface RecordDeletedPayloadInterface {
 export interface ColumnsArrayUpdatedPayloadInterface {
     columns_array: ColumnDefinitionInterface[]
 }
+
+export interface IndexesArrayUpdatedPayloadInterface {
+    indexes_array: IndexDefinitionInterface[]
+}
+

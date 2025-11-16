@@ -44,8 +44,10 @@ class ColumnsSectionUIController extends BaseController {
     protected getUIWatchers(): Record<string, (new_val: any, old_val: any) => void> { 
         return {
             columns_model: (new_val) => { 
+                console.log({ new_val });
                 new_val.forEach(this?.cleanColumnModel.bind(this)); 
                 this.event_bus.emit("on_columns_array_updated", { columns_array: new_val});
+                console.log({ new_val })
             },
         }; 
     }
@@ -58,6 +60,8 @@ class ColumnsSectionUIController extends BaseController {
 
     // Method to check column type reuires precision
     public showPrecision = (t: string) => { return ["FLOAT", "DOUBLE", "DECIMAL", "NUMBER"].includes(t); }
+
+    public showValues = (t: string) => { return ["ENUM", "SET"].includes(t); }
 
     // Method to check if you can select primary key
     public showPrimaryKey = (index: number) => {
@@ -89,18 +93,18 @@ class ColumnsSectionUIController extends BaseController {
     public cleanColumnModel (col: ColumnDefinitionInterface) {
         const t = col.type?.name;
 
-        if (!this.showLength(t))    { delete col.type.length; }
+        if (t && !this.showLength(t))    { delete col.type.length; }
 
-        if (!this.showVariant(t))   { delete col.type.variant; }
+        if (t && !this.showVariant(t))   { delete col.type.variant; }
 
-        if (!this.showPrecision(t)) {
+        if (t && !this.showPrecision(t)) {
             delete col.type.precision;
             delete col.type.scale;
         }
 
-        if (!this.showAutoIncrement(t)) { delete col.auto_increment; }
+        if (t && !this.showAutoIncrement(t)) { delete col.auto_increment; }
         
-        if (!this.showUnique(col)) { delete col.unique; }
+        if (col?.name && !this.showUnique(col)) { delete col.unique; }
     }
 
 

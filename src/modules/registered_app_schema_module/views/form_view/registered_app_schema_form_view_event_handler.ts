@@ -7,7 +7,7 @@ import {
     RegisteredAppSchemaFormDataInterface, 
     RequestQueryInputInterface 
 } from "@/types/api_service_type";
-import { ColumnsArrayUpdatedPayloadInterface } from "@/types/app_event_type";
+import { ColumnsArrayUpdatedPayloadInterface, IndexesArrayUpdatedPayloadInterface } from "@/types/app_event_type";
 
 
 
@@ -106,6 +106,15 @@ class RegisteredAppSchemaFormViewEventHandler extends BaseFormViewEventHandler {
         const { columns_array } = payload;
         this.form_data.columns_array = columns_array;
         this.controller.state_refs.columns_array.value = columns_array;
+    }
+
+    // Method to handle update indexes array
+    public handleIndexesArrayUpdate (payload: IndexesArrayUpdatedPayloadInterface) {
+        const { indexes_array }                         = payload;
+        this.form_data.indexes                          = indexes_array;
+        this.controller.state_refs.indexes.value        = indexes_array;
+
+        console.log({ data: this.form_data });
     }
 }
 

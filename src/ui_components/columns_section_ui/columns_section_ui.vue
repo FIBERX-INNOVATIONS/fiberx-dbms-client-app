@@ -41,6 +41,10 @@
 
                     <InputGroupUI v-bind="get_input_group_props(props.content_data, `columns_array.${i}.type.scale`, col?.type?.scale, 'number', false, col, event_methods('number'), { min: 0 })" />
                 </template>
+
+                <template v-else-if="showValues(col.type.name)">
+                    <InputGroupUI v-bind="get_input_group_props(props.content_data, `columns_array.${i}.type.values`, col?.type?.values, 'text', false, col, event_methods('text'))" />
+                </template>
             </div>
 
             <!-- Default & On Update -->
@@ -115,7 +119,8 @@ const { InputGroupUI, ButtonUI }    = components;
 const { 
     showLength, 
     showVariant, 
-    showPrecision, 
+    showPrecision,
+    showValues, 
     showPrimaryKey,
     showAutoIncrement,
     showUnique
