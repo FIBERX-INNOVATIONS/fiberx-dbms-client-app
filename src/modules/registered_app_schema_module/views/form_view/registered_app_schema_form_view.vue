@@ -7,6 +7,7 @@
             <InputGroupUI v-bind="migration_priority_input_group_prop" />
 
             <SchemaDesignerUI 
+                :permission_definition="permissions"
                 :columns_defintion="columns_array"
                 :indexes_definition="indexes"
                 :content_data="schema_designer_content_data"
@@ -31,6 +32,7 @@ const { state_refs, computed_refs, components} = controller.getComponentDefiniti
 const { InputGroupUI, ToastAlertUI, ButtonUI, SchemaDesignerUI } = components;
 
 const {
+    permissions,
     columns_array,
     indexes,
     schema_designer_content_data,

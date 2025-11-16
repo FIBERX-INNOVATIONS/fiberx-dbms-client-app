@@ -53,7 +53,6 @@ class ColumnsSectionUIEventHandler extends BaseEventHandler {
         this.form_data          = { ...this.form_data, ...new_form_data };
         const updated_columns   = this.form_data?.columns_array || [];
 
-        console.log({ data: this.form_data })
         this.controller.state_refs.columns_model.value = [...updated_columns];
         this.onColumnsArrayUpdated();
     }

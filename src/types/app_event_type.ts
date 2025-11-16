@@ -1,7 +1,8 @@
 import { Component } from "vue";
 import { 
     ColumnDefinitionInterface, 
-    IndexDefinitionInterface 
+    IndexDefinitionInterface, 
+    PermissionType
 } from "./schema_type";
 
 export type AppEvents = {
@@ -13,7 +14,8 @@ export type AppEvents = {
     on_record_updated: RecordUpdatedPayloadInterface;
     on_record_deleted: RecordDeletedPayloadInterface;
     on_columns_array_updated: ColumnsArrayUpdatedPayloadInterface;
-    on_indexes_array_updated: IndexesArrayUpdatedPayloadInterface
+    on_indexes_array_updated: IndexesArrayUpdatedPayloadInterface;
+    on_schema_permissions_updated: SchemaPermissionsUpdatedPayloadInterface;
 };
 
 export interface StatusPayloadOptionsInterface { 
@@ -62,5 +64,9 @@ export interface ColumnsArrayUpdatedPayloadInterface {
 
 export interface IndexesArrayUpdatedPayloadInterface {
     indexes_array: IndexDefinitionInterface[]
+}
+
+export interface SchemaPermissionsUpdatedPayloadInterface {
+    permissions_array: PermissionType[]
 }
 

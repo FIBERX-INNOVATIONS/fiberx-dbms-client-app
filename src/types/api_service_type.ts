@@ -1,7 +1,8 @@
 import { 
     PermissionType, 
     SchemaDefinitionInterface, 
-    IndexDefinitionInterface 
+    IndexDefinitionInterface ,
+    ColumnDefinitionInterface
 } from "./schema_type";
 
 
@@ -60,7 +61,8 @@ export interface RegisteredAppSchemaFormDataInterface {
 	primary_key: string;
 	migration_priority: number; 
 	permissions: string[];
-	columns: Record<string, SchemaDefinitionInterface>;
+	columns: Record<string, ColumnDefinitionInterface>;
+    columns_array: ColumnDefinitionInterface[];
 	indexes: IndexDefinitionInterface[];   
 
 }

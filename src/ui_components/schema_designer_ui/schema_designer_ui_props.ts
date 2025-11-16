@@ -2,13 +2,16 @@ import { PropType }     from "vue";
 import ClassStyles      from "@/enums/class_styles.enums";
 import { 
     ColumnDefinitionInterface, 
-    IndexDefinitionInterface 
+    IndexDefinitionInterface, 
+    PermissionType
 } from "@/types/schema_type";
 
 const ui_class_styles   = ClassStyles.schema_designer_ui;
 
 const SchemaDesignerUIProps   = {
-    columns_defintion: { type: Object as PropType<ColumnDefinitionInterface[]>, default: () => {}, required: false },
+    permission_definition: { type: Object as PropType<PermissionType[]>, default: () => {}, required: false },
+
+    columns_defintion: { type: Object as PropType<ColumnDefinitionInterface[]>, default: () => [], required: false },
 
     indexes_definition: { type: Object as PropType<IndexDefinitionInterface[]>, default: () => [], required: false },
 

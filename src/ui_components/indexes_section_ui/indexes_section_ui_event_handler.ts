@@ -59,8 +59,6 @@ class IndexesSectionUIEventHandler extends BaseEventHandler {
         this.form_data          = { ...this.form_data, ...new_form_data };
         const updated_indexes   = this.form_data?.indexes_array || [];
 
-        console.log({ data: this.form_data })
-
         this.controller.state_refs.indexes_model.value = [...updated_indexes];
         this.onIndexesArrayUpdated();
     }

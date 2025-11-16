@@ -399,6 +399,11 @@ const ClassStyles = {
             
             
 
+        },
+        schema_permissions_section_ui: {
+            wrapper_class_style: "w-full justify-center items-center border-b  p-6 space-y-6",
+            body_class_style: "w-full justify-center items-center grid grid-cols-1 lg:grid-cols-2",
+            row_class_style: "flex items-center gap-2 w-full items-center justify-center"
         }
     }
 

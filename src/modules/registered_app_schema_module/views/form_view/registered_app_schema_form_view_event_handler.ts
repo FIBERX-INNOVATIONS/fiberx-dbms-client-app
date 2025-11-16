@@ -7,14 +7,43 @@ import {
     RegisteredAppSchemaFormDataInterface, 
     RequestQueryInputInterface 
 } from "@/types/api_service_type";
-import { ColumnsArrayUpdatedPayloadInterface, IndexesArrayUpdatedPayloadInterface } from "@/types/app_event_type";
+import { 
+    ColumnsArrayUpdatedPayloadInterface, 
+    IndexesArrayUpdatedPayloadInterface,
+    SchemaPermissionsUpdatedPayloadInterface
+} from "@/types/app_event_type";
 
 
 
 class RegisteredAppSchemaFormViewEventHandler extends BaseFormViewEventHandler {
+    private getColumnsAndPrimaryKeyFromFormData (
+        form_data: RegisteredAppSchemaFormDataInterface
+    ): { columns: Record<string, ColumnDefinitionInterface>, primary_key: string } { 
+        const columns: Record<string, ColumnDefinitionInterface> = {};
+        let primary_key: string = "";
+
+        const { columns_array = [] } = form_data;
+
+        for (const column_def of columns_array) {
+            const { name, ...other_col_def } = column_def;
+
+            if(!name) { continue; }
+
+            columns[name] = other_col_def as ColumnDefinitionInterface;
+
+            if (column_def.primary_key) { primary_key = name }
+        }
+        
+        return { columns, primary_key };
+    }
+
     protected onFormDataUpdated() { }
 
     protected validateFormData(form_data: RegisteredAppSchemaFormDataInterface, record: Record<string, any>) {
+        const { columns, primary_key } = this.getColumnsAndPrimaryKeyFromFormData(form_data);
+        form_data.columns = columns;
+        form_data.primary_key = primary_key;
+        this.form_data = { ...form_data };
         return RegisteredAppSchemaValidator.validateRegisteredAppSchemaInput(form_data, record);
     }
 
@@ -104,17 +133,22 @@ class RegisteredAppSchemaFormViewEventHandler extends BaseFormViewEventHandler {
     // Method to handle update columns array
     public handleColumnsArrayUpdate (payload: ColumnsArrayUpdatedPayloadInterface) {
         const { columns_array } = payload;
-        this.form_data.columns_array = columns_array;
-        this.controller.state_refs.columns_array.value = columns_array;
+        this.form_data.columns_array = [...columns_array];
+        this.controller.state_refs.columns_array.value = [...columns_array];
     }
 
     // Method to handle update indexes array
     public handleIndexesArrayUpdate (payload: IndexesArrayUpdatedPayloadInterface) {
         const { indexes_array }                         = payload;
-        this.form_data.indexes                          = indexes_array;
-        this.controller.state_refs.indexes.value        = indexes_array;
+        this.form_data.indexes                          = [...indexes_array];
+        this.controller.state_refs.indexes.value        = [...indexes_array];
+    }
 
-        console.log({ data: this.form_data });
+    // Method to handle permissions array update
+    public handlePermissionsArrayUpdate (payload: SchemaPermissionsUpdatedPayloadInterface) {
+        const { permissions_array }                     = payload;
+        this.form_data.permissions                      = [...permissions_array];
+        this.controller.state_refs.permissions.value    = [...permissions_array];
     }
 }
 

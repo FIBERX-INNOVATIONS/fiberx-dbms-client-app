@@ -4,7 +4,11 @@ import RegisteredAppSchemaService           from "@/modules/registered_app_schem
 import RegisteredAppSchemaFormEventHandler  from "@/modules/registered_app_schema_module/views/form_view/registered_app_schema_form_view_event_handler";
 import { CSRF_TOKEN_FOR }                   from "@/enums/constants.enums";
 import { InputUIEventMethodsPropsInterface } from "@ui/version_2/types/props_builder_type";
-import { ColumnsArrayUpdatedPayloadInterface, IndexesArrayUpdatedPayloadInterface } from "@/types/app_event_type";
+import { 
+    ColumnsArrayUpdatedPayloadInterface, 
+    IndexesArrayUpdatedPayloadInterface,
+    SchemaPermissionsUpdatedPayloadInterface
+} from "@/types/app_event_type";
 
 
 class RegisteredAppSchemaFormViewController extends BaseFormViewController {
@@ -68,6 +72,8 @@ class RegisteredAppSchemaFormViewController extends BaseFormViewController {
         return {
             csrf_token: ref(null), 
 
+            permissions: ref(permissions),
+
             columns_array: ref(columns_array),
 
             indexes: ref(indexes),
@@ -95,6 +101,10 @@ class RegisteredAppSchemaFormViewController extends BaseFormViewController {
 
         this.event_bus.on("on_indexes_array_updated", async (payload: IndexesArrayUpdatedPayloadInterface) => {
             this.event_handler.handleIndexesArrayUpdate(payload);
+        });
+
+        this.event_bus.on("on_schema_permissions_updated", async (payload: SchemaPermissionsUpdatedPayloadInterface) => {
+            this.event_handler.handlePermissionsArrayUpdate(payload);
         });
     }
 

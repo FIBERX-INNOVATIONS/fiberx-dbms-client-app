@@ -1,5 +1,6 @@
 <template>
     <div :class="props.section_wrapper_class_style">
+        <SchemaPermissionsSectionUI :content_data="props.content_data" :permissions="props.permission_definition" />
         <ColumnsSectionUI :content_data="props.content_data" :columns="props.columns_defintion" />
         <IndexesSectionUI :content_data="props.content_data" :columns="props.columns_defintion" :indexes="props.indexes_definition" />
     </div>
@@ -13,6 +14,6 @@ import SchemaDesignerUIController  from "./schema_designer_ui_controller";
 const props            = defineProps(SchemaDesignerUIProps);
 const controller       = new SchemaDesignerUIController(props);
 
-const { state_refs, components }                = controller.getComponentDefinition();
-const { ColumnsSectionUI, IndexesSectionUI }    = components;
+const { components }                = controller.getComponentDefinition();
+const { ColumnsSectionUI, IndexesSectionUI, SchemaPermissionsSectionUI }    = components;
 </script>
