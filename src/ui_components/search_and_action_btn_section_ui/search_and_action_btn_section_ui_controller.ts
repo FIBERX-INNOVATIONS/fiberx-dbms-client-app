@@ -2,6 +2,7 @@
 import { ref }                      from "vue";
 import BaseController               from "@ui/version_2/base_classes/base_controller";
 import SearchFieldUI                from "@ui/version_2/components/SearchFieldUI/search_field_ui.vue";
+import InputGroupUI                 from "@ui/version_2/components/InputGroupUI/input_group_ui.vue";
 import ButtonUI                     from "@ui/version_2/components/ButtonUI/button_ui.vue";
 
 
@@ -13,7 +14,7 @@ class SearchAndActionBtnSectionUIController extends BaseController {
 
     // Method to get ui components
     protected getUIComponents(): Record<string, any> { 
-        return  { SearchFieldUI, ButtonUI }; 
+        return  { SearchFieldUI, InputGroupUI, ButtonUI }; 
     }
 
 }

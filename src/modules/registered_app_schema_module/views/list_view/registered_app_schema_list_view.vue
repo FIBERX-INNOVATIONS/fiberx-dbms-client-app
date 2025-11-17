@@ -16,6 +16,7 @@
                 :grid_2_wrapper_class_style="props.grid_2_wrapper_class_style"
                 :search_field_props="state_refs.search_field_props"
                 :form_action_btn_props="state_refs.form_action_btn_props"
+                :select_filter_input_props="state_refs.select_filter_input_props"
             />
             
             <PaginationResultAndBulkActionSectionUI

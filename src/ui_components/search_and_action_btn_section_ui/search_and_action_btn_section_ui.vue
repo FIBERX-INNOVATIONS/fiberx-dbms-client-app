@@ -7,6 +7,11 @@
         <div :class="props.grid_2_wrapper_class_style">
             <ButtonUI v-bind="props.form_action_btn_props" />
         </div>
+
+        <div v-if="props.select_filter_input_props" :class="props.grid_1_wrapper_class_style">
+            <InputGroupUI  v-bind="props.select_filter_input_props" />
+        </div>
+
     </section>
 </template>
 
@@ -18,5 +23,5 @@ const props             = defineProps(SearchAndActionBtnSectionUIProps);
 const controller        = new SearchAndActionBtnSectionUIController(props);
 const { components }    = controller.getComponentDefinition();
 
-const { SearchFieldUI, ButtonUI } = components
+const { SearchFieldUI, ButtonUI, InputGroupUI } = components
 </script>

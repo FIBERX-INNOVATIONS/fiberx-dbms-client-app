@@ -55,7 +55,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
     }
 
     // Method to update controller attributes
-    private updateControllerAttributes (updated_attr: ListControllerAttributesInterface): boolean {
+    public updateControllerAttributes (updated_attr: ListControllerAttributesInterface): boolean {
         const { 
             current_page, records, total_items, total_pages, selected_record, 
             order_by, order_direction, keyword, selected_records, app_id
@@ -435,11 +435,13 @@ class BaseListViewEventHandler extends BaseEventHandler {
         try {
             if(!this.controller?.service) { return }
 
-            const { current_page: page, size, order_by, order_direction, keyword = null, preview_only = false } = this.controller;
+            const { current_page: page, size, order_by, order_direction, keyword = null, preview_only = false, app_id = null } = this.controller;
 
-            const params  = { page, size, order_by, order_direction, keyword, preview_only }
+            const params: RequestQueryInputInterface  = { page, size, order_by, order_direction, keyword, preview_only }
 
-            const { s_state, s_msg, s_data, logout }    = await this.controller.service?.executeFetchRecords?.(params as RequestQueryInputInterface);
+            if(app_id) { params["app_id"] = app_id }
+
+            const { s_state, s_msg, s_data, logout }    = await this.controller.service?.executeFetchRecords?.(params);
 
             const formatted_api_msg     = this.content_manager?.getAPIResponseValue(s_msg);
             const status_alert_payload  = { status: "", message: formatted_api_msg, options: this.status_alert_options };

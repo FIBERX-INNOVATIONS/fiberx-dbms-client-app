@@ -66,6 +66,8 @@ class BaseListViewController extends BaseController {
 
     protected initializeDependencies(): void { return };
 
+    protected getCustomUIStateData(): Record<string, any> { return {} }
+
     // Method to get ui components
     protected getUIComponents(): Record<string, any> {
         return {
@@ -103,6 +105,7 @@ class BaseListViewController extends BaseController {
 
     // Method to get ui state data
     protected getUIStateData(): Record<string, any> {
+        const custom_state_data = this.getCustomUIStateData();
         return {
             current_page: ref(this.current_page), 
 
@@ -163,7 +166,9 @@ class BaseListViewController extends BaseController {
                 this.selected_records
             ),
 
-            pagination_props: BaseListViewPropsBuilder.getPaginationProps(this.event_handler, this.content_field_key)
+            pagination_props: BaseListViewPropsBuilder.getPaginationProps(this.event_handler, this.content_field_key),
+
+            ...custom_state_data
         };
     }
 
