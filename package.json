@@ -1,6 +1,6 @@
 {
     "name": "fiberx-dbms-client-app",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "description": "FiberX DBMS Admin Panel – A modern, responsive dashboard for managing applications, roles, permissions, and users within the FiberX ecosystem. Built for performance and flexibility.",
     "private": true,
     "scripts": {
