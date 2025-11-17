@@ -642,6 +642,9 @@
   .animate-spin {
     animation: var(--animate-spin);
   }
+  .cursor-grab {
+    cursor: grab;
+  }
   .cursor-not-allowed {
     cursor: not-allowed;
   }
@@ -1584,6 +1587,23 @@
 }
 footer, main {
   background-color: #f0f4f8;
+}
+.column-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.column-item.dragging {
+  opacity: 0.8;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  cursor: grabbing;
+}
+.column-item.drag-over {
+  border-top: 2px solid #041c2c;
+  background-color: #2f77a7;
+}
+.drag-handle {
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
 }
 @property --tw-border-spacing-x {
   syntax: "<length>";

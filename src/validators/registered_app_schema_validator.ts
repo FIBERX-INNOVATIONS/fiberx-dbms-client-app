@@ -31,50 +31,50 @@ class RegisteredAppSchemaValidator {
 
             // 1️⃣ Validate column name
             if (!valid_column_name_regex.test(col_name)) {
-                return { v_state: false, v_msg: `invalid_input_column_name_${col_name}` };
+                return { v_state: false, v_msg: `invalid_input_column_name_[${col_name}]` };
             }
 
             // 2️⃣ Validate column definition object
             if (!col_def || typeof col_def !== "object") {
-                return { v_state: false, v_msg: `invalid_input_column_definition_${col_name}` };
+                return { v_state: false, v_msg: `invalid_input_column_definition_[${col_name}]` };
             }
 
             // 3️⃣ Validate type
             if (!col_def.type || typeof col_def.type !== "object") {
-                return { v_state: false, v_msg: `invalid_input_column_definition_type_${col_name}` };
+                return { v_state: false, v_msg: `invalid_input_column_definition_type_[${col_name}]` };
             }
 
             // 4️⃣ Validate column type name
             const type_name = (col_def.type.name || "").toUpperCase();
 
             if (!col_def.type.name || typeof col_def.type.name !== "string") {
-                return { v_state: false, v_msg: `invalid_input_column_definition_type_name_missing_${col_name}` };
+                return { v_state: false, v_msg: `invalid_input_column_definition_type_name_missing_[${col_name}]` };
             }
 
             if (!COLUMN_NAME_TYPE_OPTIONS.find( (obj) => { return obj.value === type_name as ColumnNameType }) ) {
-                return { v_state: false, v_msg: `invalid_input_column_definition_type_name_${col_name}` };
+                return { v_state: false, v_msg: `invalid_input_column_definition_type_name_[${col_name}]` };
             }
 
             // 5️⃣ Optional numeric validations
             if (col_def.type.length !== undefined && (!Number.isInteger(col_def.type.length) || col_def.type.length <= 0)) {
-                return { v_state: false, v_msg: `invalid_input_column_definition_type_length_${col_name}` };
+                return { v_state: false, v_msg: `invalid_input_column_definition_type_length_[${col_name}]` };
             }
 
             if (col_def.type.precision !== undefined && (typeof col_def.type.precision !== "number" || col_def.type.precision < 0)) {
-                return { v_state: false, v_msg: `invalid_input_column_definition_type_precision_${col_name}` };
+                return { v_state: false, v_msg: `invalid_input_column_definition_type_precision_[${col_name}]` };
             }
 
             if (col_def.type.scale !== undefined && (typeof col_def.type.scale !== "number" || col_def.type.scale < 0)) {
-                return { v_state: false, v_msg: `invalid_input_column_definition_type_scale_${col_name}` };
+                return { v_state: false, v_msg: `invalid_input_column_definition_type_scale_[${col_name}]` };
             }
 
             // 6️⃣ Validate ENUM or ARRAY types
             if (type_name === "ENUM" && (!Array.isArray(col_def.type.values) || col_def.type.values.length === 0)) {
-                return { v_state: false, v_msg: `invalid_input_column_definition_type_enum_values_${col_name}` };
+                return { v_state: false, v_msg: `invalid_input_column_definition_type_enum_values_[${col_name}]` };
             }
 
             if (type_name === "ARRAY" && (!col_def.type.element_type || typeof col_def.type.element_type !== "object")) {
-                return { v_state: false, v_msg: `invalid_input_column_definition_type_array_element_type_${col_name}` };
+                return { v_state: false, v_msg: `invalid_input_column_definition_type_array_element_type_[${col_name}]` };
             }
 
             // 7️⃣ Validate references (if exists)
@@ -84,22 +84,22 @@ class RegisteredAppSchemaValidator {
                 const valid_on_update_action = REFERENCE_TABLE_ACTIONS.find((obj) => { return obj?.value === (ref?.on_update?.toUpperCase()) })
 
                 if (!ref.table || typeof ref.table !== "string" || !InputValidatorUtil.isLowerSnakeCase(ref.table)) {
-                    return { v_state: false, v_msg: `invalid_input_column_definition_reference_table_name_${col_name}` };
+                    return { v_state: false, v_msg: `invalid_input_column_definition_reference_table_name_[${col_name}]` };
                 }
                 if (!ref.column || typeof ref.column !== "string") {
-                    return { v_state: false, v_msg: `invalid_input_column_definition_reference_table_column_${col_name}` };
+                    return { v_state: false, v_msg: `invalid_input_column_definition_reference_table_column_[${col_name}]` };
                 }
                 if (ref.on_delete && !valid_on_delete_action) {
-                    return { v_state: false, v_msg: `invalid_input_column_definition_reference_on_delete_${col_name}` };
+                    return { v_state: false, v_msg: `invalid_input_column_definition_reference_on_delete_[${col_name}]` };
                 }
                 if (ref.on_update && !valid_on_update_action) {
-                    return { v_state: false, v_msg: `invalid_input_column_definition_reference_on_update_${col_name}` };
+                    return { v_state: false, v_msg: `invalid_input_column_definition_reference_on_update_[${col_name}]` };
                 }
             }
 
             // 8️⃣ Validate default values type consistency (basic check)
             if (col_def?.default !== undefined && col_def?.default !== null && (typeof col_def?.default === "object" || typeof col_def?.default === "function")) {
-                return { v_state: false, v_msg: `invalid_input_column_definition_default_${col_name}` };
+                return { v_state: false, v_msg: `invalid_input_column_definition_default_[${col_name}]` };
             }
         }
 
@@ -201,8 +201,6 @@ class RegisteredAppSchemaValidator {
         }
 
         const { v_state, v_msg } = this.validateColumns(columns);
-
-        console.log({ v_state, v_msg })
 
         if(!v_state) { return { v_state, v_msg }; }
 

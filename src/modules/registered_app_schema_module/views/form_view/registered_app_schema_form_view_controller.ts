@@ -4,13 +4,13 @@ import RegisteredAppSchemaService           from "@/modules/registered_app_schem
 import RegisteredAppSchemaFormEventHandler  from "@/modules/registered_app_schema_module/views/form_view/registered_app_schema_form_view_event_handler";
 import { CSRF_TOKEN_FOR }                   from "@/enums/constants.enums";
 import { InputUIEventMethodsPropsInterface } from "@ui/version_2/types/props_builder_type";
+import InputTransformerUtil                 from "@ui/version_2/utils/input_formatter_util";
 import { 
     ColumnsArrayUpdatedPayloadInterface, 
     IndexesArrayUpdatedPayloadInterface,
     SchemaPermissionsUpdatedPayloadInterface
 } from "@/types/app_event_type";
-import InputValidatorUtil from "@ui/version_2/utils/input_validator_util";
-import InputTransformerUtil from "@ui/version_2/utils/input_formatter_util";
+
 
 
 class RegisteredAppSchemaFormViewController extends BaseFormViewController {
@@ -50,7 +50,7 @@ class RegisteredAppSchemaFormViewController extends BaseFormViewController {
 
     // Method initialize dependencies
     protected initializeDependencies(): void {
-        this.csrf_token_for         = CSRF_TOKEN_FOR.DATASOURCE;
+        this.csrf_token_for         = CSRF_TOKEN_FOR.REGISTERED_APP_SCHEMA;
         this.form_content_data =     this.content_manager?.get("content_resource.registered_app_schema_view_ui.form_view_ui.fieldset") ?? {};
     };
 
@@ -66,7 +66,7 @@ class RegisteredAppSchemaFormViewController extends BaseFormViewController {
         const datasource_id                         = schema_datasource?.id ?? 0;
         const model_snake_case_name                 = InputTransformerUtil.toSnakeCase(model_name);
         const columns_array                         = this.event_handler.buildColumnsArray(columns);
-        this.form_data                              = { app_public_id, datasource_id, model_name, primary_key, migration_priority, permissions, columns, indexes, columns_array };
+        this.form_data                              = { app_public_id, datasource_id, model_name: model_snake_case_name, primary_key, migration_priority, permissions, columns, indexes, columns_array };
         this.event_handler.form_data                = JSON.parse(JSON.stringify(this.form_data));
         const text_input_event_methods              = { on_change: this.event_handler.handleOnInputchanged.bind(this.event_handler) };
         const schema_app_input_event_methods        = this.getSchemaAppEventMethods();

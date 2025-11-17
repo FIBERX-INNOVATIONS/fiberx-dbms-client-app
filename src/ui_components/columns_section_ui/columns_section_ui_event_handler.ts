@@ -48,7 +48,7 @@ class ColumnsSectionUIEventHandler extends BaseEventHandler {
 
         const existing_columns  = this.controller.state_refs.columns_model.value;
         const input_id          = target.id;
-        const input_value       = input_model_value ?? target.value;
+        const input_value       = input_model_value === undefined ? target.value : input_model_value;
         const new_form_data     = InputTransformerUtil.buildFormDataObject(input_id, input_value, this.form_data);
         this.form_data          = { ...this.form_data, ...new_form_data };
         const updated_columns   = this.form_data?.columns_array || [];
@@ -63,6 +63,72 @@ class ColumnsSectionUIEventHandler extends BaseEventHandler {
         const event_methods     = { on_change };
 
         return event_methods
+    }
+
+    // Method to handle on drag start
+    public onDragStart(index: number, event: DragEvent) {
+        const element = event.currentTarget as HTMLElement;
+
+        this.controller.state_refs.dragged_index.value          = index;
+        this.controller.state_refs.drag_start_y.value           = event.clientY;
+        this.controller.state_refs.dragged_element_height.value = element.offsetHeight;
+
+        event.dataTransfer?.setData('text/plain', String(index));
+        event.dataTransfer!.effectAllowed = 'move';
+    }
+
+    // Methos to handle on drag over
+    public onDragOver(index: number, event: DragEvent) {
+        event.preventDefault(); // allow drop
+
+        const refs              = this.controller.state_refs;
+        const columns           = refs.columns_model.value;
+        const dragged_index     = refs.dragged_index.value;
+
+        if (dragged_index === null || dragged_index === index) { return; }
+
+        const element       = event.currentTarget as HTMLElement;
+        const rect          = element.getBoundingClientRect();
+        const midpoint      = rect.top + rect.height / 2;
+
+        // Determine if dragging up or down
+        if (dragged_index < index && event.clientY > midpoint) {
+            // Dragging down past midpoint → swap
+            const item = this.controller.state_refs.columns_model.value[dragged_index]
+            this.controller.state_refs.columns_model.value.splice(index, 0, item);
+            this.controller.state_refs.dragged_index.value = index;
+        } 
+        else if (dragged_index > index && event.clientY < midpoint) {
+            // Dragging up past midpoint → swap
+            const item = this.controller.state_refs.columns_model.value[dragged_index]
+            this.controller.state_refs.columns_model.value.splice(index, 0, item);
+            this.controller.state_refs.dragged_index.value = index;
+        }
+
+        this.controller.state_refs.drag_over_index.value = index;
+
+        // Auto scroll if near viewport edges
+        const scroll_threshold  = 50;
+        const scroll_speed      = 10;
+        const y                 = event.clientY;
+        const window_height     = window.innerHeight;
+
+        if (y < scroll_threshold) { window.scrollBy(0, -scroll_speed); }
+
+        else if (y > window_height - scroll_threshold) { window.scrollBy(0, scroll_speed); }
+    }
+    
+    // Methos to handle on drag leave
+    public onDragLeave(index: number) {
+        if (this.controller.state_refs.drag_over_index.value === index) {
+            this.controller.state_refs.drag_over_index.value = null;
+        }
+    }
+    
+    // Methos to handle on drop 
+    public onDrop(drop_index: number) {
+        this.controller.state_refs.dragged_index.value = null;
+        this.controller.state_refs.drag_over_index.value = null;
     }
  
 }

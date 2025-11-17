@@ -25,7 +25,7 @@
                 <!-- fields -->
                 <div class="flex items-start flex-col justify-center w-full">
                     <div v-for="(col, col_i) in columns_array.filter((obj: { name: string }) => obj.name)" :key="col_i" class="flex items-center gap-2">
-                        <InputGroupUI v-bind="get_input_group_props(props.content_data, `indexes_array.${i}.fields.[]`, index_obj?.fields.includes(col?.name), 'checkbox', false, index_obj, event_methods('checkbox'), { checkbox_value: col?.name })" />
+                        <InputGroupUI v-bind="get_input_group_props(props.content_data, `indexes_array.${i}.fields.[1]`, index_obj?.fields.includes(col?.name), 'checkbox', false, index_obj, event_methods('checkbox'), { checkbox_value: col?.name })" />
 
                         <span class="text-sm">{{ InputTransformerUtil.toTitleCase(col.name) }}</span>
                     </div>

@@ -44,6 +44,7 @@ class RegisteredAppSchemaFormViewEventHandler extends BaseFormViewEventHandler {
         form_data.columns = columns;
         form_data.primary_key = primary_key;
         this.form_data = { ...form_data };
+
         return RegisteredAppSchemaValidator.validateRegisteredAppSchemaInput(form_data, record);
     }
 

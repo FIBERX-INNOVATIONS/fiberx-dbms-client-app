@@ -14,7 +14,6 @@ class SidebarMenuListConfig {
     private static checkIfMenuIsActive = (menu_id: string): boolean => {
         const global_vars       = GlobalVariableManager.getInstance();
         const current_page_id   = global_vars.getVariable("CURRENT_PAGE_ID")
-        // console.log({ current_page_id, menu_id})
 
         return menu_id === current_page_id;
     }

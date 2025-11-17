@@ -84,7 +84,7 @@ class TwoFactorLoginViewController extends BaseController {
  // Method to handle on unmount logic
     protected async handleBeforeUnmountedLogic(): Promise<void> {
         this.event_handler.clearRedirectTimer();
-        console.log("Timer cleared for two factor")
+        this.logger.debug("Timer cleared for two factor")
     }
 
 

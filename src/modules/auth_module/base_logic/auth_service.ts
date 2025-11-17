@@ -52,11 +52,14 @@ class AuthService extends BaseService {
             this.csrf_refresh_timer = null;
         }
 
-        const expiration_time = new Date(expires_at).getTime();
+        const expiration_time   = new Date(expires_at).getTime();
+        const now               = Date.now()
+        const delay             = expiration_time - now
 
         this.csrf_refresh_timer = setTimeout(async () => {
+            this.logger.debug("Refreshing CSRF Token Now");
             await this.getFormCsrfToken(token_for);
-        }, expiration_time);
+        }, delay);
     }
 
     public deleteMemberdata(): boolean {
@@ -96,11 +99,12 @@ class AuthService extends BaseService {
     }
 
 
-    // Method to cancle csrf refresh token timer
+    // Method to cancel csrf refresh token timer
     public cancelCsrfRefresh(): void {
         if (this.csrf_refresh_timer) {
             clearTimeout(this.csrf_refresh_timer);
             this.csrf_refresh_timer = null;
+            this.logger.info(`CSF Refresh timer has been cancelled`)
         }
     }
 

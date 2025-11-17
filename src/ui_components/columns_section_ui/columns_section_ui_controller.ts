@@ -36,7 +36,15 @@ class ColumnsSectionUIController extends BaseController {
 
             delete_column_btn_props: BaseFormViewPropsBuilder.getObjectRemoveFieldBtnProps,
 
-            get_input_group_props: BaseFormViewPropsBuilder.getInputGroupProps
+            get_input_group_props: BaseFormViewPropsBuilder.getInputGroupProps,
+
+            dragged_index: ref<number | null>(null),
+
+            drag_over_index: ref<number | null>(null),
+
+            drag_start_y: ref<number>(0),
+            
+            dragged_element_height: ref<number>(0),
         } 
     }
 
@@ -44,6 +52,7 @@ class ColumnsSectionUIController extends BaseController {
     protected getUIWatchers(): Record<string, (new_val: any, old_val: any) => void> { 
         return {
             columns_model: (new_val) => { 
+                console.log("Columns Model Updated:", new_val);
                 new_val.forEach(this?.cleanColumnModel.bind(this)); 
                 this.event_bus.emit("on_columns_array_updated", { columns_array: new_val});
             },

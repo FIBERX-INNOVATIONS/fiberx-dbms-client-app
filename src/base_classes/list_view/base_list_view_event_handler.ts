@@ -360,7 +360,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
         const { record, record_id }             = payload;
         const { record_id_key, records = [] }   = this.controller;
         const record_to_update_index            = records.findIndex(
-            (obj: Record<string, any>) => { console.log({obj}); return obj[record_id_key].toString() === record_id.toString() }
+            (obj: Record<string, any>) => { this.logger.debug({obj}); return obj[record_id_key].toString() === record_id.toString() }
         );
 
         if(record_to_update_index < 0) { return }

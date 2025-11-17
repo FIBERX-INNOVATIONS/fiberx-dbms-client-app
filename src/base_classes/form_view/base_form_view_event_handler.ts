@@ -75,11 +75,9 @@ class BaseFormViewEventHandler extends BaseEventHandler {
         if (!target) return;
 
         const input_id          = target.id;
-        const input_value       = input_model_value ?? target.value;
+        const input_value       = input_model_value === undefined ? target.value : input_model_value;
         const new_form_data     = InputTransformerUtil.buildFormDataObject(input_id, input_value, this.form_data);
         this.form_data          = { ...this.form_data, ...new_form_data };
-
-        console.log({ data: this.form_data })
 
         this.onFormDataUpdated();
     }

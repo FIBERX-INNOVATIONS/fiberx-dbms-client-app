@@ -12,13 +12,25 @@
                 {{ props.content_data?.no_columns_text }}
             </span>
         </div>
+        {{ columns_model }}
 
-        <div v-for="(col, i) in columns_model" :key="col.id" :class="props.body_section_wrapper_class_style">
+        <div 
+            v-for="(col, i) in columns_model" 
+            :key="`${col?.name}_${i}`" 
+            :class="[props.body_section_wrapper_class_style, 'column-item', dragged_index === i ? 'dragging' : '', drag_over_index === i ? 'drag-over' : '']"
+            draggable="true"
+            @dragstart="event_handler.onDragStart(i, $event)"
+            @dragover.prevent="event_handler.onDragOver(i, $event)"
+            @dragenter.prevent
+            @dragleave="event_handler.onDragLeave(i)"
+            @drop="event_handler.onDrop(i)"
+        >
             <div :class="props.body_section_row_header_wrapper_class_style">
                 <span :class="props.body_section_row_header_label_class_style">
                     {{ props.content_data?.columns_label_text }} {{ i + 1 }}
                 </span>
                 <ButtonUI v-bind="delete_column_btn_props(event_handler, `${i}`, null)" />
+                <span class="drag-handle cursor-grab">☰</span>
             </div>
 
             <!-- Name & Type -->
@@ -127,6 +139,10 @@ const {
 } = controller
 
 const { 
+    dragged_index,
+    drag_over_index,
+    drag_start_y,
+    dragged_element_height,
     add_column_btn_props,
     delete_column_btn_props,
     columns_model,
