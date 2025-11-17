@@ -9,6 +9,8 @@ import {
     IndexesArrayUpdatedPayloadInterface,
     SchemaPermissionsUpdatedPayloadInterface
 } from "@/types/app_event_type";
+import InputValidatorUtil from "@ui/version_2/utils/input_validator_util";
+import InputTransformerUtil from "@ui/version_2/utils/input_formatter_util";
 
 
 class RegisteredAppSchemaFormViewController extends BaseFormViewController {
@@ -62,6 +64,7 @@ class RegisteredAppSchemaFormViewController extends BaseFormViewController {
 
         const app_public_id                         = schema_app?.public_id ?? "";
         const datasource_id                         = schema_datasource?.id ?? 0;
+        const model_snake_case_name                 = InputTransformerUtil.toSnakeCase(model_name);
         const columns_array                         = this.event_handler.buildColumnsArray(columns);
         this.form_data                              = { app_public_id, datasource_id, model_name, primary_key, migration_priority, permissions, columns, indexes, columns_array };
         this.event_handler.form_data                = JSON.parse(JSON.stringify(this.form_data));
@@ -84,7 +87,7 @@ class RegisteredAppSchemaFormViewController extends BaseFormViewController {
 
             schema_datasource_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "datasource_id", datasource_id, "select_search", false, schema_datasource, schema_datasource_input_event_methods),
 
-            model_name_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "model_name", model_name, "text", false, record, text_input_event_methods),
+            model_name_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "model_name", model_snake_case_name, "text", false, record, text_input_event_methods),
             
             migration_priority_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "migration_priority", migration_priority, "number", false, record, text_input_event_methods, { min: 1 }),
 

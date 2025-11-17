@@ -19,6 +19,7 @@ import {
 class AuthService extends BaseService {
     public readonly api_service: AuthAPIService;
     public member_auth_manager: MemberAuthManagerUtil;
+    private csrf_refresh_timer: ReturnType<typeof setTimeout> | null = null;
 
     constructor(controller: BaseControllerInterface) {
         super(controller, controller.component_name);
@@ -41,6 +42,23 @@ class AuthService extends BaseService {
         return this.member_auth_manager.setCurrentMemberData(member_key, current_member, other_member_data);
     }
 
+        // Method to schedule csrf refresh
+    private scheduleCsrfRefresh(expires_at: string, token_for: string): void {
+        if (!expires_at) { return; }
+
+        // Clear any existing timer
+        if (this.csrf_refresh_timer) {
+            clearTimeout(this.csrf_refresh_timer);
+            this.csrf_refresh_timer = null;
+        }
+
+        const expiration_time = new Date(expires_at).getTime();
+
+        this.csrf_refresh_timer = setTimeout(async () => {
+            await this.getFormCsrfToken(token_for);
+        }, expiration_time);
+    }
+
     public deleteMemberdata(): boolean {
         return this.member_auth_manager.deleteCurrentMemberData(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
     }
@@ -50,6 +68,7 @@ class AuthService extends BaseService {
         try {
             const { data }      = await this.api_service.getFormCSRFToken(token_for);
             const csrf_token    = data?.token;
+            const expires_at    = data?.expires_at;
 
             if(!csrf_token) { return false }
 
@@ -65,11 +84,23 @@ class AuthService extends BaseService {
                 this.controller.state_refs.btn_props.disabled = false;
             }
 
+            // Schedule next refresh
+            this.scheduleCsrfRefresh(expires_at, token_for);
+
             return true;
         }
         catch(error: unknown) {
             this.logger.error(`Failed to get form csrf token`, { error });
             return false;
+        }
+    }
+
+
+    // Method to cancle csrf refresh token timer
+    public cancelCsrfRefresh(): void {
+        if (this.csrf_refresh_timer) {
+            clearTimeout(this.csrf_refresh_timer);
+            this.csrf_refresh_timer = null;
         }
     }
 

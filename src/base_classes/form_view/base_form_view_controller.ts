@@ -82,6 +82,11 @@ class BaseFormViewController extends BaseController {
         await this?.formMountedLogic?.()
     }
 
+    // Method to handle before unmounted logic
+    protected async handleBeforeUnmountedLogic(): Promise<void> {
+        this.auth_service.cancelCsrfRefresh();
+    }
+
     // Method to get input group props for social links
     public getObjectInputGroupProps (
         field_key: string, 
