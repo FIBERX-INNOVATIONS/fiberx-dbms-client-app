@@ -7,7 +7,6 @@
             <InputGroupUI v-bind="host_input_group_prop" />
             <InputGroupUI v-bind="port_input_group_prop" /> 
             <InputGroupUI v-bind="username_input_group_prop" /> 
-            <InputGroupUI v-bind="database_name_input_group_prop" /> 
 
             <div :class="props.object_section_wrapper_class_style">
                 <!-- Object header -->

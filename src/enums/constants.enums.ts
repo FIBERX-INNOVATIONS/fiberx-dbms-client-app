@@ -53,5 +53,6 @@ export const SCHEMA_PERMISSIONS_ACTIONS = [
   { value: "read", label_text: "Permission to Read Table data"},
   { value: "create", label_text: "Permission to Add to Table Data"},
   { value: "update", label_text: "Permission to Update Table Data" },
-  { value: "delete", label_text: "Permission to Delete From Table Data"}
+  { value: "delete", label_text: "Permission to Delete From Table Data"},
+  { value: "alter_table", label_text: "Permission to Alter Table Structure" },
 ]
