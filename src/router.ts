@@ -18,7 +18,7 @@ const DashboardView                     = () => import("@/modules/dashboard_modu
 const RegisteredAppListView             = () => import("@/modules/registered_app_module/views/list_view/registered_app_list_view.vue");
 const DatasourceListView                = () => import("@/modules/datasource_module/views/list_view/datasource_list_view.vue");
 const RegisteredAppSchemaListView       = () => import("@/modules/registered_app_schema_module/views/list_view/registered_app_schema_list_view.vue");
-// const AppSchemaView             = () => import("@/modules/app_schema_module/views/app_schemas_view.vue");
+const SchemaAccessListView              = () => import("@/modules/schema_access_module/views/list_view/schema_access_list_view.vue");
 // const MemberView                = () => import("@/modules/member_module/views/members_view.vue");
 
 class RouterManager {
@@ -183,17 +183,16 @@ class RouterManager {
                     requires_full_auth: true
                 }
             },
-
-        //     { 
-        //         path: "/app-schemas", 
-        //         name: "AppSchemaView", 
-        //         component: AppSchemaView, 
-        //         meta: {
-        //             title_key: "app-schema-page",
-        //             permission_name: "view_app_schema_access" , 
-        //             requires_full_auth: true
-        //         }
-        //     },
+            { 
+                path: "/schema-access", 
+                name: "SchemaAccessListView", 
+                component: SchemaAccessListView, 
+                meta: {
+                    title_key: "schema-access-page",
+                    permission_name: "view_registered_app_schema_access" , 
+                    requires_full_auth: true
+                }
+            },
 
         //     { 
         //         path: "/members", 
