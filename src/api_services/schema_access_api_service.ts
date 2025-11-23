@@ -45,7 +45,7 @@ class SchemaAccessService extends BaseAPIService {
     } 
 
     // Service method to query delete schema-access record endpoint
-    public async deleteSchemaAccessRecord (schema_access_id: number) : Promise<APIResponseInterface<any>> {
+    public async deleteSchemaAccessRecord (schema_access_id: string) : Promise<APIResponseInterface<any>> {
         const url           = `/schema-access/${schema_access_id}/delete`;
         const config        = { url, method: "DELETE" };
 

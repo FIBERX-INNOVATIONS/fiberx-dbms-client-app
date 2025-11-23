@@ -43,7 +43,7 @@ class SchemaAccessTableColumnConfig {
         const columns_config: TableColumnInterface[] = [
             {
                 label_content: registered_app_name_text,
-                sortable: true,
+                sortable: false,
                 sort_direction: "none" as SortDirectionType,
                 field_key: "registered_app.name",
                 on_sort,
@@ -55,7 +55,7 @@ class SchemaAccessTableColumnConfig {
             },
             {
                 label_content: app_id_text,
-                sortable: true,
+                sortable: false,
                 sort_direction: "none" as SortDirectionType,
                 field_key: "registered_app.public_id",
                 on_sort,
@@ -67,7 +67,7 @@ class SchemaAccessTableColumnConfig {
             },
             {
                 label_content: schema_name_text,
-                sortable: true,
+                sortable: false,
                 sort_direction: "none" as SortDirectionType,
                 field_key: "schema.name",
                 on_sort,
@@ -80,7 +80,7 @@ class SchemaAccessTableColumnConfig {
             },
             {
                 label_content: schema_table_name_text,
-                sortable: true,
+                sortable: false,
                 sort_direction: "none" as SortDirectionType,
                 on_sort,
                 content_type: "plain" as const,
