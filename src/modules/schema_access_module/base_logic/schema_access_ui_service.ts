@@ -12,7 +12,8 @@ import {
 
 import { 
     RequestQueryInputInterface,
-    RegisteredAppSchemaFormDataInterface
+    SchemaAccessFormInputInterface,
+    SchemaAccessUpdateFormInputInterface
 } from "@/types/api_service_type";
 
 class SchemaAccessUIService extends BaseService {
@@ -30,7 +31,7 @@ class SchemaAccessUIService extends BaseService {
 
 
     // Method to get and set form csrf token
-    public async getFormCsrfToken(token_for: string = CSRF_TOKEN_FOR.REGISTERED_APP_SCHEMA ): Promise<boolean> {
+    public async getFormCsrfToken(token_for: string = CSRF_TOKEN_FOR.SCHEMA_ACCESS ): Promise<boolean> {
         try {
             const { data }      = await this.auth_api_service.getFormCSRFToken(token_for);
             const csrf_token    = data?.token;
@@ -60,7 +61,7 @@ class SchemaAccessUIService extends BaseService {
     // Method to execute fetch records
     public async executeFetchRecords(params: RequestQueryInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
-            const { status, msg, data: response_data } = await this.api_service.getAllRegisteredAppSchemas(params);
+            const { status, msg, data: response_data } = await this.api_service.getAllSchemaAccessRecords(params);
 
             if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
 
@@ -75,9 +76,9 @@ class SchemaAccessUIService extends BaseService {
     }
 
     // Method to execute create new record
-    public async executeCreateRecord(form_data: RegisteredAppSchemaFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeCreateRecord(form_data: SchemaAccessFormInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
-            const { status, msg, data: response_data } = await this.api_service.createNewRegisteredAppSchema(form_data)
+            const { status, msg, data: response_data } = await this.api_service.createSchemaAccessRecord(form_data)
 
             if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
 
@@ -92,9 +93,9 @@ class SchemaAccessUIService extends BaseService {
     }
 
     // Method to execute update record
-    public async executeUpdateRecord(record_id: number, form_data: RegisteredAppSchemaFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeUpdateRecord(record_id: string, form_data: SchemaAccessUpdateFormInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
-            const { status, msg, data: response_data } = await this.api_service.updateRegisteredAppSchema(record_id, form_data)
+            const { status, msg, data: response_data } = await this.api_service.updateSchemaAccessRecord(record_id, form_data)
 
             if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
 
@@ -109,9 +110,9 @@ class SchemaAccessUIService extends BaseService {
     }
 
     // Method to execute delete reord
-    public async executeDeleteRecord(record_id: number): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeDeleteRecord(record_id: string): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
-            const { status, msg, data: response_data } = await this.api_service.deleteRegisteredAppSchema(record_id)
+            const { status, msg, data: response_data } = await this.api_service.deleteSchemaAccessRecord(record_id)
 
             if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
 
@@ -121,6 +122,23 @@ class SchemaAccessUIService extends BaseService {
         }
         catch(error: unknown) {
             this.logger.error(`Failed to execute delete record`, { error });
+            return { s_state: false, s_msg: "error_occurred"};
+        }
+    }
+
+    // Method to execute change record state
+    public async executeChangeRecordState(record_id: string): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+        try {
+            const { status, msg, data: response_data } = await this.api_service.changeSchemaAccessIsGrantedState(record_id)
+
+            if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
+
+            else if(status != "success") { return { s_state: false, s_msg: msg } }
+            
+            return { s_state: true, s_msg: msg, s_data: response_data};
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to execute change state`, { error });
             return { s_state: false, s_msg: "error_occurred"};
         }
     }
