@@ -4,7 +4,7 @@ import { CSRF_TOKEN_FOR, LOCAT_STORAGE_FIELDS } from "@/enums/constants.enums";
 import { EventBus }                             from "@/utils/gloabal_event_bus";
 import BaseController                           from "@ui/version_2/base_classes/base_controller";
 import BaseFormViewPropsBuilder                 from "@/base_classes/form_view/base_form_view_props_builder";
-import AuthService                              from "@/modules/auth_module/base_logic/auth_service";
+import AuthUIService                              from "@/modules/auth_module/base_logic/auth_ui_service";
 import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";
 import ContentManagerUtil                       from "@ui/version_2/utils/content_manager_util";
 import InputTransformerUtil                     from "@ui/version_2/utils/input_formatter_util";
@@ -22,7 +22,7 @@ import {
 class BaseFormViewController extends BaseController {
     public router: Router;
     public member_auth_manager: MemberAuthManagerUtil;
-    public auth_service: AuthService;
+    public auth_service: AuthUIService;
     public content_manager: ContentManagerUtil;
     public event_bus = EventBus;
     public event_handler: any;
@@ -37,7 +37,7 @@ class BaseFormViewController extends BaseController {
         this.router                     = useRouter();
         this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
         this.content_manager            = ContentManagerUtil.getInstance();
-        this.auth_service               = new AuthService(this);
+        this.auth_service               = new AuthUIService(this);
         this.props_builder              = BaseFormViewPropsBuilder;
     }
 

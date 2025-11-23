@@ -16,7 +16,7 @@ import {
     RegisteredAppFormDataInterface
 } from "@/types/api_service_type";
 
-class RegisteredAppService extends BaseService {
+class RegisteredAppUIService extends BaseService {
     public readonly auth_api_service: AuthAPIService;
     public readonly api_service: RegisteredAppAPIService;
     public member_auth_manager: MemberAuthManagerUtil;
@@ -145,4 +145,4 @@ class RegisteredAppService extends BaseService {
 
 }
 
-export default RegisteredAppService
+export default RegisteredAppUIService

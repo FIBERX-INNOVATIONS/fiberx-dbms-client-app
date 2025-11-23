@@ -1,19 +1,19 @@
 import { ref, }                             from "vue";
 import BaseFormViewController               from "@/base_classes/form_view/base_form_view_controller";
-import DatasourceService                    from "@/modules/datasource_module/base_logic/datasource_service";
+import DatasourceUIService                    from "@/modules/datasource_module/base_logic/datasource_ui_service";
 import DatasourceFormEventHandler           from "@/modules/datasource_module/views/form_view/datasource_form_view_event_handler";
 import { CSRF_TOKEN_FOR }                   from "@/enums/constants.enums";
 
 
 class DatasourceFormViewController extends BaseFormViewController {
-    public service: DatasourceService;
+    public service: DatasourceUIService;
     public event_handler: DatasourceFormEventHandler;
     public record_id_key: string = "id";
 
     constructor(props: Record<string, any> = {}) {
         super("datasource_form_view_ui", props);
 
-        this.service            = new DatasourceService(this);
+        this.service            = new DatasourceUIService(this);
         this.event_handler      = new DatasourceFormEventHandler(this);
 
         this.initializeDependencies();

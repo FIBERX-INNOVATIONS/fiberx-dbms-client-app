@@ -6,7 +6,7 @@ import { BaseControllerInterface }  from "@ui/version_2/types/component_type";
 import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manager_util";
 
 
-class DashbaordBaseViewService extends BaseService {
+class DashbaordBaseViewUIService extends BaseService {
     public readonly api_service: AuthAPIService;
     public member_auth_manager: MemberAuthManagerUtil;
     private auth_token_manager: AuthTokenManagerUtil;
@@ -21,4 +21,4 @@ class DashbaordBaseViewService extends BaseService {
 
 }
 
-export default DashbaordBaseViewService
+export default DashbaordBaseViewUIService

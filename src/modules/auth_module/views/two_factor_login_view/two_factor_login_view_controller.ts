@@ -6,7 +6,7 @@ import { EventBus }                     from "@/utils/gloabal_event_bus";
 import AuthPropsBuilder                 from "@/modules/auth_module/base_logic/auth_props_builder"
 import AuthEventhandler                 from "@/modules/auth_module/base_logic/auth_event_handler";;
 import TwoFactorLoginViewPropsBuilder   from "@/modules/auth_module/views/two_factor_login_view/two_factor_login_view_props_builder";
-import AuthService                      from "@/modules/auth_module/base_logic/auth_service";
+import AuthUIService                      from "@/modules/auth_module/base_logic/auth_ui_service";
 import BaseController                   from "@ui/version_2/base_classes/base_controller";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
 import InputGroupUI                     from "@ui/version_2/components/InputGroupUI/input_group_ui.vue";
@@ -22,7 +22,7 @@ import {
 class TwoFactorLoginViewController extends BaseController {
     public router: Router;
     public event_handler: AuthEventhandler;
-    public service: AuthService;
+    public service: AuthUIService;
     public event_bus = EventBus;
     private member_auth_manager: MemberAuthManagerUtil;
 
@@ -31,7 +31,7 @@ class TwoFactorLoginViewController extends BaseController {
 
         this.router                 = useRouter();
         this.event_handler          = new AuthEventhandler(this);
-        this.service                = new AuthService(this);
+        this.service                = new AuthUIService(this);
         this.member_auth_manager    = MemberAuthManagerUtil.getInstance();
     }
 

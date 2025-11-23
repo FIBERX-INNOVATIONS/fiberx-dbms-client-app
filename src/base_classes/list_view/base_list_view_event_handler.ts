@@ -5,7 +5,7 @@ import ContentManagerUtil               from "@ui/version_2/utils/content_manage
 import RenderHtmlUtil                   from "@ui/version_2/utils/render_html_util";
 import SVGIcons                         from "@ui/version_2/resources/svg_icon_resource";
 import BaseEventHandler                 from "@ui/version_2/base_classes/base_event_handler";
-import BaseListViewPropsBuilder         from "@/modules/dashboard_module/base_logic/base_list_view_props_builder";
+import BaseListViewPropsBuilder         from "@/base_classes/list_view/base_list_view_props_builder";
 import ConfirmActionUI                  from "@ui/version_2/components/confirm_action_ui/confirm_action_ui.vue";
 import { debounceMethod, sleep }        from "@ui/version_2/utils/debounce_util";
 import { NON_INPUT_KEYS  }              from "@ui/version_2/enums/constants.enum";

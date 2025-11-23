@@ -3,7 +3,7 @@ import BaseListViewController                       from "@/base_classes/list_vi
 import RegisteredAppSchemaListViewEventHandler      from "@/modules/registered_app_schema_module/views/list_view/registered_app_schema_list_view_event_hanlder";
 import RegisteredAppSchemaMenuListConfig            from "@/configs/menu_list_configs/registered_app_schema_menu_list_config";
 import RegisteredAppSchemaTableColumnConfig         from "@/configs/table_column_config/registered_app_schema_table_column_config";
-import RegisteredAppSchemaService                   from "@/modules/registered_app_schema_module/base_logic/registered_app_schema_service";
+import RegisteredAppSchemaUIService                   from "@/modules/registered_app_schema_module/base_logic/registered_app_schema_ui_service";
 import BaseFormViewPropsBuilder                     from "@/base_classes/form_view/base_form_view_props_builder";
 import ContentManagerUtil                           from "@ui/version_2/utils/content_manager_util";
 import { InputUIEventMethodsPropsInterface }        from "@ui/version_2/types/props_builder_type";
@@ -36,7 +36,7 @@ class RegisteredAppSchemaListViewController extends BaseListViewController {
 
     protected initializeDependencies(): void {
         this.event_handler          = new RegisteredAppSchemaListViewEventHandler(this);
-        this.service                = new RegisteredAppSchemaService(this);
+        this.service                = new RegisteredAppSchemaUIService(this);
         this.content_field_key      = "registered_app_schema_view_ui";
         this.record_id_key          = "id";
         this.bulk_action_btn_id     = "RegisteredAppSchemaBulkActionBtn";

@@ -16,7 +16,7 @@ import {
     DatasourceFormDataInterface
 } from "@/types/api_service_type";
 
-class DatasourceService extends BaseService {
+class DatasourceUIService extends BaseService {
     public readonly auth_api_service: AuthAPIService;
     public readonly api_service: DatasourceAPIService;
     public member_auth_manager: MemberAuthManagerUtil;
@@ -162,4 +162,4 @@ class DatasourceService extends BaseService {
 
 }
 
-export default DatasourceService
+export default DatasourceUIService

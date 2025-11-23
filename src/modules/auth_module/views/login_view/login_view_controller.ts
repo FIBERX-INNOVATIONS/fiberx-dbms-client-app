@@ -6,7 +6,7 @@ import { LOCAT_STORAGE_FIELDS }  from "@/enums/constants.enums";
 import AuthPropsBuilder         from "@/modules/auth_module/base_logic/auth_props_builder"
 import AuthEventhandler         from "@/modules/auth_module/base_logic/auth_event_handler";;
 import LoginViewPropsBuilder    from "@/modules/auth_module/views/login_view/login_view_props_builder";
-import AuthService              from "@/modules/auth_module/base_logic/auth_service";
+import AuthUIService              from "@/modules/auth_module/base_logic/auth_ui_service";
 import BaseController           from "@ui/version_2/base_classes/base_controller";
 import MemberAuthManagerUtil    from "@ui/version_2/utils/member_auth_manager_util";
 import InputGroupUI             from "@ui/version_2/components/InputGroupUI/input_group_ui.vue";
@@ -15,7 +15,7 @@ import ButtonUI                 from "@ui/version_2/components/ButtonUI/button_u
 
 class LoginViewController extends BaseController {
     public event_handler: AuthEventhandler;
-    public service: AuthService;
+    public service: AuthUIService;
     public event_bus = EventBus;
     public router: Router;
     private member_auth_manager: MemberAuthManagerUtil;
@@ -24,7 +24,7 @@ class LoginViewController extends BaseController {
         super("login_view", props);
 
         this.event_handler              = new AuthEventhandler(this);
-        this.service                    = new AuthService(this);
+        this.service                    = new AuthUIService(this);
         this.router                     = useRouter();
         this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
     }

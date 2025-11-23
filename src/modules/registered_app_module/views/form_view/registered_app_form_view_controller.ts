@@ -1,19 +1,19 @@
 
 import { ref } from "vue";
 import BaseFormViewController               from "@/base_classes/form_view/base_form_view_controller";
-import RegisteredAppService                 from "@/modules/registered_app_module/base_logic/registered_app_service";
+import RegisteredAppUIService                 from "@/modules/registered_app_module/base_logic/registered_app_ui_service";
 import RegisteredAppFormViewEventHandler    from "./registered_app_form_view_event_handler";
 import { CSRF_TOKEN_FOR }                   from "@/enums/constants.enums";
 
 class RegisteredAppFormViewController extends BaseFormViewController {
-    public service: RegisteredAppService;
+    public service: RegisteredAppUIService;
     public event_handler: RegisteredAppFormViewEventHandler;
     public record_id_key: string = "id";
 
     constructor(props: Record<string, any> = {}) {
         super("registered_app_form_view_ui", props);
 
-        this.service            = new RegisteredAppService(this);
+        this.service            = new RegisteredAppUIService(this);
         this.event_handler      = new RegisteredAppFormViewEventHandler(this);
 
         this.initializeDependencies();

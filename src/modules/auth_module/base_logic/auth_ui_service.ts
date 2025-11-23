@@ -16,7 +16,7 @@ import {
     TwoFactorFormDataInterface 
 } from "@/types/api_service_type";
 
-class AuthService extends BaseService {
+class AuthUIService extends BaseService {
     public readonly api_service: AuthAPIService;
     public member_auth_manager: MemberAuthManagerUtil;
     private csrf_refresh_timer: ReturnType<typeof setTimeout> | null = null;
@@ -177,4 +177,4 @@ class AuthService extends BaseService {
 
 }
 
-export default AuthService
+export default AuthUIService

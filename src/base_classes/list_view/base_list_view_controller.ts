@@ -2,7 +2,7 @@ import { ref, }                                 from "vue";
 import { Router, useRouter }                    from "vue-router";
 import { LOCAT_STORAGE_FIELDS }                 from "@/enums/constants.enums";
 import { EventBus }                             from "@/utils/gloabal_event_bus";
-import BaseListViewPropsBuilder                 from "@/modules/dashboard_module/base_logic/base_list_view_props_builder";
+import BaseListViewPropsBuilder                 from "@/base_classes/list_view/base_list_view_props_builder";
 import BaseController                           from "@ui/version_2/base_classes/base_controller";
 import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";
 import PageTitleAndBreadcrumbSectionUI          from "@/ui_components/page_title_and_breadcrumb_section_ui/page_title_and_breadcrumb_section_ui.vue";

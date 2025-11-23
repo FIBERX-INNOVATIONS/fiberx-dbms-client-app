@@ -1,7 +1,7 @@
 import { ref, }                         from "vue";
 import { Router, useRouter }            from "vue-router";
 import { LOCAT_STORAGE_FIELDS }         from "@/enums/constants.enums";
-import DashbaordBaseViewService         from "@/modules/dashboard_module/base_logic/dashboard_base_view_service";
+import DashbaordBaseViewUIService         from "@/modules/dashboard_module/base_logic/dashboard_base_view_ui_service";
 import DashboardBaseViewPropsBuilder    from "./dashboard_base_view_props_builder";
 import DashboardBaseViewEventHandler    from "./dashboard_base_view_event_handler";
 import BaseController                   from "@ui/version_2/base_classes/base_controller";
@@ -19,7 +19,7 @@ class DashboardBaseViewController extends BaseController {
     public router: Router;
     private member_auth_manager: MemberAuthManagerUtil;
     public event_handler: DashboardBaseViewEventHandler;
-    public service: DashbaordBaseViewService;
+    public service: DashbaordBaseViewUIService;
 
     constructor(props: Record<string, any> = {}) {
         super("dashboard_base_view", props);
@@ -27,7 +27,7 @@ class DashboardBaseViewController extends BaseController {
         this.router                     = useRouter();
         this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
         this.event_handler              = new DashboardBaseViewEventHandler(this);
-        this.service                    = new DashbaordBaseViewService(this);
+        this.service                    = new DashbaordBaseViewUIService(this);
     }
 
     // Method to get ui components

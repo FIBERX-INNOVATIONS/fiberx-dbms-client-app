@@ -1,6 +1,6 @@
 import { ref, }                             from "vue";
 import BaseFormViewController               from "@/base_classes/form_view/base_form_view_controller";
-import RegisteredAppSchemaService           from "@/modules/registered_app_schema_module/base_logic/registered_app_schema_service";
+import RegisteredAppSchemaUIService           from "@/modules/registered_app_schema_module/base_logic/registered_app_schema_ui_service";
 import RegisteredAppSchemaFormEventHandler  from "@/modules/registered_app_schema_module/views/form_view/registered_app_schema_form_view_event_handler";
 import { CSRF_TOKEN_FOR }                   from "@/enums/constants.enums";
 import { InputUIEventMethodsPropsInterface } from "@ui/version_2/types/props_builder_type";
@@ -14,14 +14,14 @@ import {
 
 
 class RegisteredAppSchemaFormViewController extends BaseFormViewController {
-    public service: RegisteredAppSchemaService;
+    public service: RegisteredAppSchemaUIService;
     public event_handler: RegisteredAppSchemaFormEventHandler;
     public record_id_key: string = "id";
 
     constructor(props: Record<string, any> = {}) {
         super("registered_app_schema_form_view_ui", props);
 
-        this.service            = new RegisteredAppSchemaService(this);
+        this.service            = new RegisteredAppSchemaUIService(this);
         this.event_handler      = new RegisteredAppSchemaFormEventHandler(this);
 
         this.initializeDependencies();

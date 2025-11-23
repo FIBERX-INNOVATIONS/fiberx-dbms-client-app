@@ -4,13 +4,13 @@ import { Router, useRouter }    from "vue-router";
 import { EventBus }             from "@/utils/gloabal_event_bus";
 import AuthEventhandler         from "@/modules/auth_module/base_logic/auth_event_handler";;
 import LogoutViewPropsBuilder   from "@/modules/auth_module/views/logout_view/logout_view_props_builder";
-import AuthService              from "@/modules/auth_module/base_logic/auth_service";
+import AuthUIService              from "@/modules/auth_module/base_logic/auth_ui_service";
 import BaseController           from "@ui/version_2/base_classes/base_controller";
 
 class LogoutViewController extends BaseController {
     public router: Router;
     public event_handler: AuthEventhandler;
-    public service: AuthService;
+    public service: AuthUIService;
     public event_bus = EventBus
 
     constructor(props: Record<string, any> = {}) {
@@ -18,7 +18,7 @@ class LogoutViewController extends BaseController {
 
         this.router         = useRouter();
         this.event_handler  = new AuthEventhandler(this);
-        this.service        = new AuthService(this);
+        this.service        = new AuthUIService(this);
     }
 
     // Method to get ui computed data
