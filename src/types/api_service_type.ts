@@ -66,3 +66,19 @@ export interface RegisteredAppSchemaFormDataInterface {
 	indexes: IndexDefinitionInterface[];   
 
 }
+
+export interface SchemaAccessFormInputInterface {
+    csrf_token: string,
+    app_public_id: string;
+    schemas: {
+        name: string;
+        schema_id: number;
+        permissions: PermissionType[];
+    }[];
+}
+
+export interface SchemaAccessUpdateFormInputInterface {
+    csrf_token: string;
+    schema_name: string;
+    permissions: PermissionType[];
+}
