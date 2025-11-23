@@ -1,16 +1,12 @@
 
 import { markRaw, reactive  }           from "vue";
 import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type";
-import { LOCAT_STORAGE_FIELDS }         from "@/enums/constants.enums";
 import ClassStyles                      from "@/enums/class_styles.enums";
 import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
-import InputUI                          from "@ui/version_2/components/InputUI/input_ui.vue";
 import InputTransformerUtil             from "@ui/version_2/utils/input_formatter_util";
-import BaseTableColumnConfig            from "./base_table_column_config";
-import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
+
 
 import { 
-    InputUIPropsInterface,
     SortDirectionType,
     TableColumnInterface 
 } from "@ui/version_2/types/props_builder_type";
