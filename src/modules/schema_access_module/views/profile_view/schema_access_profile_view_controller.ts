@@ -1,3 +1,4 @@
+
 import { ref, }                                 from "vue";
 import { Router, useRouter }                    from "vue-router";
 import { LOCAT_STORAGE_FIELDS }                 from "@/enums/constants.enums";
@@ -6,25 +7,23 @@ import BaseController                           from "@ui/version_2/base_classes
 import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";
 import ContentManagerUtil                       from "@ui/version_2/utils/content_manager_util";
 import InputTransformerUtil                     from "@ui/version_2/utils/input_formatter_util";
-import DatasourceProfileViewPropsBuilder        from "./datasource_profile_view_props_builder";
 
 
 
-class DatasourceProfileViewController extends BaseController {
+class SchemaAccessProfileViewController extends BaseController {
     public router: Router;
-    private member_auth_manager: MemberAuthManagerUtil;
     public content_field_key: string;
+    private member_auth_manager: MemberAuthManagerUtil;
     public content_manager: ContentManagerUtil;
     public event_bus = EventBus;
 
-
     constructor(props: Record<string, any> = {}) {
-        super("datasource_profile_view", props);
+        super("schema_access_profile_view", props);
 
-        this.router                     = useRouter();
-        this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
-        this.content_manager            = ContentManagerUtil.getInstance();
-        this.content_field_key          = "datasource_view_ui";
+        this.router                 = useRouter();
+        this.member_auth_manager    = MemberAuthManagerUtil.getInstance();
+        this.content_manager        = ContentManagerUtil.getInstance();
+        this.content_field_key      = "schema_access_view_ui";
     }
 
     // Method to render member link
@@ -33,6 +32,15 @@ class DatasourceProfileViewController extends BaseController {
 
         const text = `(${member.public_id}) ${member.full_name}`;
         const link = `/members?member_profile=${member.public_id}`;
+        return InputTransformerUtil.formatURLToAnchorHtml(text, link);
+    }
+
+    // Method to render schema link
+    private renderSchemaLink(schema: any): string {
+        if (!schema?.id) { return ""; }
+
+        const text = `(${schema.id}) ${schema.name}`;
+        const link = `/registered-app-schemas?schema_profile=${schema.id}`;
         return InputTransformerUtil.formatURLToAnchorHtml(text, link);
     }
 
@@ -46,46 +54,45 @@ class DatasourceProfileViewController extends BaseController {
     }
 
     // Method to get ui state data
-    protected getUIStateData(): Record<string, any> {        
+    protected getUIStateData(): Record<string, any> {
         return {
-            profile_content_data: this.content_manager.get("content_resource.datasource_view_ui.profile_view_ui"),
-        } 
+            profile_content_data: this.content_manager.get("content_resource.schema_access_view_ui.profile_view_ui"),
+        };
     }
 
     // Method to to get ui computed data
-    protected getUIComputedData(): Record<string, () => any> { 
-        const { 
-            connection_info = {}, host = "", database_name, datasource_type = "",
-            created_at = null, updated_at = null, creator = {}, updator = {},
-            datasource_app = {}
+    protected getUIComputedData(): Record<string, () => any> {
+        const {
+            schema = {},
+            registered_app = {},
+            creator = {},
+            updator = {},
+            permissions = [],
+            is_owner,
+            is_granted,
+            created_at,
+            updated_at,
         } = this.props.record ?? {};
 
         return {
-            formatted_databse_name_type: () => { return `${database_name} (${datasource_type?.toUpperCase()})` },
+            formatted_schema: () => { return this.renderSchemaLink(schema) },
 
-            formatted_host: () => { return InputTransformerUtil.formatURLToAnchorHtml(host, host); },
+            formatted_registered_app: () => { return this.renderRegisteredAppLink(registered_app) },
 
-            formatted_connection_info: () => { 
-                return Object.keys(connection_info)
-                .map(
-                    (connection_info_key: string) => { 
-                        return `
-                        <strong>${connection_info_key.toUpperCase()}:</strong> 
-                        <span>${connection_info[connection_info_key]}</span>
-                        `
-                    }
-            )},
+            formatted_permissions: () => { return permissions?.length ? permissions.join(", ").toUpperCase() : "NONE" },
 
-            formatted_registered_app: () => { return this.renderRegisteredAppLink(datasource_app) },
+            formatted_is_owner: () => { return (is_owner ? "YES" : "NO") },
 
-            formatted_created_at: () => { return InputTransformerUtil.formatReadableDateTime(created_at); },
+            formatted_is_granted: () => { return (is_granted ? "YES" : "NO") },
 
-            formatted_updated_at: () => { return InputTransformerUtil.formatReadableDateTime(updated_at); },
+            formatted_created_at: () => { return InputTransformerUtil.formatReadableDateTime(created_at) },
+
+            formatted_updated_at: () => { return InputTransformerUtil.formatReadableDateTime(updated_at) },
 
             formatted_creator: () => { return this.renderMemberLink(creator) },
 
             formatted_updator: () => { return this.renderMemberLink(updator) },
-        }; 
+        };
     }
 
     // Method to handle on mount logic
@@ -97,6 +104,7 @@ class DatasourceProfileViewController extends BaseController {
 
         if(!is_fully_authenticated) { await this.router.push("/logout") }
     }
+
 }
 
-export default DatasourceProfileViewController;
+export default SchemaAccessProfileViewController;
