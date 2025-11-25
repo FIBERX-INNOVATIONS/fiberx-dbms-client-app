@@ -183,6 +183,8 @@ class BaseListViewController extends BaseController {
 
         await this.event_handler.handleFetchRecords();
 
+        await this.event_handler.handleListViewProfileModalRouting()
+
         this.event_bus.on("on_new_record_created", async (payload: NewRecordPayloadInterface) => {
             this.event_handler.handleOnNewRecordCreated(payload);
         });

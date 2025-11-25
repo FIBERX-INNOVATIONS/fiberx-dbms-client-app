@@ -30,6 +30,7 @@ import {
 
 
 class BaseListViewEventHandler extends BaseEventHandler {
+    private profile_types: string[];
     public content_manager: ContentManagerUtil;
     protected status_alert_options: StatusPayloadOptionsInterface;
     protected debouncedFetchRecords: () => Promise<void>;
@@ -53,6 +54,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
         this.content_manager                = ContentManagerUtil.getInstance();
         this.status_alert_options           = { duration: 3000, close_modal: true };
         this.debouncedFetchRecords          = debounceMethod(this.handleFetchRecords.bind(this), 2000);
+        this.profile_types                  = ["registered_app_profile", "schema_profile", "member_profile"];
     }
 
     // Method to get modal_title value
@@ -503,7 +505,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
     }
 
     // Method to handle opening registered app profile modal
-    public async handleOpenProfileModal (event: Event | InputEvent, record: Record<string, any>) {
+    public async handleOpenProfileModal (event: Event | InputEvent | null, record: Record<string, any>) {
         try {
             const { content_field_key } = this.controller;
             const content_data          = this.content_manager?.get(`content_resource.${content_field_key}.profile_view_ui`);
@@ -642,6 +644,33 @@ class BaseListViewEventHandler extends BaseEventHandler {
         catch(error: unknown) {
             this.logger.error(`Failed to delete a record`, { error })
         }
+    }
+
+    // Method to Handle profile view routing via query parameters.
+    public async handleListViewProfileModalRouting(): Promise<void> { 
+        const query         = this.controller?.router?.currentRoute?.value?.query;
+        const query_key     = query ? this.profile_types.find((profile_key: string) => { return query[profile_key] }) : null;
+        const query_value   = query_key ? query?.[query_key] : null;
+        let record: Record<string, any>;
+
+        if(!query || !query_value || !query_key) { return }
+
+        const { record_id_key, records = [] } = this.controller;
+
+        record = records.find((obj: Record<string, any>) => { return obj?.[record_id_key].toString() === query_value.toString() })
+
+        if(!record) {
+            const { s_state, s_msg, s_data, logout }    = await this.controller.service?.executeFetchRecord?.(query_value);
+
+            if(logout) { return await this.controller.router.push("/logout"); }
+
+            else if(!s_state) { return; }
+
+            record = s_data
+        }
+
+        this.handleOpenProfileModal(null, record);
+
     }
 
 }

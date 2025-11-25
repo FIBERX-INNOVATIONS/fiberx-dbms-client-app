@@ -12,6 +12,14 @@ class RegisteredAppSchemaAPIService extends BaseAPIService {
     constructor() { super("registered_app_schema_api_service"); }
 
     // Service method to query Fetch all app-schemas (paginated) endpoint
+    public async getRegisteredAppSchemaRecord (schema_id: string | number ): Promise<APIResponseInterface<any>> {
+        const url       = `/app-schema/${schema_id}`;
+        const config    = { url, method: "GET" };
+
+        return await this.queryAPI(config);
+    }
+
+    // Service method to query Fetch all app-schemas (paginated) endpoint
     public async getAllRegisteredAppSchemas (params: RequestQueryInputInterface ): Promise<APIResponseInterface<any>> {
         const url       = `/app-schema/all`;
         const config    = { url, params, method: "GET" };

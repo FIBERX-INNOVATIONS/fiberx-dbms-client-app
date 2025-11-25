@@ -58,6 +58,23 @@ class RegisteredAppUIService extends BaseService {
         }
     }
 
+    // Method to execute fetch record
+    public async executeFetchRecord(app_public_id: string ): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+        try {
+            const { status, msg, data: response_data } = await this.api_service.getRegisteredAppRecord(app_public_id);
+
+            if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
+
+            else if(status != "success") { return { s_state: false, s_msg: msg } }
+            
+            return { s_state: true, s_msg: msg, s_data: response_data};
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to execute fetch record`, { error });
+            return { s_state: false, s_msg: "error_occurred"};
+        }
+    }
+
     // Method to execute fetch records
     public async executeFetchRecords(params: RequestQueryInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {

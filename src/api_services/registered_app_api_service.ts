@@ -11,6 +11,14 @@ import {
 class RegisteredAppAPIService extends BaseAPIService {
     constructor() { super("registered_app_api_service"); }
 
+    // Service method to query get an app record endpoint
+    public async getRegisteredAppRecord (app_public_id: string ): Promise<APIResponseInterface<any>> {
+        const url       = `/registered-app/${app_public_id}`;
+        const config    = { url, method: "GET" };
+
+        return await this.queryAPI(config);
+    }
+
     // Service method to query get all apps endpoint
     public async getAllRegisteredApps (params: RequestQueryInputInterface ): Promise<APIResponseInterface<any>> {
         const url       = `/registered-app/all`;
