@@ -97,15 +97,15 @@ class SchemaAccessMenuListConfig {
         }
 
         if(member_authenticator.canMemberAccess("update_registered_app_schema_access_is_granted_state", member_perm_key) && !is_granted) {
-            const update_is_granted_menu_on_click   = (event: MouseEvent) => { return event_handler.handleConfirmCreateInstance.bind(event_handler)(event, record); }
-            const grant_menu                        = this.buildMenuItem(`UpdateCreateSchemaAccess-${record_index}`, is_granted_menu_text, "", is_granted_menu_svg_icon, update_is_granted_menu_on_click);
+            const update_is_granted_menu_on_click   = (event: MouseEvent) => { return event_handler.handleConfirmGrantOrRevokeAccess.bind(event_handler)(event, record); }
+            const grant_menu                        = this.buildMenuItem(`UpdateGrantSchemaAccess-${record_index}`, is_granted_menu_text, "", is_granted_menu_svg_icon, update_is_granted_menu_on_click);
 
             menu_list.push(grant_menu)
         }
 
         if(member_authenticator.canMemberAccess("update_registered_app_schema_access_is_granted_state", member_perm_key) && is_granted) {
-            const update_is_granted_menu_on_click   = (event: MouseEvent) => { return event_handler.handleConfirmDestroyInstance.bind(event_handler)(event, record); }
-            const revoke_menu                       = this.buildMenuItem(`UpdateCreateSchemaAccess-${record_index}`, revoke_menu_text, "", revoke_menu_svg_icon, update_is_granted_menu_on_click);
+            const update_is_granted_menu_on_click   = (event: MouseEvent) => { return event_handler.handleConfirmGrantOrRevokeAccess.bind(event_handler)(event, record); }
+            const revoke_menu                       = this.buildMenuItem(`UpdateRevokeSchemaAccess-${record_index}`, revoke_menu_text, "", revoke_menu_svg_icon, update_is_granted_menu_on_click);
 
             menu_list.push(revoke_menu)
         }

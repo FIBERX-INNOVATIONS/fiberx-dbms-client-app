@@ -53,6 +53,58 @@ class SchemaAccessListViewEventHandler extends BaseListViewEventHandler {
 
         await this.handleFetchRecords();
     }
+
+    // Method to handle oepning confirm modal to grant or revoke access
+    public async handleConfirmGrantOrRevokeAccess (event: Event | InputEvent, record: Record<string, any> = {}) {
+        const { is_granted }        = record;
+        const record_title_text     = this.getModalTitleValue(record);  
+
+        if(!record_title_text) { return }
+
+        const content_data_key      = is_granted ? "confirm_revoke_access_modal" : "confirm_grant_access_modal";
+        const on_confirm_click      = (event: MouseEvent) => { this.handleExecuteGrantOrRevokeEvent(event, record); }
+        
+        this.handleOpenConfirmModal(content_data_key, record_title_text, on_confirm_click);
+        return;
+    }
+
+    // Method to handle executing grant or revoke access event
+    public async handleExecuteGrantOrRevokeEvent (event: MouseEvent | InputEvent, record: Record<string, any> = {}) {
+        try {
+            const { record_id_key }     = this.controller;
+            const record_id             = record?.[record_id_key];
+            const event_name            = "on_record_updated";
+            const status_alert_payload  = { status: "error", message: "", options: this.status_alert_options };
+
+            if(!record_id) {
+                status_alert_payload.message = this.content_manager?.getAPIResponseValue("invalid_record_not_found");
+                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            }
+
+            if(!this.controller?.service) { return }
+
+            const { s_state, s_msg, logout }    = await this.controller.service?.executeChangeRecordState(record_id);
+            const formmated_status_msg          = this.content_manager?.getAPIResponseValue(s_msg);
+
+            if(logout) { return await this.controller.router.push("/logout"); }
+
+            if(!s_state) {
+                status_alert_payload.message = formmated_status_msg
+                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            }
+
+            status_alert_payload.status     = "success";
+            status_alert_payload.message    = formmated_status_msg
+            const event_payload             = { record_id, record: { is_granted: !record.is_granted } };
+
+            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit(event_name, event_payload);
+            return;
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to execute grant or revoke event`, { error })
+        }
+    }
 }
 
 export default SchemaAccessListViewEventHandler
