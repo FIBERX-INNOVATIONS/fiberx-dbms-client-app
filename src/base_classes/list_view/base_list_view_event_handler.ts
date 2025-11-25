@@ -651,25 +651,29 @@ class BaseListViewEventHandler extends BaseEventHandler {
         const query         = this.controller?.router?.currentRoute?.value?.query;
         const query_key     = query ? this.profile_types.find((profile_key: string) => { return query[profile_key] }) : null;
         const query_value   = query_key ? query?.[query_key] : null;
-        let record: Record<string, any>;
+        let record: Record<string, any> | null = null;
 
         if(!query || !query_value || !query_key) { return }
 
         const { record_id_key, records = [] } = this.controller;
 
-        record = records.find((obj: Record<string, any>) => { return obj?.[record_id_key].toString() === query_value.toString() })
+        record = records.find(
+            (obj: Record<string, any>) => { 
+                return obj?.[record_id_key].toString() === query_value.toString() 
+            }
+        )
 
         if(!record) {
             const { s_state, s_msg, s_data, logout }    = await this.controller.service?.executeFetchRecord?.(query_value);
 
             if(logout) { return await this.controller.router.push("/logout"); }
 
-            else if(!s_state) { return; }
+            else if(!s_state || !s_data) { return; }
 
             record = s_data
         }
 
-        this.handleOpenProfileModal(null, record);
+        if(record) { this.handleOpenProfileModal(null, record); }
 
     }
 

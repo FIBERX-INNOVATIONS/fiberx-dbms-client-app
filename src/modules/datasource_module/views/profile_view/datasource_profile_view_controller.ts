@@ -1,63 +1,27 @@
-import { ref, }                                 from "vue";
-import { Router, useRouter }                    from "vue-router";
-import { LOCAT_STORAGE_FIELDS }                 from "@/enums/constants.enums";
-import { EventBus }                             from "@/utils/gloabal_event_bus";
-import BaseController                           from "@ui/version_2/base_classes/base_controller";
-import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";
-import ContentManagerUtil                       from "@ui/version_2/utils/content_manager_util";
-import InputTransformerUtil                     from "@ui/version_2/utils/input_formatter_util";
-import DatasourceProfileViewPropsBuilder        from "./datasource_profile_view_props_builder";
+
+
+import BaseProfileViewController            from "@/base_classes/profile_view/base_profile_view_controller";
+import DatasourceProfileViewPropsBuilder    from "./datasource_profile_view_props_builder";
+import InputTransformerUtil                 from "@ui/version_2/utils/input_formatter_util";
 
 
 
-class DatasourceProfileViewController extends BaseController {
-    public router: Router;
-    private member_auth_manager: MemberAuthManagerUtil;
-    public content_field_key: string;
-    public content_manager: ContentManagerUtil;
-    public event_bus = EventBus;
-
+class DatasourceProfileViewController  extends BaseProfileViewController {
 
     constructor(props: Record<string, any> = {}) {
         super("datasource_profile_view", props);
 
-        this.router                     = useRouter();
-        this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
-        this.content_manager            = ContentManagerUtil.getInstance();
-        this.content_field_key          = "datasource_view_ui";
-    }
-
-    // Method to render member link
-    private renderMemberLink(member: any): string {
-        if (!member?.public_id) { return ""; }
-
-        const text = `(${member.public_id}) ${member.full_name}`;
-        const link = `/members?member_profile=${member.public_id}`;
-        return InputTransformerUtil.formatURLToAnchorHtml(text, link);
-    }
-
-    // Method to render register app link
-    private renderRegisteredAppLink(app: any): string {
-        if (!app?.public_id) { return ""; }
-
-        const text = `(${app.public_id}) ${app.name}`;
-        const link = `/registered-apps?registered_app_profile=${app.public_id}`;
-        return InputTransformerUtil.formatURLToAnchorHtml(text, link);
-    }
-
-    // Method to get ui state data
-    protected getUIStateData(): Record<string, any> {        
-        return {
-            profile_content_data: this.content_manager.get("content_resource.datasource_view_ui.profile_view_ui"),
-        } 
+        this.content_field_key  = "datasource_view_ui"
+        this.route_query_key    = "";
     }
 
     // Method to to get ui computed data
-    protected getUIComputedData(): Record<string, () => any> { 
+    protected getCustomChildComputedData(): Record<string, () => any> { 
         const { 
-            connection_info = {}, host = "", database_name, datasource_type = "",
-            created_at = null, updated_at = null, creator = {}, updator = {},
-            datasource_app = {}
+            connection_info = {}, 
+            host = "", 
+            database_name, 
+            datasource_type = "",
         } = this.props.record ?? {};
 
         return {
@@ -74,28 +38,8 @@ class DatasourceProfileViewController extends BaseController {
                         <span>${connection_info[connection_info_key]}</span>
                         `
                     }
-            )},
-
-            formatted_registered_app: () => { return this.renderRegisteredAppLink(datasource_app) },
-
-            formatted_created_at: () => { return InputTransformerUtil.formatReadableDateTime(created_at); },
-
-            formatted_updated_at: () => { return InputTransformerUtil.formatReadableDateTime(updated_at); },
-
-            formatted_creator: () => { return this.renderMemberLink(creator) },
-
-            formatted_updator: () => { return this.renderMemberLink(updator) },
+            )}
         }; 
-    }
-
-    // Method to handle on mount logic
-    protected async handleOnMountedLogic(): Promise<void> {
-        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
-        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
-
-        if(is_partially_authenticated) { await this.router.push("/two-factor-login") }
-
-        if(!is_fully_authenticated) { await this.router.push("/logout") }
     }
 }
 

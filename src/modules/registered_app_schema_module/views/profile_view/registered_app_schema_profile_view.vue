@@ -21,7 +21,7 @@
             <span :class="props.key_text_class_style">
                 {{ profile_content_data.registered_app_key_text }}:
             </span>
-            <span :class="props.value_text_class_style" v-html="formatted_schema_app"></span>
+            <span :class="props.value_text_class_style" v-html="formatted_registered_app"></span>
         </div>
 
         <!-- Datasource Info -->
@@ -117,7 +117,7 @@ const {
     formatted_updated_at,
     formatted_creator,
     formatted_updator,
-    formatted_schema_app,
+    formatted_registered_app,
     formatted_schema_datasource
 } = computed_refs;
 </script>
