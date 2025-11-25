@@ -2,7 +2,8 @@ import { Component } from "vue";
 import { 
     ColumnDefinitionInterface, 
     IndexDefinitionInterface, 
-    PermissionType
+    PermissionType,
+    SchemaAccessDefinitionInterface
 } from "./schema_type";
 
 export type AppEvents = {
@@ -16,6 +17,7 @@ export type AppEvents = {
     on_columns_array_updated: ColumnsArrayUpdatedPayloadInterface;
     on_indexes_array_updated: IndexesArrayUpdatedPayloadInterface;
     on_schema_permissions_updated: SchemaPermissionsUpdatedPayloadInterface;
+    on_schema_access_arrayupdated: SchemaAccessUpdatedPayloadInterface;
 };
 
 export interface StatusPayloadOptionsInterface { 
@@ -68,5 +70,9 @@ export interface IndexesArrayUpdatedPayloadInterface {
 
 export interface SchemaPermissionsUpdatedPayloadInterface {
     permissions_array: PermissionType[]
+}
+
+export interface SchemaAccessUpdatedPayloadInterface {
+    schema_access_array: SchemaAccessDefinitionInterface[]
 }
 

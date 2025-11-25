@@ -392,8 +392,7 @@ const ClassStyles = {
                     summary_wrapper_class_style: "cursor-pointer text-sm font-medium text-gray-700",
                     responsive_grid_2_class_style: "grid grid-cols-1 sm:grid-cols-2 gap-4",
                     responsive_grid_3_class_style: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-2",
-
-
+                    row_class_style: "flex items-center gap-2 w-full items-center justify-center"
                 }
             }
             

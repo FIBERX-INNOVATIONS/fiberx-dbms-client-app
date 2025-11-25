@@ -2,7 +2,8 @@ import {
     PermissionType, 
     SchemaDefinitionInterface, 
     IndexDefinitionInterface ,
-    ColumnDefinitionInterface
+    ColumnDefinitionInterface,
+    SchemaAccessDefinitionInterface
 } from "./schema_type";
 
 
@@ -70,11 +71,7 @@ export interface RegisteredAppSchemaFormDataInterface {
 export interface SchemaAccessFormInputInterface {
     csrf_token: string,
     app_public_id: string;
-    schemas: {
-        name: string;
-        schema_id: number;
-        permissions: PermissionType[];
-    }[];
+    schema_access_array: SchemaAccessDefinitionInterface[]
 }
 
 export interface SchemaAccessUpdateFormInputInterface {

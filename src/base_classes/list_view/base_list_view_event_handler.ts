@@ -7,6 +7,7 @@ import SVGIcons                         from "@ui/version_2/resources/svg_icon_r
 import BaseEventHandler                 from "@ui/version_2/base_classes/base_event_handler";
 import BaseListViewPropsBuilder         from "@/base_classes/list_view/base_list_view_props_builder";
 import ConfirmActionUI                  from "@ui/version_2/components/confirm_action_ui/confirm_action_ui.vue";
+import InputTransformerUtil             from "@ui/version_2/utils/input_formatter_util";
 import { debounceMethod, sleep }        from "@ui/version_2/utils/debounce_util";
 import { NON_INPUT_KEYS  }              from "@ui/version_2/enums/constants.enum";
 import { TableColumnConfigInterface }   from "@/types/table_column_config_type";
@@ -53,6 +54,9 @@ class BaseListViewEventHandler extends BaseEventHandler {
         this.status_alert_options           = { duration: 3000, close_modal: true };
         this.debouncedFetchRecords          = debounceMethod(this.handleFetchRecords.bind(this), 2000);
     }
+
+    // Method to get modal_title value
+    public getModalTitleValue (record: Record<string, any>): string | null { return record?.name ? `${record?.name ?? ""}`: null}
 
     // Method to update controller attributes
     public updateControllerAttributes (updated_attr: ListControllerAttributesInterface): boolean {
@@ -101,12 +105,12 @@ class BaseListViewEventHandler extends BaseEventHandler {
             this.controller.state_refs.order_direction.value = order_direction;
         }
 
-        if(keyword) {
+        if(typeof keyword === "string" || keyword === null) {
             this.controller.keyword = keyword
             this.controller.state_refs.keyword.value = keyword;
         }
 
-        if(app_id) {
+        if(typeof app_id === "string" || app_id === null) {
             this.controller.app_id = app_id
             this.controller.state_refs.app_id.value = keyword;
         }
@@ -237,8 +241,9 @@ class BaseListViewEventHandler extends BaseEventHandler {
         this.controller.state_refs.is_loading.value = true
         this.updateControllerAttributes({ keyword: new_keyword, current_page: 1 })
 
+
         // Case 3: only fetch when user types something or clears previous text
-        if (new_keyword.length > 0 || (is_deleting && previous_keyword.length > 0 && new_keyword.length === 0)) {
+        if (new_keyword.length > 0 || (previous_keyword.length > 0 && new_keyword.length === 0)) {
             await this.debouncedFetchRecords();
         }
     }
@@ -339,7 +344,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
         // 🟩 1. Add the new record to the top of the records array,
         //  Increment total_items (total count of records in database)
         // Recalculate total_pages based on size
-        const updated_records       = [record, ...records];
+        const updated_records       = Array.isArray(record) ? [...record, ...records] : [record, ...records];
         const updated_total_items   = (total_items ?? 0) + 1;
         const updated_total_pages   = Math.ceil(updated_total_items / size);
 
@@ -487,12 +492,13 @@ class BaseListViewEventHandler extends BaseEventHandler {
     // Method to handle delete confim
     public async handleConfirmDelete (event: Event | InputEvent, record: Record<string, any> = {}) {
         const { is_active, is_created, name } = record;
+        const record_title_value    = this.getModalTitleValue(record)
 
-        if(is_active || is_created) { return };
+        if(is_active || is_created || !record_title_value) { return };
 
-        const on_confirm_click = (event: MouseEvent) => { this.handleDeleteARecord(event, record); }
+        const on_confirm_click      = (event: MouseEvent) => { this.handleDeleteARecord(event, record); }
 
-        this.handleOpenConfirmModal("confirm_delete_modal", name, on_confirm_click);
+        this.handleOpenConfirmModal("confirm_delete_modal", record_title_value, on_confirm_click);
         return;
     }
 
@@ -502,7 +508,8 @@ class BaseListViewEventHandler extends BaseEventHandler {
             const { content_field_key } = this.controller;
             const content_data          = this.content_manager?.get(`content_resource.${content_field_key}.profile_view_ui`);
             const { title_text }        = content_data;
-            const title_content         = title_text.replace("%", record?.name);
+            const record_title_value    = this.getModalTitleValue(record)
+            const title_content         = title_text.replace("%", record_title_value);
             const component             = markRaw(this.profile_view_component);
             const component_props       = { record };
 
@@ -528,7 +535,8 @@ class BaseListViewEventHandler extends BaseEventHandler {
 
             const { new_app_title_text, edit_app_title_text }  = content_data;
 
-            const title_content     = record?.name ? edit_app_title_text.replace("%", record?.name) : new_app_title_text;
+            const record_title_value= this.getModalTitleValue(record);
+            const title_content     = record_title_value ? edit_app_title_text.replace("%", record_title_value) : new_app_title_text;
             const component         = markRaw(this.form_view_component);
             const component_props   = { record };
 

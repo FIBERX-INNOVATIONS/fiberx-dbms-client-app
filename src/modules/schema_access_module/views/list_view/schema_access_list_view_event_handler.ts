@@ -6,6 +6,7 @@ import SchemaAccessProfileView                  from "../profile_view/schema_acc
 import RegisteredAppAPIService                  from "@/api_services/registered_app_api_service";
 import { BaseControllerInterface }              from "@ui/version_2/types/component_type";
 import { RequestQueryInputInterface }           from "@/types/api_service_type";
+import InputTransformerUtil from "@ui/version_2/utils/input_formatter_util";
 
 class SchemaAccessListViewEventHandler extends BaseListViewEventHandler {
     public registered_app_api_service: RegisteredAppAPIService;
@@ -13,8 +14,15 @@ class SchemaAccessListViewEventHandler extends BaseListViewEventHandler {
     constructor(controller: BaseControllerInterface) {
         super(controller, SchemaAccessTableColumnConfig, SchemaAccessProfileView, SchemaAccessFormView);
 
-        this.form_modal_config              = { position: "center", width_class: "w-lg" };
+        this.form_modal_config              = { position: "center", width_class: "w-[60%]" };
         this.registered_app_api_service     = new RegisteredAppAPIService();
+    }
+
+    // Method to get modal_title value
+    public getModalTitleValue (record: Record<string, any>): string | null  { 
+        if(!record?.registered_app && !record?.schema) { return null }
+
+        return `${record?.registered_app?.name ?? ""} - ${InputTransformerUtil.spaceCamelCase(record?.schema?.name ?? "")}`
     }
 
      // Method to fetch preview registered apps

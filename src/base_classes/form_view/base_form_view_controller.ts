@@ -13,6 +13,7 @@ import InputGroupUI                             from "@ui/version_2/components/I
 import ToastAlertUI                             from "@ui/version_2/components/AlertUI/ToastAlertUI/toast_alert_ui.vue";
 import ButtonUI                                 from "@ui/version_2/components/ButtonUI/button_ui.vue";
 import SchemaDesignerUI                         from "@/ui_components/schema_designer_ui/schema_designer_ui.vue";
+import SchemaAccessDesignerUI                   from "@/ui_components/schema_access_designer_ui/schema_access_designer_ui.vue";      
 
 import { 
     ButtonUIPropsInterface, 
@@ -46,7 +47,7 @@ class BaseFormViewController extends BaseController {
     protected getFormUIStateData(): Record<string, any> { return {} };
 
     protected getUIComponents(): Record<string, any> {
-        return { InputGroupUI, ToastAlertUI, ButtonUI, SchemaDesignerUI };
+        return { InputGroupUI, ToastAlertUI, ButtonUI, SchemaDesignerUI, SchemaAccessDesignerUI };
     }
 
     // Method to get ui state data

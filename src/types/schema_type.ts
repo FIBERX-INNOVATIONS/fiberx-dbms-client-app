@@ -53,3 +53,9 @@ export interface SchemaDefinitionInterface {
     indexes?: IndexDefinitionInterface[];
     status?: "PENDING" | "ACTIVE" | "DEPRECATED" | string;
 }
+
+export interface SchemaAccessDefinitionInterface {
+    schema_id: number;
+    schema_name: string;
+    permissions: PermissionType[]
+}
