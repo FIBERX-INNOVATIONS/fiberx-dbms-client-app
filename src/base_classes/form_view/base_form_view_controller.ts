@@ -1,6 +1,6 @@
 import { ref, }                                 from "vue";
 import { Router, useRouter }                    from "vue-router";
-import { CSRF_TOKEN_FOR, LOCAT_STORAGE_FIELDS } from "@/enums/constants.enums";
+import { CSRF_TOKEN_FOR, LOCAL_STORAGE_FIELDS } from "@/enums/constants.enums";
 import { EventBus }                             from "@/utils/gloabal_event_bus";
 import BaseController                           from "@ui/version_2/base_classes/base_controller";
 import BaseFormViewPropsBuilder                 from "@/base_classes/form_view/base_form_view_props_builder";
@@ -70,8 +70,8 @@ class BaseFormViewController extends BaseController {
 
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
-        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
-        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
+        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
+        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
 
         if(is_partially_authenticated) { await this.router.push("/two-factor-login") }
 

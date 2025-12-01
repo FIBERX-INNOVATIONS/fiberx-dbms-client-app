@@ -7,7 +7,7 @@ import {
   RouteMeta
 } from "vue-router";
 
-import { LOCAT_STORAGE_FIELDS }     from "@/enums/constants.enums";
+import { LOCAL_STORAGE_FIELDS }     from "@/enums/constants.enums";
 import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manager_util";
 import GlobalVariableManager        from "@ui/version_2/utils/global_variable_manager_util";
 
@@ -63,9 +63,9 @@ class RouterManager {
                 requires_partial_auth = false
             } = (route.meta || {}) as RouteMeta;
 
-            const has_permission                = this.member_auth_manager.canMemberAccess(permission_name, LOCAT_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY);
-            const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
-            const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
+            const has_permission                = this.member_auth_manager.canMemberAccess(permission_name, LOCAL_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY);
+            const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
+            const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
             const is_not_authenticated          = (is_fully_authenticated === false && is_partially_authenticated === false);
 
             // 🚦 Handle no-auth routes

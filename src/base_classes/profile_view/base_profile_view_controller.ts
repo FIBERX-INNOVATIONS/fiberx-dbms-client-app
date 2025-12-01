@@ -4,7 +4,7 @@ import {
     useRouter, 
     useRoute, 
     RouteLocationNormalizedGeneric }            from "vue-router";
-import { LOCAT_STORAGE_FIELDS }                 from "@/enums/constants.enums";
+import { LOCAL_STORAGE_FIELDS }                 from "@/enums/constants.enums";
 import { EventBus }                             from "@/utils/gloabal_event_bus";
 import BaseController                           from "@ui/version_2/base_classes/base_controller";
 import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";
@@ -125,8 +125,8 @@ class BaseProfileViewController extends BaseController {
 
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
-        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
-        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
+        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
+        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
 
         if(is_partially_authenticated) { await this.router.push("/two-factor-login") }
 

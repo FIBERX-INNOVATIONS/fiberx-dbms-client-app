@@ -10,7 +10,7 @@ import AppRootComponent             from "@/modules/app_root_module/app_root.vue
 import RouterManager                from "@/router";
 
 import { ENVInterface }             from "@ui/version_2/types/env_type";
-import { LOCAT_STORAGE_FIELDS }     from "@/enums/constants.enums";
+import { LOCAL_STORAGE_FIELDS }     from "@/enums/constants.enums";
 
 
 
@@ -78,7 +78,7 @@ class FiberxDbmsClientApp {
 
     // Method to register local storage keys
     private registerLocalStorageKeys(): void {
-        Object.entries(LOCAT_STORAGE_FIELDS).forEach(([key, value]) => {
+        Object.entries(LOCAL_STORAGE_FIELDS).forEach(([key, value]) => {
             if (!key || !value) {
                 this.logger.warn(`⚠️ Skipping invalid entry: key="${key}", value="${value}"`);
                 return;

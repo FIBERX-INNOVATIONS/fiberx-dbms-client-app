@@ -7,7 +7,7 @@ import MemberAuthManagerUtil        from "@ui/version_2/utils/member_auth_manage
 
 import { 
     CSRF_TOKEN_FOR ,
-    LOCAT_STORAGE_FIELDS
+    LOCAL_STORAGE_FIELDS
 } from "@/enums/constants.enums";
 
 

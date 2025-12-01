@@ -1,6 +1,6 @@
 import { ref, }                         from "vue";
 import { Router, useRouter }            from "vue-router";
-import { LOCAT_STORAGE_FIELDS }         from "@/enums/constants.enums";
+import { LOCAL_STORAGE_FIELDS }         from "@/enums/constants.enums";
 import DashbaordBaseViewUIService         from "@/modules/dashboard_module/base_logic/dashboard_base_view_ui_service";
 import DashboardBaseViewPropsBuilder    from "./dashboard_base_view_props_builder";
 import DashboardBaseViewEventHandler    from "./dashboard_base_view_event_handler";
@@ -45,7 +45,7 @@ class DashboardBaseViewController extends BaseController {
 
     // Method to get ui state data
     protected getUIStateData(): Record<string, any> {  
-        const current_member = this.member_auth_manager.getCurrentMember(LOCAT_STORAGE_FIELDS.MEMBER_KEY);       
+        const current_member = this.member_auth_manager.getCurrentMember(LOCAL_STORAGE_FIELDS.MEMBER_KEY);       
         return {
             base_class_styles: DashboardBaseViewPropsBuilder.getBaseClassStyle(),
 
@@ -85,8 +85,8 @@ class DashboardBaseViewController extends BaseController {
 
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
-        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
-        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
+        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
+        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
 
         if(is_partially_authenticated) { await this.router.push("/two-factor-login") }
 

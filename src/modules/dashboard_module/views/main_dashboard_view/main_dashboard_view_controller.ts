@@ -1,6 +1,6 @@
 import { ref, }                         from "vue";
 import { Router, useRouter }            from "vue-router";
-import { LOCAT_STORAGE_FIELDS }          from "@/enums/constants.enums";
+import { LOCAL_STORAGE_FIELDS }          from "@/enums/constants.enums";
 import BaseListViewPropsBuilder         from "@/base_classes/list_view/base_list_view_props_builder";
 import BaseController                   from "@ui/version_2/base_classes/base_controller";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
@@ -43,8 +43,8 @@ class MainDashboardViewController extends BaseController {
 
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
-        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
-        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAT_STORAGE_FIELDS.MEMBER_KEY);
+        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
+        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
 
         if(is_partially_authenticated) { await this.router.push("/two-factor-login") }
 

@@ -6,7 +6,7 @@ import SVGIcons                         from "@ui/version_2/resources/svg_icon_r
 
 import { NavLinkUIPropsInterface }      from "@ui/version_2/types/props_builder_type";     
 import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type";
-import { LOCAT_STORAGE_FIELDS }         from "@/enums/constants.enums";
+import { LOCAL_STORAGE_FIELDS }         from "@/enums/constants.enums";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
 
 
@@ -38,7 +38,7 @@ class DatasourceMenuListConfig {
         const content_key               = content_field_key ? `content_resource.${content_field_key}.bulk_action_menu` : "content_resource.bulk_action_menu"
         const content_data              = content_manager?.get(content_key) ?? {};
         const member_authenticator      = MemberAuthManagerUtil.getInstance();
-        const can_member_bulk_delete    = member_authenticator.canMemberAccess("bulk_delete_datasource", LOCAT_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY)
+        const can_member_bulk_delete    = member_authenticator.canMemberAccess("bulk_delete_datasource", LOCAL_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY)
 
         const menu_list: NavLinkUIPropsInterface[] = [];
 
@@ -65,7 +65,7 @@ class DatasourceMenuListConfig {
         const content_key               = content_field_key ? `content_resource.${content_field_key}.data_table.action_menu` : "content_resource.data_table.action_menu"
         const content_data              = content_manager?.get(content_key) ?? {};
         const member_authenticator      = MemberAuthManagerUtil.getInstance();
-        const member_perm_key           = LOCAT_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY;
+        const member_perm_key           = LOCAL_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY;
 
         const { is_active, is_created = false } = record;
 

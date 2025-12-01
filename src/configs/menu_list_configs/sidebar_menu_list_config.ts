@@ -5,7 +5,7 @@ import ContentManagerUtil               from "@ui/version_2/utils/content_manage
 import SVGIcons                         from "@ui/version_2/resources/svg_icon_resource";
 import { NavLinkUIPropsInterface }      from "@ui/version_2/types/props_builder_type";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
-import { LOCAT_STORAGE_FIELDS }          from "@/enums/constants.enums";
+import { LOCAL_STORAGE_FIELDS }          from "@/enums/constants.enums";
 
 
 class SidebarMenuListConfig {
@@ -51,7 +51,7 @@ class SidebarMenuListConfig {
         for (const menu of menu_list) {
             const { menu_link, svg_icon, menu_text, menu_id, menu_permission_text = "" } = menu;
 
-            const member_key                = LOCAT_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY;
+            const member_key                = LOCAL_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY;
             const can_member_access_menu    = member_auth_manager.canMemberAccess(menu_permission_text, member_key)
 
             if(menu_permission_text && !can_member_access_menu) { continue }

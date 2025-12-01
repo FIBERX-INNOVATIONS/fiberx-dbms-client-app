@@ -1,7 +1,7 @@
 
 import { markRaw, reactive  }           from "vue";
 import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type";
-import { LOCAT_STORAGE_FIELDS }         from "@/enums/constants.enums";
+import { LOCAL_STORAGE_FIELDS }         from "@/enums/constants.enums";
 import ClassStyles                      from "@/enums/class_styles.enums";
 import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
 import InputUI                          from "@ui/version_2/components/InputUI/input_ui.vue";
@@ -41,7 +41,7 @@ class DatasourceTableColumnConfig {
         const member_authenticator      = MemberAuthManagerUtil.getInstance();
         const content_data              = content_manager?.get(`content_resource.${content_field_key}.data_table`) ?? {};
         const on_sort                   = event_handler?.handleOnColumnSort?.bind(event_handler);
-        const member_perm_key           = LOCAT_STORAGE_FIELDS?.MEMBER_PERMISSIONS_KEY;
+        const member_perm_key           = LOCAL_STORAGE_FIELDS?.MEMBER_PERMISSIONS_KEY;
 
         const { 
             sortable_cell_wrapper_class_style, 
