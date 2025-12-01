@@ -28,6 +28,7 @@ export interface RequestQueryInputInterface {
     keyword?: string | null;
     preview_only?: string | boolean;
     app_id?: string;
+    hard_reset?: string;
 }
 
 export interface RegisteredAppFormDataInterface {
@@ -78,4 +79,17 @@ export interface SchemaAccessUpdateFormInputInterface {
     csrf_token: string;
     schema_name: string;
     permissions: PermissionType[];
+}
+
+export interface MemberFormInputInterface {
+  csrf_token: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  role_name: string;
+  phone?: string;
+  dob?: string;
+  gender?: string;
+  profile_photo_link?: string;
+  password?: string;
 }
