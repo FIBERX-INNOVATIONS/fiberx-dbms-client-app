@@ -31,7 +31,7 @@ class MemberTableColumnConfig {
     private static getIsActiveUIProps (event_handler: BaseEventHandlerInterface, record: Record<string, any>): InputUIPropsInterface {
         const { public_id, member_auth = {} } = record;
 
-        const { is_active = false } = member_auth
+        const is_active             = ("is_active" in record) ? record?.is_active : ("is_active") in member_auth ? member_auth.is_active : false;
         const is_active_boolean     = is_active ? true : false;
         const switch_props          = BaseTableColumnConfig.geIsActiveSwitchProps(public_id.toString(), is_active_boolean);
         switch_props.on_click       = event_handler.handleOnRecordChangeState.bind(event_handler);
@@ -42,8 +42,8 @@ class MemberTableColumnConfig {
     // Method to format role name
     private static formatRoleName (role_name: string, record?: Record<string, any>): string { 
         const content_manager           = ContentManagerUtil.getInstance();
-        const content_data              = content_manager?.get(`content_resource.member_view_ui.form_view_ui`) ?? {};
-        const role_options_list         = content_data?.fieldset?.role_options_list || [];
+        const content_data              = content_manager?.get(`content_resource.member_view_ui.data_table`) ?? {};
+        const role_options_list         = content_data?.role_options_list || [];
         const valid_role                = role_options_list.find((role_obj: { value: string, label_text: string }) => { return role_name === role_obj.value });
 
         if (!valid_role) { return "" }
@@ -71,7 +71,7 @@ class MemberTableColumnConfig {
             sortable_icon_class_style 
         } = class_styles
 
-        const { name_text, email_text, role_text, phone_text, is_active_text, created_at_text } = content_data;
+        const { name_text, username_text, email_text, role_text, phone_text, is_active_text, created_at_text } = content_data;
 
         const is_active_column_render =  {
             label_content: is_active_text,
@@ -104,6 +104,19 @@ class MemberTableColumnConfig {
                 col_class_style: "",
             },
             {
+                label_content: username_text,
+                sortable: true,
+                sort_direction: "none" as SortDirectionType,
+                on_sort,
+                content_type: "formatted" as const,
+                formatter: (username: string, record: Record<string, any> = {}) => { return InputTransformerUtil.formatURLToAnchorHtml(username, `/members?member_profile=${record.public_id.toLowerCase()}`); },
+                field_key: "username",
+                wrapper_class_style: sortable_cell_wrapper_class_style,
+                icon_class_style: sortable_icon_class_style,
+                content_wrapper_class_style: sortable_cell_content_wrapper_class_style,
+                col_class_style: "",
+            },
+            {
                 label_content: email_text,
                 sortable: true,
                 sort_direction: "none" as SortDirectionType,
@@ -123,7 +136,7 @@ class MemberTableColumnConfig {
                 on_sort,
                 content_type: "formatted" as const,
                 formatter: this.formatRoleName,
-                field_key: "email",
+                field_key: "role_name",
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
                 content_wrapper_class_style: sortable_cell_content_wrapper_class_style,
@@ -135,7 +148,7 @@ class MemberTableColumnConfig {
                 sort_direction: "none" as SortDirectionType,
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (phone_number: string, record?: Record<string, any>) => { return InputTransformerUtil.formatURLToAnchorHtml(phone_number, `tel:${phone_number}`); },
+                formatter: (phone_number: string, record?: Record<string, any>) => { return phone_number ? InputTransformerUtil.formatURLToAnchorHtml(phone_number, `tel:${phone_number}`): "N/A"; },
                 field_key: "phone",
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,

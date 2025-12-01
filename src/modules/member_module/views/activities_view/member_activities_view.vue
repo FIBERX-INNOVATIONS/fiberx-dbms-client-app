@@ -1,0 +1,3 @@
+<template>
+    Activities view
+</template>
