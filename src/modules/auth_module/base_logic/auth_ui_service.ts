@@ -60,6 +60,8 @@ class AuthUIService extends BaseService {
             this.logger.debug("Refreshing CSRF Token Now");
             await this.getFormCsrfToken(token_for);
         }, delay);
+
+        console.log(`scheduled fetch for the next ${delay} s`)
     }
 
     public deleteMemberdata(): boolean {
@@ -104,7 +106,7 @@ class AuthUIService extends BaseService {
         if (this.csrf_refresh_timer) {
             clearTimeout(this.csrf_refresh_timer);
             this.csrf_refresh_timer = null;
-            this.logger.info(`CSF Refresh timer has been cancelled`)
+            console.log(`CSF Refresh timer has been cancelled`)
         }
     }
 

@@ -35,7 +35,6 @@ class SchemaAccessSectionUIEventHandler extends BaseEventHandler {
             schema_access["schema_name"]    = schema?.name;
         }
 
-        console.log({ combined_form_data })
         this.form_data = combined_form_data;
         this.controller.state_refs.schema_access_array.value = [...combined_form_data.schema_access_array];
     }

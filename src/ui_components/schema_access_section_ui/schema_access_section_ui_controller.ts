@@ -30,11 +30,6 @@ class SchemaAccessSectionUIController extends BaseController {
         const is_edit_mode = (this.props.app_public_id && this.props?.schema_access_definition && this.props?.schema_access_definition?.length ? true : false);
 
         this.event_handler.form_data = { schema_access_array };
-        console.log({
-            schema_access_array,
-            props_schema_access_array: this.props.schema_access_definition,
-            form_data_schema_access_array: this.event_handler.form_data
-        });
 
         return {
             is_edit_mode: ref(is_edit_mode),
