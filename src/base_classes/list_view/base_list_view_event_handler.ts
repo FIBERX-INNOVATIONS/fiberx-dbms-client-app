@@ -529,6 +529,37 @@ class BaseListViewEventHandler extends BaseEventHandler {
 
     }
 
+    // Method to handle opening a modal to display a component
+    public async handleOpenModalForCustomView (
+        event: Event | InputEvent | null, 
+        record: Record<string, any>,
+        custom_view_content_field_key: string,
+        custom_view_component: Component,
+        props_obj: Record<string, any> = {}
+    ) {
+        try {
+            const { content_field_key } = this.controller;
+            const content_data          = this.content_manager?.get(`content_resource.${content_field_key}.${custom_view_content_field_key}`);
+            const { title_text }        = content_data;
+            const record_title_value    = this.getModalTitleValue(record)
+            const title_content         = title_text.replace("%", record_title_value);
+            const component             = markRaw(custom_view_component);
+            const component_props       = { record, ...props_obj };
+
+            const open_modal_payload: OpenNewModalPayloadInterface = {
+                position: "center", width_class: "w-lg", title_content,
+                component, component_props
+            }
+            this.controller.event_bus.emit("open_new_modal", open_modal_payload);
+        }
+        catch(error: unknown) {
+            const formatted_api_msg     = this.content_manager?.getAPIResponseValue("app_record_not_found");
+            const status_alert_payload  = { status: "error", message: formatted_api_msg, options: this.status_alert_options };
+            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+        }
+
+    }
+
     // Method to handle opening registered app form modal
     public async handleOpenFormModal (event: Event | InputEvent, record: Record<string, any> = {}) {
         try {

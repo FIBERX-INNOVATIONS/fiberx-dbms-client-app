@@ -19,7 +19,7 @@
         <!-- App Info -->
         <div :class="props.info_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data.registered_app_key_text }}:
+                {{ content_data.registered_app_key_text }}:
             </span>
             <span :class="props.value_text_class_style" v-html="formatted_registered_app"></span>
         </div>

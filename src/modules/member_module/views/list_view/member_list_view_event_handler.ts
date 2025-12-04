@@ -16,18 +16,6 @@ class MemberListViewEventHandler extends BaseListViewEventHandler {
     public getModalTitleValue (record: Record<string, any>): string | null { return record?.full_name ? `${record?.full_name ?? ""}`: null}
 
     // Method to handle delete confim
-    public async handleViewMember2FAInfo (event: Event | InputEvent, record: Record<string, any> = {}) {
-        
-        return;
-    }
-
-    // Method to handle delete confim
-    public async handleViewMemberActivities (event: Event | InputEvent, record: Record<string, any> = {}) {
-
-        return;
-    }
-
-    // Method to handle delete confim
     public async handleConfirmResetMember2FA (event: Event | InputEvent, record: Record<string, any> = {}) {
         const { full_name } = record;
 

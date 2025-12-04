@@ -9,6 +9,8 @@ import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type
 import { LOCAL_STORAGE_FIELDS }         from "@/enums/constants.enums";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
 
+import TwoFactorInfoView                from "@/modules/member_module/views/two_factor_info_view/two_factor_info_view.vue";
+
 
 class MemberMenuListConfig {
     public readonly name = "member_menu_list_config";
@@ -70,6 +72,7 @@ class MemberMenuListConfig {
         const current_member            = member_authenticator.getCurrentMember(current_member_key);
         const is_super_admin            = current_member?.role_name === "SuperAdmin";
         const is_my_profile             = record?.public_id === current_member?.public_id;
+        const is_active                 = record?.is_active ?? record?.member_auth.is_active;
 
         const { 
             view_menu_text, view_menu_svg_icon, select_menu_text, select_menu_svg_icon,
@@ -88,20 +91,20 @@ class MemberMenuListConfig {
         const menu_list: NavLinkUIPropsInterface[] = [view_menu, select_menu];
 
         if(member_authenticator.canMemberAccess("view_member_two_factor_info", member_perm_key) && (is_super_admin)) {
-            const view_2fa_menu_on_click  = (event: MouseEvent) => { return event_handler.handleViewMember2FAInfo.bind(event_handler)(event, record);}
+            const view_2fa_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOpenModalForCustomView.bind(event_handler)(event, record, "two_factor_info_view", TwoFactorInfoView); }
             const view_2fa_menu           = this.buildMenuItem(`ViewMember2FAInfo-${record_index}`, view_2fa_menu_text, "", view_2fa_menu_svg_icon, view_2fa_menu_on_click);
 
             menu_list.push(view_2fa_menu)
         }
 
-        if(member_authenticator.canMemberAccess("view_member_two_factor_info", member_perm_key) && (is_super_admin && !is_my_profile)) {
-            const reset_2fa_menu_on_click  = (event: MouseEvent) => { return event_handler.handleConfirmResetMember2FA.bind(event_handler)(event, record);}
+        if(member_authenticator.canMemberAccess("view_member_two_factor_info", member_perm_key) && (!is_active) && (is_super_admin && !is_my_profile)) {
+            const reset_2fa_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOpenModalForCustomView.bind(event_handler)(event, record, "two_factor_info_view", TwoFactorInfoView, { hard_reset: true } );}
             const reset_2fa_menu           = this.buildMenuItem(`ViewMember2FAInfo-${record_index}`, reset_2fa_menu_text, "", reset_2fa_menu_svg_icon, reset_2fa_menu_on_click);
 
             menu_list.push(reset_2fa_menu)
         }
 
-        if(member_authenticator.canMemberAccess("view_member_activities", member_perm_key) && (is_super_admin || is_my_profile)) {
+        if(member_authenticator.canMemberAccess("view_member_activities", member_perm_key)  && (is_super_admin || is_my_profile)) {
             const view_activities_menu_on_click  = (event: MouseEvent) => { return event_handler.handleViewMemberActivities.bind(event_handler)(event, record);}
             const view_activities_menu           = this.buildMenuItem(`ViewMemberActivities-${record_index}`, view_activities_menu_text, "", view_activities_menu_svg_icon, view_activities_menu_on_click);
 
@@ -115,7 +118,7 @@ class MemberMenuListConfig {
             menu_list.push(edit_menu)
         }
 
-        if(member_authenticator.canMemberAccess("delete_member_profile_record", member_perm_key) && (is_super_admin && !is_my_profile)) {
+        if(member_authenticator.canMemberAccess("delete_member_profile_record", member_perm_key) && (!is_active) && (is_super_admin && !is_my_profile)) {
             const delete_menu_on_click  = (event: MouseEvent) => { return event_handler.handleConfirmDelete.bind(event_handler)(event, record); }
             const delete_menu           = this.buildMenuItem(`DeleteMember-${record_index}`, delete_menu_text, "", delete_menu_svg_icon, delete_menu_on_click);
 

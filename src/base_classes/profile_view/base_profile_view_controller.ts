@@ -21,12 +21,13 @@ class BaseProfileViewController extends BaseController {
     public event_bus = EventBus;
     public content_field_key: string = "";
     public route_query_key: string = "schema_profile";
+    public content_component_field_key: string =  "profile_view_ui";
 
     constructor(component_name: string, props: Record<string, any> = {}) {
         super(component_name, props);
 
         this.router                     = useRouter();
-         this.route                     = useRoute();
+        this.route                     = useRoute();
         this.member_auth_manager        = MemberAuthManagerUtil.getInstance();
         this.content_manager            = ContentManagerUtil.getInstance();
     }
@@ -75,7 +76,7 @@ class BaseProfileViewController extends BaseController {
     protected getUIStateData(): Record<string, any> {      
         const custom_child_state_data = this.getCustomChildUIStateData();
         return {
-            profile_content_data: this.content_manager.get(`content_resource.${this.content_field_key}.profile_view_ui`),
+            content_data: this.content_manager.get(`content_resource.${this.content_field_key}.${this.content_component_field_key}`),
 
             ...custom_child_state_data
         } 
@@ -123,6 +124,9 @@ class BaseProfileViewController extends BaseController {
         }; 
     }
 
+    // Method to handle child mounted logic
+    protected async getHandleChildMountedLogic (): Promise<void>  { }
+
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
         const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
@@ -131,6 +135,8 @@ class BaseProfileViewController extends BaseController {
         if(is_partially_authenticated) { await this.router.push("/two-factor-login") }
 
         if(!is_fully_authenticated) { await this.router.push("/logout") }
+
+        this.getHandleChildMountedLogic();
     }
 
     // Method to handle before on mount logic
