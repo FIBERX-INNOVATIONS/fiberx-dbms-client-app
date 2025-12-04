@@ -12,6 +12,9 @@ class MemberListViewEventHandler extends BaseListViewEventHandler {
         super(controller, MemberTableColumnConfig, MemberProfileView, MemberFormView);
     }
 
+     // Method to get modal_title value
+    public getModalTitleValue (record: Record<string, any>): string | null { return record?.full_name ? `${record?.full_name ?? ""}`: null}
+
     // Method to handle delete confim
     public async handleViewMember2FAInfo (event: Event | InputEvent, record: Record<string, any> = {}) {
         

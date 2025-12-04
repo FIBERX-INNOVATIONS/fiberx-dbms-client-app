@@ -311,7 +311,7 @@ const ClassStyles = {
 
         key_text_class_style: "text-center text-xs font-black uppercase",
 
-        value_text_class_style: "text-center text-md font-bold",
+        value_text_class_style: "text-center text-sm font-semibold",
 
         underline_value_text_class_style: "text-center text-md font-bold underline",
 

@@ -99,6 +99,9 @@ class BaseListViewController extends BaseController {
             },
             records: (new_val) => {
                 this.event_handler?.updateTableBodyProps?.(new_val);
+            },
+            route: async (new_val, old_val) => {
+                await this.event_handler.handleListViewProfileModalRouting();
             }
         };
     }
@@ -183,7 +186,7 @@ class BaseListViewController extends BaseController {
 
         await this.event_handler.handleFetchRecords();
 
-        await this.event_handler.handleListViewProfileModalRouting()
+        await this.event_handler.handleListViewProfileModalRouting();
 
         this.event_bus.on("on_new_record_created", async (payload: NewRecordPayloadInterface) => {
             this.event_handler.handleOnNewRecordCreated(payload);
