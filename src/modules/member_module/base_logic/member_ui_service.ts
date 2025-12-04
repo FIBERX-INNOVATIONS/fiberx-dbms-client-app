@@ -110,9 +110,9 @@ class MemberUIService extends BaseService {
     }
 
     // Method to execute fetch record activities
-    public async executeFetchMemberActivities(record_id: string): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeFetchMemberActivities(record_id: string, params: RequestQueryInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
-            const { status, msg, data: response_data } = await this.api_service.getMemberProfileActivities(record_id);
+            const { status, msg, data: response_data } = await this.api_service.getMemberProfileActivities(record_id, params);
 
             if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
 

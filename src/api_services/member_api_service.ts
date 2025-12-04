@@ -36,9 +36,9 @@ class MemberAPIService extends BaseAPIService {
     }
 
     // Service method to query Fetch member Activities endpoint
-    public async getMemberProfileActivities (member_public_id: string): Promise<APIResponseInterface<any>> {
+    public async getMemberProfileActivities (member_public_id: string, params: RequestQueryInputInterface): Promise<APIResponseInterface<any>> {
         const url       = `/member/${member_public_id}/activities`;
-        const config    = { url, method: "GET" };
+        const config    = { url, params, method: "GET" };
 
         return await this.queryAPI(config);
     }

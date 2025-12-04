@@ -255,7 +255,7 @@ const ClassStyles = {
         grid_2_wrapper_class_style: "relative w-full md:items-end items-center flex flex-col px-2 justify-center",
         data_table_section_wrapper_class_style: "w-full py-4 grid grid-cols-1 relative",
         data_table_class_style: "w-full border-separate border-spacing-y-2",
-        lg_table_wrapper_class_style: "border rounded-md border-ld overflow-x-auto bg-gray-200 pb-[150px]",
+        lg_table_wrapper_class_style: "border rounded-md border-ld overflow-x-auto bg-gray-200 pb-[150px] min-h-[700px]",
 
         dropdown_menu_list_ui: {
             wrapper_class_style: "hidden divide-y divide-gray-100 w-[170px] bg-white shadow-xl border border-gray-200 z-[10] p-0 min-h-[114px] m-0 absolute top-10 rounded-2xl transform transition-all duration-300 ease-in-out origin-top",

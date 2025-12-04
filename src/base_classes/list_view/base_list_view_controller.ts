@@ -112,13 +112,13 @@ class BaseListViewController extends BaseController {
         return {
             current_page: ref(this.current_page), 
 
-            size: (this.size), 
+            size: ref(this.size), 
 
             keyword: ref(this.keyword),
             
             total_pages: ref(this.total_pages),  
             
-            total_items: (this.total_items), 
+            total_items: ref (this.total_items), 
             
             order_by: ref(this.order_by), 
             

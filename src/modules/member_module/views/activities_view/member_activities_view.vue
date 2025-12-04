@@ -1,3 +1,0 @@
-<template>
-    Activities view
-</template>

@@ -63,9 +63,13 @@ class BaseListViewPropsBuilder {
     }
 
     // Method to get page search input group props
-    public static getPageSearchInputGroupProps (content_field_key: string, event_handler: BaseEventHandlerInterface,): SearchFieldUIPropsInterface {
+    public static getPageSearchInputGroupProps (
+        content_field_key: string, 
+        event_handler: BaseEventHandlerInterface, 
+        component_field_key: string = "search_field"
+    ): SearchFieldUIPropsInterface {
         const content_manager           = ContentManagerUtil.getInstance();
-        const content_data              = content_manager?.get(`content_resource.${content_field_key}.search_field`) ?? {};
+        const content_data              = content_manager?.get(`content_resource.${content_field_key}.${component_field_key}`) ?? {};
         const class_styles              = ClassStyles.search_field_ui;
         const input_ui_class_styles     = ClassStyles.input_ui;
         const search_label_text         = content_data?.search_label_text ?? "";
@@ -85,9 +89,9 @@ class BaseListViewPropsBuilder {
         const loader_content_text       = RenderHtmlUtil.renderLoaderHtml({});
         const content_text              = RenderHtmlUtil.renderHtml({ icon: SVGIcons.search_svg_icon, icon_class_style })
         const on_change                 = event_handler.handleOnSearchInput.bind(event_handler);
-        const input_config              = { id: "RegisteredAppSearchInput", type: "text", value: "", placeholder: search_placeholder_text, input_class_style, on_change };
+        const input_config              = { id: `${content_field_key}_search_input`, type: "text", value: "", placeholder: search_placeholder_text, input_class_style, on_change };
 
-        const btn_config                = { id: "RegisteredAppSearchBtn", type: button_type, btn_class_style, clicked: false, show_loader: false, loader_content_text, content_text, on_click: null };
+        const btn_config                = { id: `${content_field_key}_search_btn`, type: button_type, btn_class_style, clicked: false, show_loader: false, loader_content_text, content_text, on_click: null };
 
         return SearchFieldUIPropsBuilder.buildSearchFieldProps(ui_wrapper_class_styles, label_config, input_config, btn_config);
     }
@@ -287,10 +291,11 @@ class BaseListViewPropsBuilder {
     public static getPaginationProps (
         event_handler: BaseEventHandlerInterface,
         content_field_key: string,
+        component_field_key: string = "pagination_result"
     ): PaginationUIPropsInterface {
         const class_styles              = ClassStyles?.list_view_ui?.pagination_ui;
         const content_manager           = ContentManagerUtil.getInstance();
-        const content_data              = content_manager?.get(`content_resource.${content_field_key}.pagination_result`) ?? {};
+        const content_data              = content_manager?.get(`content_resource.${content_field_key}.${component_field_key}`) ?? {};
 
         const { prev_btn_text, next_btn_text, page_text }   = content_data
 
@@ -300,7 +305,7 @@ class BaseListViewPropsBuilder {
             next_btn_content_class_style,
         } = class_styles;
 
-        const select_id                 = "registered_app_pagination_select"
+        const select_id                 = `${content_field_key}.${component_field_key}`;
         const loader_content_text       = RenderHtmlUtil.renderLoaderHtml({});
         const prev_btn_content          = RenderHtmlUtil.renderHtml({ text: prev_btn_text, icon: SVGIcons.less_than_caret_svg_icon, icon_class_style: prev_btn_content_class_style })
         const next_btn_content          = RenderHtmlUtil.renderHtml({ text: next_btn_text, icon: SVGIcons.greater_than_caret_svg_icon, icon_class_style: next_btn_content_class_style, order: "text-first" })

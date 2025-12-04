@@ -9,7 +9,8 @@ import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type
 import { LOCAL_STORAGE_FIELDS }         from "@/enums/constants.enums";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
 
-import TwoFactorInfoView                from "@/modules/member_module/views/two_factor_info_view/member_two_factor_info_view.vue";
+import MemberTwoFactorInfoView          from "@/modules/member_module/views/two_factor_info_view/member_two_factor_info_view.vue";
+import MemberActivityView               from "@/modules/member_module/views/activity_view/member_activity_view.vue";
 
 
 class MemberMenuListConfig {
@@ -91,21 +92,21 @@ class MemberMenuListConfig {
         const menu_list: NavLinkUIPropsInterface[] = [view_menu, select_menu];
 
         if(member_authenticator.canMemberAccess("view_member_two_factor_info", member_perm_key) && (is_super_admin)) {
-            const view_2fa_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOpenModalForCustomView.bind(event_handler)(event, record, "two_factor_info_view", TwoFactorInfoView); }
+            const view_2fa_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOpenModalForCustomView.bind(event_handler)(event, record, "two_factor_info_view", MemberTwoFactorInfoView); }
             const view_2fa_menu           = this.buildMenuItem(`ViewMember2FAInfo-${record_index}`, view_2fa_menu_text, "", view_2fa_menu_svg_icon, view_2fa_menu_on_click);
 
             menu_list.push(view_2fa_menu)
         }
 
         if(member_authenticator.canMemberAccess("view_member_two_factor_info", member_perm_key) && (!is_active) && (is_super_admin && !is_my_profile)) {
-            const reset_2fa_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOpenModalForCustomView.bind(event_handler)(event, record, "two_factor_info_view", TwoFactorInfoView, { hard_reset: true } );}
+            const reset_2fa_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOpenModalForCustomView.bind(event_handler)(event, record, "two_factor_info_view", MemberTwoFactorInfoView, { hard_reset: true } ); }
             const reset_2fa_menu           = this.buildMenuItem(`ViewMember2FAInfo-${record_index}`, reset_2fa_menu_text, "", reset_2fa_menu_svg_icon, reset_2fa_menu_on_click);
 
             menu_list.push(reset_2fa_menu)
         }
 
         if(member_authenticator.canMemberAccess("view_member_activities", member_perm_key)  && (is_super_admin || is_my_profile)) {
-            const view_activities_menu_on_click  = (event: MouseEvent) => { return event_handler.handleViewMemberActivities.bind(event_handler)(event, record);}
+            const view_activities_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOpenModalForCustomView.bind(event_handler)(event, record, "activity_view", MemberActivityView ); }
             const view_activities_menu           = this.buildMenuItem(`ViewMemberActivities-${record_index}`, view_activities_menu_text, "", view_activities_menu_svg_icon, view_activities_menu_on_click);
 
             menu_list.push(view_activities_menu)
