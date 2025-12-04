@@ -9,7 +9,7 @@ import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type
 import { LOCAL_STORAGE_FIELDS }         from "@/enums/constants.enums";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
 
-import TwoFactorInfoView                from "@/modules/member_module/views/two_factor_info_view/two_factor_info_view.vue";
+import TwoFactorInfoView                from "@/modules/member_module/views/two_factor_info_view/member_two_factor_info_view.vue";
 
 
 class MemberMenuListConfig {

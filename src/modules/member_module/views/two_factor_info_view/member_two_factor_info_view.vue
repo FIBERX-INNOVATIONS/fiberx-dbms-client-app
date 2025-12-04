@@ -27,12 +27,12 @@
 
 
 <script setup lang="ts">
-import TwoFactorInfoViewProps from "./two_factor_info_view_props";
-import TwoFactorInfoViewController from "./two_factor_info_view_controller";
+import MemberTwoFactorInfoViewProps from "./member_two_factor_info_view_props";
+import MemberTwoFactorInfoViewController from "./member_two_factor_info_view_controller";
 
 
-const props = defineProps(TwoFactorInfoViewProps);
-const controller = new TwoFactorInfoViewController(props);
+const props = defineProps(MemberTwoFactorInfoViewProps);
+const controller = new MemberTwoFactorInfoViewController(props);
 
 const { state_refs, computed_refs, components } = controller.getComponentDefinition();
 

@@ -6,7 +6,7 @@ import { BaseControllerInterface }  from "@ui/version_2/types/component_type";
 import { StatusPayloadOptionsInterface } from "@/types/app_event_type";
 
 
-class TwoFactorInfoViewUIEventHandler extends BaseEventHandler {
+class MemberTwoFactorInfoViewUIEventHandler extends BaseEventHandler {
     public content_manager: ContentManagerUtil;
     protected status_alert_options: StatusPayloadOptionsInterface;
 
@@ -55,4 +55,4 @@ class TwoFactorInfoViewUIEventHandler extends BaseEventHandler {
 
 }
 
-export default TwoFactorInfoViewUIEventHandler;
+export default MemberTwoFactorInfoViewUIEventHandler;

@@ -2,7 +2,7 @@ import ClassStyles from "@/enums/class_styles.enums";
 
 const ui_class_styles = ClassStyles.profile_view_ui;
 
-const TwoFactorInfoViewProps = {
+const MemberTwoFactorInfoViewProps = {
     wrapper_class_style: { type: String, default: ui_class_styles.wrapper_class_style, required: false },
 
     info_section_wrapper_class_style: { type: String, default: ui_class_styles.info_section_wrapper_class_style, required: false },
@@ -24,4 +24,4 @@ const TwoFactorInfoViewProps = {
     hard_reset: { type: Boolean, default: false, required: false },
 };
 
-export default TwoFactorInfoViewProps;
+export default MemberTwoFactorInfoViewProps;
