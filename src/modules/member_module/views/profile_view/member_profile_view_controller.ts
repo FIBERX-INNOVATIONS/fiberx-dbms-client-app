@@ -19,22 +19,22 @@ class MemberProfileViewController extends BaseProfileViewController {
             // Verified / unverified
             formatted_verification_status: () => {
                 return record.is_verified
-                    ? this.state_refs.profile_content_data?.verified_value_text
-                    : this.state_refs.profile_content_data?.unverified_value_text;
+                    ? this.state_refs.content_data?.verified_value_text
+                    : this.state_refs.content_data?.unverified_value_text;
             },
 
             // 2FA
             formatted_two_fa_status: () => {
                 return auth.is_2fa_enabled
-                    ? this.state_refs.profile_content_data?.two_fa_enabled_value_text
-                    : this.state_refs.profile_content_data?.two_fa_disabled_value_text;
+                    ? this.state_refs.content_data?.two_fa_enabled_value_text
+                    : this.state_refs.content_data?.two_fa_disabled_value_text;
             },
 
             // Active/inactive
             formatted_account_status: () => {
                 return (auth.is_active || record.is_active)
-                    ? this.state_refs.profile_content_data?.active_value_text
-                    : this.state_refs.profile_content_data?.inactive_value_text;
+                    ? this.state_refs.content_data?.active_value_text
+                    : this.state_refs.content_data?.inactive_value_text;
             },
 
             formatted_last_login: () => {

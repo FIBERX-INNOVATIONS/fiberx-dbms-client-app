@@ -6,17 +6,17 @@
         <!-- is active -->
         <div :class="props.info_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.is_active_key_text }}:
+                {{ content_data?.is_active_key_text }}:
             </span>
             <span :class="props.value_text_class_style">
-                {{ props.record.is_active ? profile_content_data?.active_state_value_text : profile_content_data?.inactive_state_value_text }}
+                {{ props.record.is_active ? content_data?.active_state_value_text : content_data?.inactive_state_value_text }}
             </span>
         </div>
 
         <!-- base url -->
           <div :class="props.info_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.base_url_key_text }}:
+                {{ content_data?.base_url_key_text }}:
             </span>
             <span :class="props.value_text_class_style" v-html="formatted_base_url"></span>
         </div>
@@ -24,7 +24,7 @@
         <!-- Social Links -->
         <div :class="props.social_links_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.social_media_key_text }}:
+                {{ content_data?.social_media_key_text }}:
             </span>
             <span 
                 v-for="(social_link, social_index) in formatted_social_links"
@@ -36,7 +36,7 @@
         <!-- timestamps -->
         <div :class="props.timestamp_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.date_created_key_text }}:
+                {{ content_data?.date_created_key_text }}:
             </span>
             <span :class="props.value_text_class_style">
                 {{ formatted_created_at  }}
@@ -45,7 +45,7 @@
 
         <div :class="props.timestamp_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.date_updated_key_text }}:
+                {{ content_data?.date_updated_key_text }}:
             </span>
             <span :class="props.value_text_class_style">
                 {{ formatted_updated_at }}
@@ -55,7 +55,7 @@
          <!-- creator / updator -->
         <div v-if="props.record?.creator?.public_id" :class="props.timestamp_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.creator_key_text }}:
+                {{ content_data?.creator_key_text }}:
             </span>
             <span :class="props.value_text_class_style" v-html="formatted_creator">
             </span>
@@ -63,7 +63,7 @@
 
         <div v-if="props.record?.updator?.public_id" :class="props.timestamp_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.updator_key_text }}:
+                {{ content_data?.updator_key_text }}:
             </span>
             <span :class="props.value_text_class_style" v-html="formatted_updator">
             </span>
@@ -72,7 +72,7 @@
         <!-- description -->
         <div :class="props.description_section_wrapper_class_style">
             <span :class="props.description_key_text_class_style">
-                {{ profile_content_data?.description_key_text }}
+                {{ content_data?.description_key_text }}
             </span>
             <p :class="props.description_value_text_class_style">
                 {{ props.record?.description}}
@@ -93,7 +93,7 @@ const controller       = new RegisteredAppProfileViewController(props)
 
 const { state_refs, computed_refs, components} = controller.getComponentDefinition();
 
-const { profile_content_data, img_avatar_ui_props } = state_refs;
+const { content_data, img_avatar_ui_props } = state_refs;
 
 const {
     formatted_base_url,

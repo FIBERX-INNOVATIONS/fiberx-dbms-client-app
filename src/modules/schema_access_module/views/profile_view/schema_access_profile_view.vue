@@ -3,7 +3,7 @@
         <!-- ID -->
         <div :class="props.info_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.id_key_text }}:
+                {{ content_data?.id_key_text }}:
             </span>
             <span :class="props.value_text_class_style" v-html="props.record.id"></span>
         </div>
@@ -11,7 +11,7 @@
         <!-- Schema -->
         <div v-if="formatted_schema" :class="props.info_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.schema_key_text }}:
+                {{ content_data?.schema_key_text }}:
             </span>
             <span :class="props.underline_value_text_class_style" v-html="formatted_schema"></span>
         </div>
@@ -19,7 +19,7 @@
         <!-- Registered App -->
         <div v-if="formatted_registered_app" :class="props.info_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.registered_app_key_text }}:
+                {{ content_data?.registered_app_key_text }}:
             </span>
             <span :class="props.underline_value_text_class_style" v-html="formatted_registered_app"></span>
         </div>
@@ -27,7 +27,7 @@
         <!-- Permissions -->
         <div :class="props.info_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.permissions_key_text }}:
+                {{ content_data?.permissions_key_text }}:
             </span>
             <span :class="props.value_text_class_style">
                 {{ formatted_permissions }}
@@ -37,7 +37,7 @@
         <!-- Is Owner -->
         <div :class="props.info_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.is_owner_key_text }}:
+                {{ content_data?.is_owner_key_text }}:
             </span>
             <span :class="props.value_text_class_style">
                 {{ formatted_is_owner }}
@@ -47,7 +47,7 @@
         <!-- Is Granted -->
         <div :class="props.info_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.is_granted_key_text }}:
+                {{ content_data?.is_granted_key_text }}:
             </span>
             <span :class="props.value_text_class_style">
                 {{ formatted_is_granted }}
@@ -57,7 +57,7 @@
         <!-- Created At -->
         <div :class="props.timestamp_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.date_created_key_text }}:
+                {{ content_data?.date_created_key_text }}:
             </span>
             <span :class="props.value_text_class_style">
                 {{ formatted_created_at }}
@@ -67,7 +67,7 @@
         <!-- Updated At -->
         <div :class="props.timestamp_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.date_updated_key_text }}:
+                {{ content_data?.date_updated_key_text }}:
             </span>
             <span :class="props.value_text_class_style">
                 {{ formatted_updated_at }}
@@ -77,7 +77,7 @@
         <!-- Creator -->
         <div v-if="formatted_creator" :class="props.timestamp_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.creator_key_text }}:
+                {{ content_data?.creator_key_text }}:
             </span>
             <span :class="props.value_text_class_style" v-html="formatted_creator"></span>
         </div>
@@ -85,7 +85,7 @@
         <!-- Updator -->
         <div v-if="formatted_updator" :class="props.timestamp_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
-                {{ profile_content_data?.updator_key_text }}:
+                {{ content_data?.updator_key_text }}:
             </span>
             <span :class="props.value_text_class_style" v-html="formatted_updator"></span>
         </div>
@@ -102,7 +102,7 @@ const controller = new SchemaAccessProfileViewController(props);
 
 const { state_refs, computed_refs } = controller.getComponentDefinition();
 
-const { profile_content_data } = state_refs;
+const { content_data } = state_refs;
 
 const {
     formatted_schema,
