@@ -31,6 +31,14 @@ export interface RequestQueryInputInterface {
     hard_reset?: string;
 }
 
+
+export interface PaginationResponseInterface<T> {
+    total_items: number;
+    total_pages: number;
+    current_page: number;
+    records: T
+}
+
 export interface RegisteredAppFormDataInterface {
   prefix: string;
   csrf_token: string;
@@ -92,4 +100,53 @@ export interface MemberFormInputInterface {
   gender?: string;
   profile_photo_link?: string;
   password?: string;
+}
+
+export interface MemberRecordInterface {
+    public_id: string;
+    username: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    is_verified: boolean | number;
+    profile_photo_link: string;
+    full_name: string;
+    member_preview: string;
+    dob: string | null
+}
+
+export interface RoleRecordInterface {
+    id: number;
+    name: string;
+    symbol: string;
+    member_count: number,
+    created_at?: string;
+    updated_at?: string | null,
+    creator?: MemberRecordInterface;
+    updator?: MemberRecordInterface;
+}
+
+export interface PermissionRecordInterface {
+    id: number;
+    name: string;
+    module_name: string;
+    description: string;
+    created_at: string;
+    updated_at: string | null;
+
+}
+
+export interface RoleAssignedPermissionInterface {
+    id: number;
+    role_id: number;
+    created_at: string;
+    updated_at: string | null;
+    creator: MemberRecordInterface;
+    updator?: MemberRecordInterface;
+    permission: PermissionRecordInterface;
+}
+
+export interface UpdatedRolePermissionsInterface {
+    role: RoleRecordInterface;
+    permissions: PermissionRecordInterface[];
 }

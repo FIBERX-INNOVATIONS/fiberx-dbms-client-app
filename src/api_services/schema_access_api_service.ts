@@ -9,8 +9,8 @@ import {
 } from "@/types/api_service_type";
 
 
-class SchemaAccessService extends BaseAPIService {
-    constructor() { super("schema_access_service"); }
+class SchemaAccessAPIService extends BaseAPIService {
+    constructor() { super("schema_access_api_service"); }
 
     // Service method to query Fetch all schema access records (paginated) endpoint
     public async getAllSchemaAccessRecords (params: RequestQueryInputInterface ): Promise<APIResponseInterface<any>> {
@@ -53,4 +53,4 @@ class SchemaAccessService extends BaseAPIService {
     }
 }
 
-export default SchemaAccessService;
+export default SchemaAccessAPIService;
