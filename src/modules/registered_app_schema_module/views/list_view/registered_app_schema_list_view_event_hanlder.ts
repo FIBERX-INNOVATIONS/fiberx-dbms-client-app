@@ -5,7 +5,7 @@ import RegisteredAppSchemaFormView              from "../form_view/registered_ap
 import RegisteredAppSchemaProfileView           from "../profile_view/registered_app_schema_profile_view.vue";
 import RegisteredAppAPIService                  from "@/api_services/registered_app_api_service";
 import { BaseControllerInterface }              from "@ui/version_2/types/component_type";
-import { RequestQueryInputInterface }           from "@/types/api_service_type";
+import { RequestQueryInputInterface }           from "@/types/validation_type";
 
 class RegisteredAppSchemaListViewEventHandler extends BaseListViewEventHandler {
     public registered_app_api_service: RegisteredAppAPIService;

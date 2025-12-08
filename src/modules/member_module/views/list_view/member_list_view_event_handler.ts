@@ -3,7 +3,6 @@ import BaseListViewEventHandler     from "@/base_classes/list_view/base_list_vie
 import MemberTableColumnConfig      from "@/configs/table_column_config/member_table_column_config";
 import MemberFormView               from "../form_view/member_form_view.vue";
 import MemberProfileView            from "../profile_view/member_profile_view.vue";
-import MemberActivitiesView         from "../activities_view/member_activities_view.vue";
 import { BaseControllerInterface }  from "@ui/version_2/types/component_type";
 
 class MemberListViewEventHandler extends BaseListViewEventHandler {

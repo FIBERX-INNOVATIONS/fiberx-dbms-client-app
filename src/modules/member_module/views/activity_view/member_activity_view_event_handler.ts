@@ -5,7 +5,7 @@ import ContentManagerUtil               from "@ui/version_2/utils/content_manage
 import { debounceMethod, sleep }        from "@ui/version_2/utils/debounce_util";
 import { NON_INPUT_KEYS  }              from "@ui/version_2/enums/constants.enum";
 
-import { RequestQueryInputInterface }   from "@/types/api_service_type";
+import { RequestQueryInputInterface }   from "@/types/validation_type";
 
 import { 
     StatusPayloadOptionsInterface,

@@ -8,6 +8,7 @@ import InputUI                          from "@ui/version_2/components/InputUI/i
 import InputTransformerUtil             from "@ui/version_2/utils/input_formatter_util";
 import BaseTableColumnConfig            from "./base_table_column_config";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
+import { DatasourceRecordInterface } from "@/types/api_service_type";
 
 import { 
     InputUIPropsInterface,
@@ -20,7 +21,10 @@ class DatasourceTableColumnConfig {
     public readonly name = "datasource_table_column_config";
 
     // Method to get is_active ui props
-    private static getIsActiveUIProps (event_handler: BaseEventHandlerInterface, record: Record<string, any>): InputUIPropsInterface {
+    private static getIsActiveUIProps (
+        event_handler: BaseEventHandlerInterface, 
+        record: DatasourceRecordInterface
+    ): InputUIPropsInterface {
         const { id, is_active }     = record;
         const is_active_boolean     = is_active ? true : false;
         const switch_props          = BaseTableColumnConfig.geIsActiveSwitchProps(id.toString(), is_active_boolean);
@@ -59,7 +63,7 @@ class DatasourceTableColumnConfig {
             field_key: "is_active",
             content_type: "component" as const,
             component: markRaw(InputUI),
-            component_props: (record: Record<string, any>) => { return this.getIsActiveUIProps(event_handler, record)},
+            component_props: (record: DatasourceRecordInterface) => { return this.getIsActiveUIProps(event_handler, record); },
             col_class_style: "",
             wrapper_class_style: sortable_cell_wrapper_class_style,
             icon_class_style: sortable_icon_class_style,
@@ -97,7 +101,7 @@ class DatasourceTableColumnConfig {
                 sort_direction: "none" as SortDirectionType,
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (value: any, record?: Record<string, any>) => { return InputTransformerUtil.formatURLToAnchorHtml(value, value); },
+                formatter: <DatasourceRecordInterface>(value: any, record?: DatasourceRecordInterface) => { return InputTransformerUtil.formatURLToAnchorHtml(value, value); },
                 field_key: "host",
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
@@ -123,7 +127,7 @@ class DatasourceTableColumnConfig {
                 sort_direction: "none" as SortDirectionType,
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (value: any, record?: Record<string, any>) => { return InputTransformerUtil.formatReadableDateTime(value) },
+                formatter: <DatasourceRecordInterface>(value: any, record?: DatasourceRecordInterface) => { return InputTransformerUtil.formatReadableDateTime(value) },
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
                 content_wrapper_class_style: sortable_cell_content_wrapper_class_style,        

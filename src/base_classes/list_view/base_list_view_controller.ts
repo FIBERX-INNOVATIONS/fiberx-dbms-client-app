@@ -13,7 +13,6 @@ import PaginationUI                             from "@ui/version_2/components/N
 
 import { MenuListConfigInterface }              from "@/types/menu_list_config_type";
 import { TableColumnConfigInterface }           from "@/types/table_column_config_type";
-import { BaseEventHandlerInterface }            from "@ui/version_2/types/component_type";
 
 import { 
     ButtonUIPropsInterface, 
@@ -184,6 +183,8 @@ class BaseListViewController extends BaseController {
 
         if(!is_fully_authenticated) { await this.router.push("/logout") }
 
+        document?.querySelector("main")?.scrollTo({ top: 0, behavior: "smooth" });
+        
         await this.event_handler.handleFetchRecords();
 
         await this.event_handler.handleListViewProfileModalRouting();

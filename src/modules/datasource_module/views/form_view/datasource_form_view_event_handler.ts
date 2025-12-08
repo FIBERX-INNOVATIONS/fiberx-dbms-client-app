@@ -3,9 +3,9 @@
 import BaseFormViewEventHandler         from "@/base_classes/form_view/base_form_view_event_handler";
 import DatasourceValidator              from "@/validators/datasource_validator";
 import { 
-    DatasourceFormDataInterface, 
+    DatasourceFormDataInputInterface, 
     RequestQueryInputInterface 
-} from "@/types/api_service_type";
+} from "@/types/validation_type";
 
 
 class DatasourceFormViewEventHandler extends BaseFormViewEventHandler {
@@ -32,7 +32,7 @@ class DatasourceFormViewEventHandler extends BaseFormViewEventHandler {
         this.controller.state_refs.connection_info_array.value = [ ...this.form_data?.connection_info_array ]
     }
 
-    protected validateFormData(form_data: DatasourceFormDataInterface, record: Record<string, any>) {
+    protected validateFormData(form_data: DatasourceFormDataInputInterface, record: Record<string, any>) {
         form_data.connection_info = this.buildConnectionInfoObject(form_data?.connection_info_array || []);
 
         const validation_result = DatasourceValidator.validateDatasourceInput(form_data, record);
@@ -42,7 +42,7 @@ class DatasourceFormViewEventHandler extends BaseFormViewEventHandler {
         return validation_result
     }
 
-    protected async executeSubmitAction(record_id: string, form_data: DatasourceFormDataInterface) {
+    protected async executeSubmitAction(record_id: string, form_data: DatasourceFormDataInputInterface) {
         if (!this.controller.service) { return {}; }
 
         if (record_id) {

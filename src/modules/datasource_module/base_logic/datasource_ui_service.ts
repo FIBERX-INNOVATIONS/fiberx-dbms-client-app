@@ -13,8 +13,8 @@ import {
 
 import { 
     RequestQueryInputInterface,
-    DatasourceFormDataInterface
-} from "@/types/api_service_type";
+    DatasourceFormDataInputInterface
+} from "@/types/validation_type";
 
 class DatasourceUIService extends BaseService {
     public readonly auth_api_service: AuthAPIService;
@@ -93,7 +93,7 @@ class DatasourceUIService extends BaseService {
     }
 
     // Method to execute change record state
-    public async executeCreateRecord(form_data: DatasourceFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeCreateRecord(form_data: DatasourceFormDataInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.createNewDatasource(form_data);
 
@@ -110,7 +110,7 @@ class DatasourceUIService extends BaseService {
     }
 
     // Method to execute update record
-    public async executeUpdateRecord(record_id: number, form_data: DatasourceFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeUpdateRecord(record_id: number, form_data: DatasourceFormDataInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.updateDatasource(record_id, form_data);
 

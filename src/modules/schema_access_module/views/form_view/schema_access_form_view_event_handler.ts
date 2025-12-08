@@ -4,10 +4,9 @@ import BaseFormViewEventHandler                 from "@/base_classes/form_view/b
 import SchemaAccessValidator                    from "@/validators/schema_access_validator";
 import { SchemaAccessUpdatedPayloadInterface }  from "@/types/app_event_type";
 import { 
-    SchemaAccessFormInputInterface, 
-    SchemaAccessUpdateFormInputInterface,
+    SchemaAccessFormDataInputInterface, 
     RequestQueryInputInterface 
-} from "@/types/api_service_type";
+} from "@/types/validation_type";
 
 
 
@@ -16,7 +15,7 @@ class SchemaAccessFormViewEventHandler extends BaseFormViewEventHandler {
         this.controller.state_refs.app_public_id.value = this.form_data.app_public_id;
      }
 
-    protected validateFormData(form_data: SchemaAccessFormInputInterface, record: Record<string, any>) {
+    protected validateFormData(form_data: SchemaAccessFormDataInputInterface, record: Record<string, any>) {
         return SchemaAccessValidator.validateSchemaAccessInput(form_data, record);
     }
 

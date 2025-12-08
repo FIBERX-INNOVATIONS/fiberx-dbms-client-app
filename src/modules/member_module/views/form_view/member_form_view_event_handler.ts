@@ -3,18 +3,18 @@
 import BaseFormViewEventHandler         from "@/base_classes/form_view/base_form_view_event_handler";
 import MemberValidator                  from "@/validators/member_validator";
 import { 
-    MemberFormInputInterface, 
+    MemberFormDataInputInterface, 
     RequestQueryInputInterface 
-} from "@/types/api_service_type";
+} from "@/types/validation_type";
 
 
 class MemberFormViewEventHandler extends BaseFormViewEventHandler {
 
-    protected validateFormData(form_data: MemberFormInputInterface, record: Record<string, any>) {
+    protected validateFormData(form_data: MemberFormDataInputInterface, record: Record<string, any>) {
         return  MemberValidator.validateMemberInput(form_data, record);
     }
 
-    protected async executeSubmitAction(record_id: string, form_data: MemberFormInputInterface) {
+    protected async executeSubmitAction(record_id: string, form_data: MemberFormDataInputInterface) {
         if (!this.controller.service) { return {}; }
 
         if (record_id) {

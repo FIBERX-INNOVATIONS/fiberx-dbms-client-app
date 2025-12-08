@@ -6,7 +6,7 @@ import InputTransformerUtil                     from "@ui/version_2/utils/input_
 import RegisteredAppSchemaAPIService            from "@/api_services/registered_app_schema_api_service";
 import { BaseControllerInterface }              from "@ui/version_2/types/component_type";
 import { InputUIEventMethodsPropsInterface }    from "@ui/version_2/types/props_builder_type";
-import { RequestQueryInputInterface }           from "@/types/api_service_type";
+import { RequestQueryInputInterface }           from "@/types/validation_type";
 
 
 class SchemaAccessSectionUIEventHandler extends BaseEventHandler {

@@ -3,7 +3,7 @@ import BaseAPIService               from "@ui/version_2/base_classes/base_api_se
 import { APIResponseInterface }     from "@ui/version_2/types/util_type";
 
 import {
-    RolePermissionsFormInputData
+    RolePermissionsFormDataInputData
 } from "@/types/validation_type";
 
 import { 
@@ -53,7 +53,7 @@ class AccessControlAPIService extends BaseAPIService {
 
     // Service method to query assign permission to role endpoint
     public async assignPermissionsToRole (
-        form_data: RolePermissionsFormInputData
+        form_data: RolePermissionsFormDataInputData
     ) : Promise<APIResponseInterface<PaginationResponseInterface<UpdatedRolePermissionsInterface>>> {
         const url       = `/access-control/assign`;
         const config    = { url, method: "POST", data: form_data };
@@ -63,7 +63,7 @@ class AccessControlAPIService extends BaseAPIService {
 
     // Service method to query un-assign permission to role endpoint
     public async unAssignPermissionsToRole (
-        form_data: RolePermissionsFormInputData
+        form_data: RolePermissionsFormDataInputData
     ) : Promise<APIResponseInterface<PaginationResponseInterface<UpdatedRolePermissionsInterface>>> {
         const url       = `/access-control/un-assign`;
         const config    = { url, method: "POST", data: form_data };

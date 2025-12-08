@@ -5,8 +5,8 @@ import SchemaAccessFormView                     from "../form_view/schema_access
 import SchemaAccessProfileView                  from "../profile_view/schema_access_profile_view.vue";
 import RegisteredAppAPIService                  from "@/api_services/registered_app_api_service";
 import { BaseControllerInterface }              from "@ui/version_2/types/component_type";
-import { RequestQueryInputInterface }           from "@/types/api_service_type";
-import InputTransformerUtil from "@ui/version_2/utils/input_formatter_util";
+import { RequestQueryInputInterface }           from "@/types/validation_type";
+import InputTransformerUtil                     from "@ui/version_2/utils/input_formatter_util";
 
 class SchemaAccessListViewEventHandler extends BaseListViewEventHandler {
     public registered_app_api_service: RegisteredAppAPIService;

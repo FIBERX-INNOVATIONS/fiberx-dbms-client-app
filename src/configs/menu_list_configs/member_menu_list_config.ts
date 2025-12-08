@@ -11,6 +11,7 @@ import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_ma
 
 import MemberTwoFactorInfoView          from "@/modules/member_module/views/two_factor_info_view/member_two_factor_info_view.vue";
 import MemberActivityView               from "@/modules/member_module/views/activity_view/member_activity_view.vue";
+import { MemberRecordInterface }        from "@/types/api_service_type";
 
 
 class MemberMenuListConfig {
@@ -61,7 +62,7 @@ class MemberMenuListConfig {
     public static getTableMenuList (
         event_handler: BaseEventHandlerInterface,
         content_field_key: string,
-        record: Record<string, any>,
+        record: MemberRecordInterface,
         record_index: Number
     ): NavLinkUIPropsInterface[] {
         const content_manager           = ContentManagerUtil.getInstance();
@@ -73,7 +74,7 @@ class MemberMenuListConfig {
         const current_member            = member_authenticator.getCurrentMember(current_member_key);
         const is_super_admin            = current_member?.role_name === "SuperAdmin";
         const is_my_profile             = record?.public_id === current_member?.public_id;
-        const is_active                 = record?.is_active ?? record?.member_auth.is_active;
+        const is_active                 = record?.is_active ?? record?.member_auth?.is_active;
 
         const { 
             view_menu_text, view_menu_svg_icon, select_menu_text, select_menu_svg_icon,

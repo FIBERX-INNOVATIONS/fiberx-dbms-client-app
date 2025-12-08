@@ -4,9 +4,9 @@ import BaseFormViewEventHandler         from "@/base_classes/form_view/base_form
 import RegisteredAppSchemaValidator     from "@/validators/registered_app_schema_validator";
 import { ColumnDefinitionInterface }    from "@/types/schema_type";
 import { 
-    RegisteredAppSchemaFormDataInterface, 
+    RegisteredAppSchemaFormDataInputInterface, 
     RequestQueryInputInterface 
-} from "@/types/api_service_type";
+} from "@/types/validation_type";
 import { 
     ColumnsArrayUpdatedPayloadInterface, 
     IndexesArrayUpdatedPayloadInterface,
@@ -17,7 +17,7 @@ import {
 
 class RegisteredAppSchemaFormViewEventHandler extends BaseFormViewEventHandler {
     private getColumnsAndPrimaryKeyFromFormData (
-        form_data: RegisteredAppSchemaFormDataInterface
+        form_data: RegisteredAppSchemaFormDataInputInterface
     ): { columns: Record<string, ColumnDefinitionInterface>, primary_key: string } { 
         const columns: Record<string, ColumnDefinitionInterface> = {};
         let primary_key: string = "";
@@ -39,7 +39,7 @@ class RegisteredAppSchemaFormViewEventHandler extends BaseFormViewEventHandler {
 
     protected onFormDataUpdated() { }
 
-    protected validateFormData(form_data: RegisteredAppSchemaFormDataInterface, record: Record<string, any>) {
+    protected validateFormData(form_data: RegisteredAppSchemaFormDataInputInterface, record: Record<string, any>) {
         const { columns, primary_key } = this.getColumnsAndPrimaryKeyFromFormData(form_data);
         form_data.columns = columns;
         form_data.primary_key = primary_key;

@@ -9,6 +9,7 @@ import InputUI                          from "@ui/version_2/components/InputUI/i
 import InputTransformerUtil             from "@ui/version_2/utils/input_formatter_util";
 import BaseTableColumnConfig            from "./base_table_column_config";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
+import { MemberRecordInterface }        from "@/types/api_service_type";
 
 import { 
     ImgAvatarUIPropsInterface,
@@ -22,13 +23,18 @@ class MemberTableColumnConfig {
     public readonly name = "member_table_column_config";
 
     // Method to render registered app avatar ui props
-    private static getImgAvatarUIProps (record: Record<string, any>): ImgAvatarUIPropsInterface {
+    private static getImgAvatarUIProps (
+        record: MemberRecordInterface
+    ): ImgAvatarUIPropsInterface {
         const { public_id, full_name, profile_photo_link } = record;
         return BaseTableColumnConfig.getImgAvatarUIProps(`RegisteredApp-${record?.public_id}`, profile_photo_link, full_name, public_id);
     }
 
     // Method to get is_active ui props
-    private static getIsActiveUIProps (event_handler: BaseEventHandlerInterface, record: Record<string, any>): InputUIPropsInterface {
+    private static getIsActiveUIProps (
+        event_handler: BaseEventHandlerInterface, 
+        record: MemberRecordInterface
+    ): InputUIPropsInterface {
         const { public_id, member_auth = {} } = record;
 
         const is_active             = ("is_active" in record) ? record?.is_active : ("is_active") in member_auth ? member_auth.is_active : false;
@@ -38,9 +44,30 @@ class MemberTableColumnConfig {
 
         return switch_props;
     }
+    
+    // Method to format username value
+    private static formatMemberUsername <MemberRecordInterface>(
+        username: string, 
+        record?: MemberRecordInterface
+    ) { 
+        const { public_id = "" } = record || {};
+
+        return InputTransformerUtil.formatURLToAnchorHtml(username, `/members?member_profile=${public_id.toLowerCase()}`); 
+    }
+
+    // Method to format member email
+    private static formatMemberEmail <MemberRecordInterface>(
+        email: string, 
+        record?: MemberRecordInterface
+    ) { 
+        return InputTransformerUtil.formatURLToAnchorHtml(email, `mailto:${email}`); 
+    }
 
     // Method to format role name
-    private static formatRoleName (role_name: string, record?: Record<string, any>): string { 
+    private static formatRoleName <MemberRecordInterface>(
+        role_name: string, 
+        record?: MemberRecordInterface
+    ): string { 
         const content_manager           = ContentManagerUtil.getInstance();
         const content_data              = content_manager?.get(`content_resource.member_view_ui.data_table`) ?? {};
         const role_options_list         = content_data?.role_options_list || [];
@@ -49,6 +76,22 @@ class MemberTableColumnConfig {
         if (!valid_role) { return "" }
 
         return InputTransformerUtil.toTitleCase(valid_role?.label_text);
+    }
+
+    // Method to format member phone number
+    private static formatMemberPhoneNumber <MemberRecordInterface>(
+        phone_number: string, 
+        record?: MemberRecordInterface
+    ) { 
+        return phone_number ? InputTransformerUtil.formatURLToAnchorHtml(phone_number, `tel:${phone_number}`) : "N/A"
+    }
+
+    // Method to format date-time
+    private static formatDateTime <MemberRecordInterface>(
+        date_time: string, 
+        record?: MemberRecordInterface
+    ) { 
+        return InputTransformerUtil.formatReadableDateTime(date_time)
     }
 
     // Method to get table column
@@ -81,7 +124,7 @@ class MemberTableColumnConfig {
             field_key: "is_active",
             content_type: "component" as const,
             component: markRaw(InputUI),
-            component_props: (record: Record<string, any>) => { return this.getIsActiveUIProps(event_handler, record)},
+            component_props: (record: MemberRecordInterface) => { return this.getIsActiveUIProps(event_handler, record)},
             col_class_style: "",
             wrapper_class_style: sortable_cell_wrapper_class_style,
             icon_class_style: sortable_icon_class_style,
@@ -109,7 +152,7 @@ class MemberTableColumnConfig {
                 sort_direction: "none" as SortDirectionType,
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (username: string, record: Record<string, any> = {}) => { return InputTransformerUtil.formatURLToAnchorHtml(username, `/members?member_profile=${record.public_id.toLowerCase()}`); },
+                formatter: this.formatMemberUsername,
                 field_key: "username",
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
@@ -122,7 +165,7 @@ class MemberTableColumnConfig {
                 sort_direction: "none" as SortDirectionType,
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (email: string, record?: Record<string, any>) => { return InputTransformerUtil.formatURLToAnchorHtml(email, `mailto:${email}`); },
+                formatter: this.formatMemberEmail,
                 field_key: "email",
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
@@ -148,7 +191,7 @@ class MemberTableColumnConfig {
                 sort_direction: "none" as SortDirectionType,
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (phone_number: string, record?: Record<string, any>) => { return phone_number ? InputTransformerUtil.formatURLToAnchorHtml(phone_number, `tel:${phone_number}`): "N/A"; },
+                formatter: this.formatMemberPhoneNumber,
                 field_key: "phone",
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
@@ -162,7 +205,7 @@ class MemberTableColumnConfig {
                 sort_direction: "none" as SortDirectionType,
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (value: any, record?: Record<string, any>) => { return InputTransformerUtil.formatReadableDateTime(value) },
+                formatter: this.formatDateTime,
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
                 content_wrapper_class_style: sortable_cell_content_wrapper_class_style,        

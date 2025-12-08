@@ -13,8 +13,8 @@ import {
 
 import { 
     RequestQueryInputInterface,
-    RegisteredAppFormDataInterface
-} from "@/types/api_service_type";
+    RegisteredAppFormDataInputInterface
+} from "@/types/validation_type";
 
 class RegisteredAppUIService extends BaseService {
     public readonly auth_api_service: AuthAPIService;
@@ -110,7 +110,7 @@ class RegisteredAppUIService extends BaseService {
     }
 
     // Method to execute change record state
-    public async executeCreateRecord(form_data: RegisteredAppFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeCreateRecord(form_data: RegisteredAppFormDataInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.createNewApp(form_data);
 
@@ -127,7 +127,7 @@ class RegisteredAppUIService extends BaseService {
     }
 
     // Method to execute update record
-    public async executeUpdateRecord(record_id: string, form_data: RegisteredAppFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeUpdateRecord(record_id: string, form_data: RegisteredAppFormDataInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.updateApp(record_id, form_data);
 

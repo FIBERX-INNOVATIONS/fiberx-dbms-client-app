@@ -12,9 +12,9 @@ import {
 
 import { 
     RequestQueryInputInterface,
-    SchemaAccessFormInputInterface,
-    SchemaAccessUpdateFormInputInterface
-} from "@/types/api_service_type";
+    SchemaAccessFormDataInputInterface,
+    SchemaAccessUpdateFormDataInputInterface
+} from "@/types/validation_type";
 
 class SchemaAccessUIService extends BaseService {
     public readonly auth_api_service: AuthAPIService;
@@ -76,7 +76,7 @@ class SchemaAccessUIService extends BaseService {
     }
 
     // Method to execute create new record
-    public async executeCreateRecord(form_data: SchemaAccessFormInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeCreateRecord(form_data: SchemaAccessFormDataInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.createSchemaAccessRecord(form_data)
 
@@ -93,7 +93,7 @@ class SchemaAccessUIService extends BaseService {
     }
 
     // Method to execute update record
-    public async executeUpdateRecord(record_id: string, form_data: SchemaAccessUpdateFormInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeUpdateRecord(record_id: string, form_data: SchemaAccessUpdateFormDataInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.updateSchemaAccessRecord(record_id, form_data)
 

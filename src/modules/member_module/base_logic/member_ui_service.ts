@@ -13,8 +13,8 @@ import {
 
 import { 
     RequestQueryInputInterface,
-    MemberFormInputInterface
-} from "@/types/api_service_type";
+    MemberFormDataInputInterface
+} from "@/types/validation_type";
 
 class MemberUIService extends BaseService {
     public readonly auth_api_service: AuthAPIService;
@@ -144,7 +144,7 @@ class MemberUIService extends BaseService {
     }
 
     // Method to execute create new record 
-    public async executeCreateRecord(form_data: MemberFormInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeCreateRecord(form_data: MemberFormDataInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.createNewMemberProfileRecord(form_data);
 
@@ -161,7 +161,7 @@ class MemberUIService extends BaseService {
     }
 
     // Method to execute update record
-    public async executeUpdateRecord(record_id: string, form_data: MemberFormInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeUpdateRecord(record_id: string, form_data: MemberFormDataInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.updateMemberProfileRecord(record_id, form_data);
 

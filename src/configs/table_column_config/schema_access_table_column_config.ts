@@ -4,6 +4,7 @@ import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type
 import ClassStyles                      from "@/enums/class_styles.enums";
 import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
 import InputTransformerUtil             from "@ui/version_2/utils/input_formatter_util";
+import { SchemaAccessRecordInterface }  from "@/types/api_service_type";
 
 
 import { 
@@ -14,6 +15,22 @@ import {
 
 class SchemaAccessTableColumnConfig {
     public readonly name = "schema_access_table_column_config";
+
+    // Method to format name value
+    private static formateName <SchemaAccessRecordInterface>(
+        name: string, 
+        record?: SchemaAccessRecordInterface
+    ) { 
+        return InputTransformerUtil.spaceCamelCase(name)
+    }
+
+    // Method to format date-time
+    private static formatDateTime <SchemaAccessRecordInterface>(
+        date_time: string, 
+        record?: SchemaAccessRecordInterface
+    ) { 
+        return InputTransformerUtil.formatReadableDateTime(date_time)
+    }
 
     // Method to get table column
     public static getTableColumnConfig (
@@ -35,8 +52,7 @@ class SchemaAccessTableColumnConfig {
 
         const { 
             registered_app_name_text, app_id_text, schema_name_text, schema_table_name_text, 
-            is_owner_text, is_owned_value_text, is_not_owned_value_text,
-            created_at_text,
+            is_owner_text, created_at_text, is_not_owned_value_text, is_owned_value_text
          } = content_data;
 
 
@@ -72,7 +88,7 @@ class SchemaAccessTableColumnConfig {
                 field_key: "schema.name",
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (value: any, record?: Record<string, any>) => { return InputTransformerUtil.spaceCamelCase(value); },
+                formatter: this.formateName,
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
                 content_wrapper_class_style: sortable_cell_content_wrapper_class_style,
@@ -97,7 +113,9 @@ class SchemaAccessTableColumnConfig {
                 field_key: "is_owner",
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (value: any, record?: Record<string, any>) => { return value ? is_owned_value_text : is_not_owned_value_text },
+                formatter:  <SchemaAccessRecordInterface>(is_owner: boolean | number, record?: SchemaAccessRecordInterface) => {  
+                    return is_owner ? is_owned_value_text : is_not_owned_value_text 
+                },
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
                 content_wrapper_class_style: sortable_cell_content_wrapper_class_style,
@@ -110,7 +128,7 @@ class SchemaAccessTableColumnConfig {
                 sort_direction: "none" as SortDirectionType,
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (value: any, record?: Record<string, any>) => { return InputTransformerUtil.formatReadableDateTime(value) },
+                formatter: this.formatDateTime,
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
                 content_wrapper_class_style: sortable_cell_content_wrapper_class_style,        

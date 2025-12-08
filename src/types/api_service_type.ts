@@ -1,35 +1,8 @@
 import { 
-    PermissionType, 
-    SchemaDefinitionInterface, 
     IndexDefinitionInterface ,
     ColumnDefinitionInterface,
-    SchemaAccessDefinitionInterface
 } from "./schema_type";
 
-
-
-
-export interface LoginFormDataInterface  {
-    username: string;
-    password: string;
-    csrf_token: string;
-}
-
-export interface TwoFactorFormDataInterface  {
-    otp_code: string;
-    csrf_token: string;
-}
-
-export interface RequestQueryInputInterface {
-    page: number;
-    size: number;
-    order_by: string;
-    order_direction: string;
-    keyword?: string | null;
-    preview_only?: string | boolean;
-    app_id?: string;
-    hard_reset?: string;
-}
 
 
 export interface PaginationResponseInterface<T> {
@@ -39,67 +12,14 @@ export interface PaginationResponseInterface<T> {
     records: T
 }
 
-export interface RegisteredAppFormDataInterface {
-  prefix: string;
-  csrf_token: string;
-  name: string;
-  description?: string;
-  base_url?: string; 
-  logo_url?: string; 
-  social_links?: Record<string, string>; 
-  social_links_array: { key: string, value: string }[]
-}
-
-export interface DatasourceFormDataInterface {
-    csrf_token: string;
-    registered_app_public_id: string;
-    name: string; 
-    datasource_type: string;
-    host: string;
-    username: string; 
-    database_name: string;
-    port: string;
-    connection_info: Record<string, any>
-    connection_info_array: { key: string, value: string }[]
-}
-
-export interface RegisteredAppSchemaFormDataInterface {
-    csrf_token: string;
-    app_public_id: string;
-	model_name: string;
-	datasource_id: number
-	primary_key: string;
-	migration_priority: number; 
-	permissions: string[];
-	columns: Record<string, ColumnDefinitionInterface>;
-    columns_array: ColumnDefinitionInterface[];
-	indexes: IndexDefinitionInterface[];   
-
-}
-
-export interface SchemaAccessFormInputInterface {
-    csrf_token: string,
-    app_public_id: string;
-    schema_access_array: SchemaAccessDefinitionInterface[]
-}
-
-export interface SchemaAccessUpdateFormInputInterface {
-    csrf_token: string;
-    schema_name: string;
-    permissions: PermissionType[];
-}
-
-export interface MemberFormInputInterface {
-  csrf_token: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  role_name: string;
-  phone?: string;
-  dob?: string;
-  gender?: string;
-  profile_photo_link?: string;
-  password?: string;
+export interface MemberAuthRecordInterface {
+    login_attempts: number;
+    account_locked_until: string | null
+    password_changed_at: string | null
+    last_password_reset_request_at: string | null
+    is_2fa_enabled: boolean | number;
+    is_active: boolean | number;
+    last_login_at: string | null
 }
 
 export interface MemberRecordInterface {
@@ -109,11 +29,114 @@ export interface MemberRecordInterface {
     last_name: string;
     email: string;
     is_verified: boolean | number;
+    is_active: boolean | number;
+    is_2fa_enabled: boolean | number;
     profile_photo_link: string;
     full_name: string;
     member_preview: string;
-    dob: string | null
+    dob: string | null;
+    gender?: string | null;
+    role_name?: string | null;
+    last_login_at?: string | null
+    permissions?: string[],
+    member_auth?: MemberAuthRecordInterface;
+    is_fully_authenticated: boolean;
 }
+
+export interface MemberActiviityRecordInterface {
+        id: number;
+        member_public_id: string;
+        permission_name: string;
+        description: string;
+        created_at: string;
+        updated_at: string | null
+}
+
+export interface MemberTwoFactorRecordInterface {
+    secret_key: string;
+    otpauth_url: string;
+}
+
+export interface CSRFTokenRecordInterface {
+    token: string;
+    expires_at: string;
+}
+
+export interface AuthenticatedMemberRecordInterface {
+    current_member: MemberRecordInterface;
+    access_token: string;
+    expires_in_secs?: number;
+}
+
+export interface RegisteredAppRecordInterface {
+    public_id: string;
+    name: string;
+    description: string;
+    base_url: string;
+    logo_url: string;
+    is_active: boolean | number;
+    social_links: Record<string, string>
+    urls: string[],
+    created_at?: string;
+    updated_at?: string | null;
+    creator?: MemberRecordInterface;
+    updator?: MemberRecordInterface;
+}
+
+export interface DatasourceRecordInterface {
+    id: number;
+    name: string;
+    datasource_type:  string;
+    host:  string;
+    username:  string;
+    database_name:  string;
+    port: number;
+    connection_info?: Record<string, any>,
+    is_active: boolean | number;
+    is_created: boolean | number;
+    created_at?: string;
+    updated_at?: string | null;
+    creator?: MemberRecordInterface;
+    updator?: MemberRecordInterface;
+    datasource_app: RegisteredAppRecordInterface
+}
+
+export interface RegisteredAppSchemaRecordInterface {
+    id: number;
+    name: string;
+    app_id: string;
+    table_name: string;
+    model_name: string;
+    datasource_name: string;
+    datasource_type: string;
+    primary_key: string;
+    migration_priority: number;
+    timestamps?: boolean | number;
+    permissions?: string[];
+    columns?: Record<string, ColumnDefinitionInterface>;
+    indexes?: IndexDefinitionInterface[]
+    created_at?: string;
+    updated_at?: string | null;
+    creator?: MemberRecordInterface;
+    updator?: MemberRecordInterface;
+    schema_app: RegisteredAppRecordInterface
+    schema_datasource?: DatasourceRecordInterface;     
+}
+
+export interface SchemaAccessRecordInterface {
+    id: number;
+    schema_id: number;
+    permissions: string[];
+    is_owner: boolean | number;
+    is_granted: boolean | number;
+    created_at?: string;
+    updated_at?: string | null,
+    creator?: MemberRecordInterface;
+    updator?: MemberRecordInterface;
+    registered_app?: RegisteredAppRecordInterface
+    schema?: RegisteredAppSchemaRecordInterface
+}
+
 
 export interface RoleRecordInterface {
     id: number;

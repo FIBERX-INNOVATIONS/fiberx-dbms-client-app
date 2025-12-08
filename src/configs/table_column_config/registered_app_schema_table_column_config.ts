@@ -4,6 +4,7 @@ import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type
 import ClassStyles                      from "@/enums/class_styles.enums";
 import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
 import InputTransformerUtil             from "@ui/version_2/utils/input_formatter_util";
+import { RegisteredAppSchemaRecordInterface } from "@/types/api_service_type";
 
 import { 
     SortDirectionType,
@@ -13,6 +14,30 @@ import {
 
 class RegisteredAppSchemaTableColumnConfig {
     public readonly name = "registered_app_schema_table_column_config";
+
+    // Method to format name value
+    private static formateName <RegisteredAppSchemaRecordInterface>(
+        name: string, 
+        record?: RegisteredAppSchemaRecordInterface
+    ) { 
+        return InputTransformerUtil.spaceCamelCase(name)
+    }
+
+    // Method to format model value
+    private static formatModelName <RegisteredAppSchemaRecordInterface>(
+        model_name: string, 
+        record?: RegisteredAppSchemaRecordInterface
+    ) { 
+       return InputTransformerUtil.toPascalCase(model_name)
+    }
+
+    // Method to format date-time
+    private static formatDateTime <MemberRecordInterface>(
+        date_time: string, 
+        record?: MemberRecordInterface
+    ) { 
+        return InputTransformerUtil.formatReadableDateTime(date_time)
+    }
 
     // Method to get table column
     public static getTableColumnConfig (
@@ -46,7 +71,7 @@ class RegisteredAppSchemaTableColumnConfig {
                 field_key: "name",
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (value: any, record?: Record<string, any>) => { return InputTransformerUtil.spaceCamelCase(value); },
+                formatter: this.formateName,
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
                 content_wrapper_class_style: sortable_cell_content_wrapper_class_style,
@@ -82,7 +107,7 @@ class RegisteredAppSchemaTableColumnConfig {
                 sort_direction: "none" as SortDirectionType,
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (value: any, record?: Record<string, any>) => { return InputTransformerUtil.toPascalCase(value); },
+                formatter: this.formatModelName,
                 field_key: "model_name",
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
@@ -144,7 +169,7 @@ class RegisteredAppSchemaTableColumnConfig {
                 sort_direction: "none" as SortDirectionType,
                 on_sort,
                 content_type: "formatted" as const,
-                formatter: (value: any, record?: Record<string, any>) => { return InputTransformerUtil.formatReadableDateTime(value) },
+                formatter: this.formatDateTime,
                 wrapper_class_style: sortable_cell_wrapper_class_style,
                 icon_class_style: sortable_icon_class_style,
                 content_wrapper_class_style: sortable_cell_content_wrapper_class_style,        

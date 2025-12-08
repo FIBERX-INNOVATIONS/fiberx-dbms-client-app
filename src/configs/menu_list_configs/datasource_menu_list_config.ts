@@ -8,6 +8,7 @@ import { NavLinkUIPropsInterface }      from "@ui/version_2/types/props_builder_
 import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type";
 import { LOCAL_STORAGE_FIELDS }         from "@/enums/constants.enums";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
+import { DatasourceRecordInterface }    from "@/types/api_service_type";
 
 
 class DatasourceMenuListConfig {
@@ -58,7 +59,7 @@ class DatasourceMenuListConfig {
     public static getTableMenuList (
         event_handler: BaseEventHandlerInterface,
         content_field_key: string,
-        record: Record<string, any>,
+        record: DatasourceRecordInterface,
         record_index: Number
     ): NavLinkUIPropsInterface[] {
         const content_manager           = ContentManagerUtil.getInstance();

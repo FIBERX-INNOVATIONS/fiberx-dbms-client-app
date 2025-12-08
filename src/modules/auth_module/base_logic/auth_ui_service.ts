@@ -12,9 +12,9 @@ import {
     CurrentMemberInterface 
 } from "@ui/version_2/types/util_type";
 import { 
-    LoginFormDataInterface, 
-    TwoFactorFormDataInterface 
-} from "@/types/api_service_type";
+    LoginFormDataInputInterface, 
+    TwoFactorFormDataInputInterface 
+}  from "@/types/validation_type";
 
 class AuthUIService extends BaseService {
     public readonly api_service: AuthAPIService;
@@ -73,7 +73,7 @@ class AuthUIService extends BaseService {
         try {
             const { data }      = await this.api_service.getFormCSRFToken(token_for);
             const csrf_token    = data?.token;
-            const expires_at    = data?.expires_at;
+            const expires_at    = data?.expires_at || "";
 
             if(!csrf_token) { return false }
 
@@ -111,14 +111,14 @@ class AuthUIService extends BaseService {
     }
 
     // Method to execute login request
-    public async executeLogIn(form_data: LoginFormDataInterface): Promise<{s_state: boolean, s_msg: string}> {
+    public async executeLogIn(form_data: LoginFormDataInputInterface): Promise<{s_state: boolean, s_msg: string}> {
         
         try {
             const { status, msg, data: response_data } = await this.api_service.logIn(form_data);
 
-            if(status != "success") { return { s_state: false, s_msg: msg } }
+            if(status != "success" || !response_data) { return { s_state: false, s_msg: msg } }
 
-            const { current_member = {}, access_token }   = response_data;
+            const { current_member, access_token }   = response_data;
 
             current_member.is_fully_authenticated = false;
             
@@ -136,15 +136,15 @@ class AuthUIService extends BaseService {
     }
 
     // Method to execute two factor log in
-    public async executeTwoFactorLogIn(form_data: TwoFactorFormDataInterface): Promise<{s_state: boolean, s_msg: string, logout?: boolean}> {
+    public async executeTwoFactorLogIn(form_data: TwoFactorFormDataInputInterface): Promise<{s_state: boolean, s_msg: string, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.twoFactorLogin(form_data);
 
             if (status === "logout") { return { s_state: false, s_msg: msg, logout: true } }
 
-            else if(status != "success") { return { s_state: false, s_msg: msg } }
+            else if(status != "success" || !response_data) { return { s_state: false, s_msg: msg } }
 
-            const { current_member = {}, access_token }   = response_data;
+            const { current_member, access_token }   = response_data;
 
             current_member.is_fully_authenticated = true;
             

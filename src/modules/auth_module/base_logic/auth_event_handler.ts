@@ -6,9 +6,9 @@ import BaseEventHandler             from "@ui/version_2/base_classes/base_event_
 
 import { BaseControllerInterface }  from "@ui/version_2/types/component_type";
 import { 
-    LoginFormDataInterface, 
-    TwoFactorFormDataInterface 
-}  from "@/types/api_service_type";
+    LoginFormDataInputInterface, 
+    TwoFactorFormDataInputInterface 
+}  from "@/types/validation_type";
 
 // const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -89,7 +89,7 @@ class AuthEventhandler extends BaseEventHandler {
         this.hideErrorAlert()
         try {
 
-            const form_data = this.form_data as LoginFormDataInterface;
+            const form_data = this.form_data as LoginFormDataInputInterface;
             const { v_state, v_msg } = AuthValidator.validateLoginInput(form_data);
 
             if(!v_state) {
@@ -123,7 +123,7 @@ class AuthEventhandler extends BaseEventHandler {
         this.hideErrorAlert()
         try {
 
-            const form_data = this.form_data as TwoFactorFormDataInterface;
+            const form_data = this.form_data as TwoFactorFormDataInputInterface;
             const { v_state, v_msg } = AuthValidator.validateTwoFactorLoginInput(form_data);
 
             if(!v_state) {

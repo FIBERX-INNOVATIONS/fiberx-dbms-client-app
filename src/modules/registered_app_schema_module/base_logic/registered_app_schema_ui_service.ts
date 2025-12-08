@@ -12,8 +12,8 @@ import {
 
 import { 
     RequestQueryInputInterface,
-    RegisteredAppSchemaFormDataInterface
-} from "@/types/api_service_type";
+    RegisteredAppSchemaFormDataInputInterface
+} from "@/types/validation_type";
 
 class RegisteredAppSchemaUIService extends BaseService {
     public readonly auth_api_service: AuthAPIService;
@@ -92,7 +92,7 @@ class RegisteredAppSchemaUIService extends BaseService {
     }
 
     // Method to execute create new record
-    public async executeCreateRecord(form_data: RegisteredAppSchemaFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeCreateRecord(form_data: RegisteredAppSchemaFormDataInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.createNewRegisteredAppSchema(form_data)
 
@@ -109,7 +109,7 @@ class RegisteredAppSchemaUIService extends BaseService {
     }
 
     // Method to execute update record
-    public async executeUpdateRecord(record_id: number, form_data: RegisteredAppSchemaFormDataInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
+    public async executeUpdateRecord(record_id: number, form_data: RegisteredAppSchemaFormDataInputInterface): Promise<{s_state: boolean, s_msg: string, s_data?: Record<string, any>, logout?: boolean}> {
         try {
             const { status, msg, data: response_data } = await this.api_service.updateRegisteredAppSchema(record_id, form_data)
 
