@@ -1,10 +1,10 @@
 <template>
     <section :class="props.list_data_action_section_class_style">
-        <div :class="props.grid_1_wrapper_class_style">
+        <div v-if="props.search_field_props" :class="props.grid_1_wrapper_class_style">
             <SearchFieldUI v-bind="props.search_field_props" />
         </div>
 
-        <div :class="props.grid_2_wrapper_class_style">
+        <div v-if="props.form_action_btn_props" :class="props.grid_2_wrapper_class_style">
             <ButtonUI v-bind="props.form_action_btn_props" />
         </div>
 

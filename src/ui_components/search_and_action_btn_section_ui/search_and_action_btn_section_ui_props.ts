@@ -11,7 +11,7 @@ const SearchAndActionBtnSectionUIProps   = {
 
     search_field_props: { type: Object as PropType<SearchFieldUIPropsInterface>, required: true },
 
-    form_action_btn_props: { type: Object as PropType<ButtonUIPropsInterface>, required: true },
+    form_action_btn_props: { type: Object as PropType<ButtonUIPropsInterface>, default: () => null, required: false },
 
     select_filter_input_props: { type: Object as PropType<InputGroupPropsInterface>, required: false },
 }

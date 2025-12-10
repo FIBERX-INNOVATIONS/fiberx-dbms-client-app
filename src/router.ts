@@ -20,6 +20,7 @@ const DatasourceListView                = () => import("@/modules/datasource_mod
 const RegisteredAppSchemaListView       = () => import("@/modules/registered_app_schema_module/views/list_view/registered_app_schema_list_view.vue");
 const SchemaAccessListView              = () => import("@/modules/schema_access_module/views/list_view/schema_access_list_view.vue");
 const MemberListView                    = () => import("@/modules/member_module/views/list_view/member_list_view.vue");
+const AccessControlRoleListView         = () => import ("@/modules/access_control_module/views/role_list_view/access_control_role_list_view.vue");
 
 class RouterManager {
     public readonly name = "router_manager";
@@ -200,6 +201,16 @@ class RouterManager {
                 meta: {
                     title_key: "members-page",
                     permission_name: "view_member_profile_records", 
+                    requires_full_auth: true
+                }
+            },
+            { 
+                path: "/roles", 
+                name: "AccessControlRoleListView", 
+                component: AccessControlRoleListView,
+                meta: {
+                    title_key: "access-control-role-list-page",
+                    permission_name: "view_all_roles", 
                     requires_full_auth: true
                 }
             }

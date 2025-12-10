@@ -1,0 +1,3 @@
+<template>
+    Permissions view
+</template>

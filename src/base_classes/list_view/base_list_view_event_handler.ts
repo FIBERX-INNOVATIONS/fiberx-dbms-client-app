@@ -35,15 +35,15 @@ class BaseListViewEventHandler extends BaseEventHandler {
     protected debouncedFetchRecords: () => Promise<void>;
     protected records_initially_fetched = false;
     public table_column_config: TableColumnConfigInterface;
-    public profile_view_component: Component;
-    public form_view_component: Component;
+    public profile_view_component: Component | null;
+    public form_view_component: Component | null;
     public form_modal_config = { position: "center", width_class: "w-lg" }
 
     constructor(
         controller: BaseControllerInterface,
         table_column_config: TableColumnConfigInterface,
-        profile_view_component: Component,
-        form_view_component: Component
+        profile_view_component: Component | null,
+        form_view_component: Component | null,
     ) {
         super(controller, controller.component_name);
 
@@ -505,6 +505,8 @@ class BaseListViewEventHandler extends BaseEventHandler {
 
     // Method to handle opening registered app profile modal
     public async handleOpenProfileModal (event: Event | InputEvent | null, record: Record<string, any>) {
+        if(!this.profile_view_component) { return }
+
         try {
             const { content_field_key } = this.controller;
             const content_data          = this.content_manager?.get(`content_resource.${content_field_key}.profile_view_ui`);
@@ -561,6 +563,8 @@ class BaseListViewEventHandler extends BaseEventHandler {
 
     // Method to handle opening registered app form modal
     public async handleOpenFormModal (event: Event | InputEvent, record: Record<string, any> = {}) {
+        if(!this.form_view_component) { return }
+        
         try {
             const { content_field_key } = this.controller;
             const content_data          = this.content_manager?.get(`content_resource.${content_field_key}.form_view_ui`  );
