@@ -21,7 +21,7 @@ class RoleTableColumnConfig {
         role_name: string, 
         role_options_list: { value: string, label_text: string}[]
     ) { 
-        const role_obj              = role_options_list.find((obj:{ value: string, label_text: string} ) => { return obj.value === role_name})
+        const role_obj = role_options_list.find((obj:{ value: string, label_text: string} ) => { return obj.value === role_name})
 
         return role_obj?.label_text ?? role_name
     }
