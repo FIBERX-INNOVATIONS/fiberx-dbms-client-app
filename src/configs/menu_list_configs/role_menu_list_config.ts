@@ -4,7 +4,7 @@ import ClassStyles                      from "@/enums/class_styles.enums";
 import ContentManagerUtil               from "@ui/version_2/utils/content_manager_util";
 import MemberAuthManagerUtil            from "@ui/version_2/utils/member_auth_manager_util";
 import SVGIcons                         from "@ui/version_2/resources/svg_icon_resource";
-import RolePermissionsView              from "@/modules/member_module/views/activity_view/member_activity_view.vue"
+import RolePermissionsView              from "@/modules/access_control_module/views/role_permissions_view/access_control_role_permissions_view.vue"
 
 import { NavLinkUIPropsInterface }      from "@ui/version_2/types/props_builder_type";     
 import { BaseEventHandlerInterface }    from "@ui/version_2/types/component_type";
@@ -83,7 +83,7 @@ class RoleMenuListConfig {
         const menu_list: NavLinkUIPropsInterface[] = [view_menu, select_menu];
 
         if(member_authenticator.canMemberAccess("view_role_assigned_permissions", member_perm_key)) {
-            const view_permissions_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOpenModalForCustomView.bind(event_handler)(event, record, "permissions_view", RolePermissionsView ); }
+            const view_permissions_menu_on_click  = (event: MouseEvent) => { return event_handler.handleOpenModalForCustomView.bind(event_handler)(event, record, "role_permissions_view_ui", RolePermissionsView ); }
             const view_permissions_menu           = this.buildMenuItem(`ViewRolePermissions-${record_index}`, view_permissions_menu_text, "", view_permissions_menu_svg_icon, view_permissions_menu_on_click);
 
             menu_list.push(view_permissions_menu)

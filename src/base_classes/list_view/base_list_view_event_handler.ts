@@ -34,14 +34,14 @@ class BaseListViewEventHandler extends BaseEventHandler {
     protected status_alert_options: StatusPayloadOptionsInterface;
     protected debouncedFetchRecords: () => Promise<void>;
     protected records_initially_fetched = false;
-    public table_column_config: TableColumnConfigInterface;
+    public table_column_config: TableColumnConfigInterface | null;
     public profile_view_component: Component | null;
     public form_view_component: Component | null;
     public form_modal_config = { position: "center", width_class: "w-lg" }
 
     constructor(
         controller: BaseControllerInterface,
-        table_column_config: TableColumnConfigInterface,
+        table_column_config: TableColumnConfigInterface | null,
         profile_view_component: Component | null,
         form_view_component: Component | null,
     ) {
@@ -196,19 +196,17 @@ class BaseListViewEventHandler extends BaseEventHandler {
         const btn_text          = content_data?.selected_row_counter_text.replace("%", updated_array.length);
 
         const new_bulk_action_btn_props = BaseListViewPropsBuilder.getEllipsisBtnProps(bulk_action_btn_id, this, should_show, btn_text);
-        const new_table_header_props    = BaseListViewPropsBuilder.getDataTableHeaderProps(this, content_field_key, this.table_column_config, order_by, order_direction, records.length, updated_array);
-        const new_table_body_props      = BaseListViewPropsBuilder.getDataTableBodyProps(this, content_field_key, this.table_column_config, record_id_key, order_by, order_direction, records, updated_array);
 
         Object.assign(this.controller.state_refs.bulk_action_btn_props, new_bulk_action_btn_props);
-        Object.assign(this.controller.state_refs.table_header_props, new_table_header_props);
-        Object.assign(this.controller.state_refs.table_body_props, new_table_body_props);
+
+        this.updateTableBodyProps(records);
     }
 
     // Method to handle update table body props
     public async updateTableBodyProps (updated_array: Record<string, any>[]) {
         const { state_refs, content_field_key, order_by, order_direction, record_id_key } = this.controller;
 
-        if(!Array.isArray(updated_array)) { return }
+        if(!Array.isArray(updated_array) || !this.table_column_config) { return }
 
         const new_table_body_props = BaseListViewPropsBuilder.getDataTableBodyProps(
             this, 
@@ -221,6 +219,17 @@ class BaseListViewEventHandler extends BaseEventHandler {
             state_refs.selected_records.value
         );
 
+        const new_table_header_props    = BaseListViewPropsBuilder.getDataTableHeaderProps(
+            this, 
+            content_field_key, 
+            this.table_column_config, 
+            order_by, 
+            order_direction, 
+            updated_array.length,
+            state_refs.selected_records.value
+        );
+
+        Object.assign(this.controller.state_refs.table_header_props, new_table_header_props);
         Object.assign(this.controller.state_refs.table_body_props, new_table_body_props); 
     }
 
@@ -269,6 +278,8 @@ class BaseListViewEventHandler extends BaseEventHandler {
             if(!event_handler || !order_by || !order_direction) { return }
 
             if(order_by === current_order_by.value && order_direction === current_order_direction.value ) { return }
+
+            if(!this.table_column_config) { return }
 
             const new_table_header_props = BaseListViewPropsBuilder.getDataTableHeaderProps(
                 event_handler, 
@@ -548,7 +559,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
             const component_props       = { record, ...props_obj };
 
             const open_modal_payload: OpenNewModalPayloadInterface = {
-                position: "center", width_class: "w-lg", title_content,
+                ...this.form_modal_config, title_content,
                 component, component_props
             }
             this.controller.event_bus.emit("open_new_modal", open_modal_payload);

@@ -9,6 +9,8 @@ class AccessControlRoleListViewEventHandler extends BaseListViewEventHandler {
 
     constructor(controller: BaseControllerInterface) {
         super(controller, RolesTableColumnConfig, AccessControlRoleProfileView, null);
+
+        this.form_modal_config = { position: "center", width_class: "w-[60%]" }
     }
 
     // Method to get modal_title value

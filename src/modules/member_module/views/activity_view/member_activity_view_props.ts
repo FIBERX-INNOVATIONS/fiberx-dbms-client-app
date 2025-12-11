@@ -1,3 +1,5 @@
+
+
 import ClassStyles from "@/enums/class_styles.enums";
 
 const ui_class_styles = ClassStyles.profile_view_ui;

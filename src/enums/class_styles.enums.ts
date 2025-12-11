@@ -404,6 +404,17 @@ const ClassStyles = {
             body_class_style: "w-full justify-center items-center grid grid-cols-1 lg:grid-cols-2",
             row_class_style: "flex items-center gap-2 w-full items-center justify-center"
         }
+    },
+    activity_list_ui: {
+        wrapper_class_style: "w-full block items-center justify-center my-4",
+        activity_wrapper_class_style: "w-full h-auto block border-2 rounded p-0 my-2",
+        activity_header_class_style: "w-full h-[25px] p-2 border-b-4 shadow flex items-center  bg-gray-300",
+        activity_header_section_1_class_style: "flex items-center w-[45%] justify-start font-bold text-sm truncate text-start",
+        activity_header_section_2_class_style: "flex items-center w-[52%] justify-end font-bold text-sm truncate text-end",
+        activity_body_class_style: "w-full p-2 bg-white text-center break-words whitespace-normal",
+        activtiy_body_content_class_style: "uppercase text-xs font-bold block",
+        select_checkbox_wrapper_class_style: "flex items-center mr-2 w-[3%]",
+        select_checkbox_class_style: "cursor-pointer h-4 w-4"
     }
 
     

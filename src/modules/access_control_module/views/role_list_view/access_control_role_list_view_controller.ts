@@ -8,7 +8,9 @@ import AccessControlUIService                              from "@/modules/acces
 class AccessControlRoleListViewController extends BaseListViewController {
     constructor(props: Record<string, any> = {}) {
         super("access_control_role_list_view", props);
+
         this.initializeDependencies();
+        this.allowed_update_records = false;
     }
 
     protected getMenuListConfig() { return RoleMenuListConfig; }

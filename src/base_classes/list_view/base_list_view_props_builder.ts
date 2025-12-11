@@ -102,9 +102,10 @@ class BaseListViewPropsBuilder {
         event_handler: BaseEventHandlerInterface,
         disabled: boolean = false,
         show_loader: boolean = true,
+        content_component_field_key: string = "form_action_btn"
     ): ButtonUIPropsInterface {
         const content_manager           = ContentManagerUtil.getInstance();
-        const content_data              = content_manager?.get(`content_resource.${content_field_key}.form_action_btn`) ?? {};
+        const content_data              = content_manager?.get(`content_resource.${content_field_key}.${content_component_field_key}`) ?? {};
         const { btn_text, btn_icon }    = content_data;
         const btn_icon_name             = btn_icon as keyof typeof SVGIcons;
         const class_styles              = ClassStyles?.form_button_ui ?? {};
@@ -113,12 +114,12 @@ class BaseListViewPropsBuilder {
         const btn_type                  = "button";
         const content_text              = RenderHtmlUtil.renderHtml({ text: btn_text, icon: SVGIcons[btn_icon_name], icon_class_style, order: "text-first" })
         const loader_content_text       = RenderHtmlUtil.renderLoaderHtml({});
-        const on_click                  = event_handler?.handleFormActionBtnClick.bind(event_handler);
+        const on_click                  = event_handler?.handleFormActionBtnClick?.bind(event_handler);
 
         return reactive({
             type: btn_type, disabled, show_loader, 
             content_text, loader_content_text, btn_class_style, on_click
-        })
+        });
     }
 
     // Method to get pagination result props
@@ -156,12 +157,12 @@ class BaseListViewPropsBuilder {
         const btn_type                  = "button";
         const content_text              = RenderHtmlUtil.renderHtml({ text: btn_text, icon: SVGIcons.vertical_elipsis_svg_icon, icon_class_style, })
         const loader_content_text       = RenderHtmlUtil.renderLoaderHtml({});
-        const on_click                  = event_handler?.toggleEllipsisDropdown.bind(event_handler);
+        const on_click                  = event_handler?.toggleEllipsisDropdown?.bind(event_handler);
 
         return reactive({
             id, type: btn_type, disabled, show_loader, 
             content_text, loader_content_text, btn_class_style, on_click
-        })
+        });
     }
 
     // Method to get Profile dropdown ui props
@@ -175,7 +176,7 @@ class BaseListViewPropsBuilder {
         const id                    = menu_id;
         const parent_id             = btn_id;
         const class_styles          = ClassStyles?.list_view_ui.dropdown_menu_list_ui ?? {};
-        const menu_list             = menu_list_config.getBulkActionMenuList(event_handler, content_field_key)
+        const menu_list             = menu_list_config?.getBulkActionMenuList?.(event_handler, content_field_key)
 
         const { wrapper_class_style, list_class_style, list_item_class_style } = class_styles;
 
@@ -196,7 +197,7 @@ class BaseListViewPropsBuilder {
         const content_manager           = ContentManagerUtil.getInstance();
         const content_data              = content_manager?.get(`content_resource.${content_field_key}.data_table`) ?? {};
         const { sn_text, actions_text } = content_data;
-        const columns                   = table_column_config.getTableColumnConfig(event_handler, content_field_key, order_by, order_direction);
+        const columns                   = table_column_config?.getTableColumnConfig?.(event_handler, content_field_key, order_by, order_direction);
         const all_selected              = selected_records.length === record_length && record_length > 0;
         const some_selected             = selected_records.length ? true : false;
         const on_toggle_all             = event_handler?.handleOnAllRecordsSelected?.bind(event_handler);
@@ -228,7 +229,7 @@ class BaseListViewPropsBuilder {
         const class_styles              = ClassStyles?.list_view_ui?.data_table_ui?.table_body_ui ?? {};
         const content_manager           = ContentManagerUtil.getInstance();
         const content_data              = content_manager?.get(`content_resource.${content_field_key}.data_table`) ?? {};
-        const columns                   = table_column_config.getTableColumnConfig(event_handler, content_field_key, order_by, order_direction);
+        const columns                   = table_column_config?.getTableColumnConfig?.(event_handler, content_field_key, order_by, order_direction);
         const on_row_select             = event_handler?.handleOnRecordSelected?.bind(event_handler)
 
         const { sn_text, actions_text, no_data_text } = content_data;

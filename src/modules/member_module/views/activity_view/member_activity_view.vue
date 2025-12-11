@@ -7,19 +7,10 @@
         <ListLoaderUI v-if="is_loading" :number_of_bars="6" />
 
         <div v-else-if="!is_loading && records?.length > 0" class="">
-            <div  class="w-full block items-center justify-center my-4">
-                <div v-for="(record, index) in records" :key="index" class="w-full h-auto block border-2 rounded p-0 my-2">
-                    <div class="w-full h-[25px] p-2 border-b-4 shadow flex items-center justify-between bg-gray-300">
-                        <span class="font-bold text-sm truncate">{{ (index + 1) }}.</span>
-                        <span class="font-bold text-sm truncate">{{ InputTransformerUtil.formatReadableDateTime(record.created_at) }}</span>
-                    </div>
-                    <div class="w-full p-2 bg-white text-center break-words whitespace-normal">
-                        <span class="uppercase text-xs font-bold block">
-                            {{ record.description }}
-                        </span>
-                    </div>
-                </div>
-            </div>
+            <ActivityListUI
+                :select_mode="false"
+                :activity_records="records"
+            />
 
 
             <!-- pagination ui -->
@@ -40,14 +31,14 @@ import MemberActivityViewProps from "./member_activity_view_props";
 import MemberActivityViewController from "./member_activity_view_controller";
 import InputTransformerUtil from "@ui/version_2/utils/input_formatter_util";
 
-
-const props             = defineProps(MemberActivityViewProps);
-const controller        = new MemberActivityViewController(props);
-const event_handler     = controller.event_handler;
+const transformer_util_ref  = InputTransformerUtil;
+const props                 = defineProps(MemberActivityViewProps);
+const controller            = new MemberActivityViewController(props);
+const event_handler         = controller.event_handler;
 
 const { state_refs, computed_refs, components } = controller.getComponentDefinition();
 
-const { ListLoaderUI, SearchFieldUI, PaginationUI } = components;
+const { ListLoaderUI, SearchFieldUI, PaginationUI, ActivityListUI } = components;
 
 const {
     content_data,

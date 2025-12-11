@@ -51,6 +51,9 @@ class BaseListViewController extends BaseController {
     public records: Record<string, any>[] = [];
     public selected_record: Record<string, any> | null = null;
     public selected_records: string[] | number[] = [];
+    public content_component_field_key: string = "";
+
+    public allowed_update_records: boolean = true;
 
     constructor(component_name: string, props: Record<string, any> = {}) {
         super(component_name, props);
@@ -187,19 +190,21 @@ class BaseListViewController extends BaseController {
         
         await this.event_handler.handleFetchRecords();
 
-        await this.event_handler.handleListViewProfileModalRouting();
+        await this.event_handler?.handleListViewProfileModalRouting?.();
 
-        this.event_bus.on("on_new_record_created", async (payload: NewRecordPayloadInterface) => {
-            this.event_handler.handleOnNewRecordCreated(payload);
-        });
+        if(this.allowed_update_records) {
+            this.event_bus.on("on_new_record_created", async (payload: NewRecordPayloadInterface) => {
+                this.event_handler?.handleOnNewRecordCreated?.(payload);
+            });
 
-        this.event_bus.on("on_record_updated", async (payload: RecordUpdatedPayloadInterface) => {
-            this.event_handler.handleOnRecordUpdated(payload);
-        });
+            this.event_bus.on("on_record_updated", async (payload: RecordUpdatedPayloadInterface) => {
+                this.event_handler?.handleOnRecordUpdated?.(payload);
+            });
 
-        this.event_bus.on("on_record_deleted", async (payload: RecordDeletedPayloadInterface) => {
-            this.event_handler.handleOnRecordDeleted(payload);
-        });
+            this.event_bus.on("on_record_deleted", async (payload: RecordDeletedPayloadInterface) => {
+                this.event_handler?.handleOnRecordDeleted?.(payload);
+            });
+        }
     }
 
     // Method to get table action btn props

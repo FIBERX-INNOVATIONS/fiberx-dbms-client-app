@@ -6,6 +6,7 @@ import BaseListViewPropsBuilder             from "@/base_classes/list_view/base_
 import ListLoaderUI                         from "@ui/version_2/components/LoaderUI/ListLoaderUI/list_loader_ui.vue";
 import SearchFieldUI                        from "@ui/version_2/components/SearchFieldUI/search_field_ui.vue";
 import PaginationUI                         from "@ui/version_2/components/NavigationUI/PaginationUI/pagination_ui.vue";
+import ActivityListUI                       from "@ui/version_2/components/ActivityListUI/activity_list_ui.vue";
 
 
 import { 
@@ -38,7 +39,7 @@ class MemberActivityViewController extends BaseProfileViewController {
 
     // Method to get custom child compnents
     protected getCustomChildComponents(): Record<string, any> { 
-        return { ListLoaderUI, SearchFieldUI, PaginationUI } 
+        return { ListLoaderUI, SearchFieldUI, PaginationUI, ActivityListUI } 
     }
 
     // Method to get custom child compnents
