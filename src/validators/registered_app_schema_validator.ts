@@ -1,18 +1,15 @@
-import InputValidatorUtil                           from "@ui/version_2/utils/input_validator_util";
-import { ValidationResult }                         from "@/types/validation_type";                 
-import { RegisteredAppSchemaFormDataInterface }     from "@/types/api_service_type";
-
-import { 
-    ColumnNameType,
-    ColumnDefinitionInterface,
-
-} from "@/types/schema_type";
+import InputValidatorUtil                               from "@ui/version_2/utils/input_validator_util";
+import { ValidationResult }                             from "@/types/validation_type";                 
+import { RegisteredAppSchemaFormDataInputInterface }    from "@/types/validation_type";
+import { RegisteredAppSchemaRecordInterface }           from "@/types/api_service_type";
+import { ColumnNameType, ColumnDefinitionInterface }    from "@/types/schema_type";
 
 import { 
     COLUMN_NAME_TYPE_OPTIONS,
     SCHEMA_PERMISSIONS_ACTIONS,
     REFERENCE_TABLE_ACTIONS
 } from "@/enums/constants.enums";
+
 
 
 class RegisteredAppSchemaValidator {
@@ -132,8 +129,8 @@ class RegisteredAppSchemaValidator {
 
     /** Validate registered app input */
     public static validateRegisteredAppSchemaInput(
-        schema_input: RegisteredAppSchemaFormDataInterface,
-        old_record: Record<string, any>
+        schema_input: RegisteredAppSchemaFormDataInputInterface,
+        old_record: RegisteredAppSchemaRecordInterface
     ): ValidationResult {
         const { 
             csrf_token, model_name, datasource_id, app_public_id,

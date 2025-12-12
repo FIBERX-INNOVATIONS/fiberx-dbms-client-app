@@ -71,6 +71,7 @@ export interface AuthenticatedMemberRecordInterface {
 export interface RegisteredAppRecordInterface {
     public_id: string;
     name: string;
+    prefix: string;
     description: string;
     base_url: string;
     logo_url: string;
@@ -159,17 +160,17 @@ export interface PermissionRecordInterface {
 
 }
 
-export interface RoleAssignedPermissionInterface {
+export interface RoleAssignedPermissionRecordInterface {
     id: number;
     role_id: number;
-    created_at: string;
-    updated_at: string | null;
-    creator: MemberRecordInterface;
+    created_at?: string;
+    updated_at?: string | null;
+    creator?: MemberRecordInterface;
     updator?: MemberRecordInterface;
     permission: PermissionRecordInterface;
 }
 
-export interface UpdatedRolePermissionsInterface {
+export interface UpdatedRolePermissionsRecordInterface {
     role: RoleRecordInterface;
     permissions: PermissionRecordInterface[];
 }

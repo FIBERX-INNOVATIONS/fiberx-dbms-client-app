@@ -16,7 +16,8 @@ export const CSRF_TOKEN_FOR = {
     DATASOURCE: "datasource",
     REGISTERED_APP_SCHEMA: "registered_app_schema",
     SCHEMA_ACCESS: "schema_access",
-    MEMBER: "member"
+    MEMBER: "member",
+    ACCESS_CONTROL: "access_control"
 }
 
 export const DEFAULT_PROFILE_PHOTO = "https://newprofilepic.photo-cdn.net//assets/images/article/profile.jpg?90af0c8";

@@ -1,7 +1,9 @@
-import InputValidatorUtil from "@ui/version_2/utils/input_validator_util";
+import InputValidatorUtil           from "@ui/version_2/utils/input_validator_util";
+import { MemberRecordInterface }    from "@/types/api_service_type";
 import { 
-    MemberFormInputInterface
-} from "@/types/api_service_type";
+    MemberFormDataInputInterface
+} from "@/types/validation_type";
+
 
 interface ValidationResult {
     v_state: boolean;
@@ -12,8 +14,8 @@ class MemberValidator {
 
     /** Validate registered app input */
     public static validateMemberInput (
-        member_input: MemberFormInputInterface,
-        old_record: Record<string, any>
+        member_input: MemberFormDataInputInterface,
+        old_record: MemberRecordInterface
     ): ValidationResult {
         const { 
             csrf_token, first_name, last_name, email, role_name,
@@ -21,7 +23,7 @@ class MemberValidator {
         } = member_input;
 
         const keys_to_check     = ["first_name", "last_name", "email", "role_name", "phone", "dob", "gender", "profile_photo_link", "password"];
-        const has_input_changed = old_record?.id ? InputValidatorUtil.hasInputChanged(member_input, old_record, keys_to_check) : true;
+        const has_input_changed = old_record?.public_id ? InputValidatorUtil.hasInputChanged(member_input, old_record, keys_to_check) : true;
 
         if (!has_input_changed) {  return { v_state: false, v_msg: "input_has_not_changed" }; }
 

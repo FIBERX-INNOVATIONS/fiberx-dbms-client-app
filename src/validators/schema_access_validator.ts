@@ -1,24 +1,18 @@
 import InputValidatorUtil                       from "@ui/version_2/utils/input_validator_util";
 import { SchemaAccessDefinitionInterface }      from "@/types/schema_type";
 import { SCHEMA_PERMISSIONS_ACTIONS }           from "@/enums/constants.enums";
+import { SchemaAccessRecordInterface } from "@/types/api_service_type";
 import { 
-    SchemaAccessFormInputInterface,
-    SchemaAccessUpdateFormInputInterface
-} from "@/types/api_service_type";
-
-
-
-interface ValidationResult {
-    v_state: boolean;
-    v_msg: string;
-}
+    ValidationResult,
+    SchemaAccessFormDataInputInterface,
+} from "@/types/validation_type";
 
 class SchemaAccessValidator {
 
     /** Validate registered app input */
     public static validateSchemaAccessInput(
-        schema_access_input: SchemaAccessFormInputInterface,
-        old_record: Record<string, any>
+        schema_access_input: SchemaAccessFormDataInputInterface,
+        old_record: SchemaAccessRecordInterface
     ): ValidationResult {
         const { csrf_token, app_public_id, schema_access_array } = schema_access_input;
 

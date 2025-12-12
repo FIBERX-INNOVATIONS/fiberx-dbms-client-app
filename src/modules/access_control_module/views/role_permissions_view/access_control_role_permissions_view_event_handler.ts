@@ -1,17 +1,25 @@
 
 import ClassStyles                                  from "@/enums/class_styles.enums";
 import BaseListViewEventHandler                     from "@/base_classes/list_view/base_list_view_event_handler";
+import ActivityListUIPropsBuilder                   from "@ui/version_2/props_builder/activity_list_props_builder";
+import InputTransformerUtil                         from "@ui/version_2/utils/input_formatter_util";
+import AccessControlRolePermissionsFormView         from "@/modules/access_control_module/views/role_permissions_form_view/access_control_role_permisssions_form_view.vue"
+import { NewRecordPayloadInterface }                from "@/types/app_event_type";
+import { ActivityListUIRenderMethodsinterface }     from "@ui/version_2/types/props_builder_type";
 import { BaseControllerInterface }                  from "@ui/version_2/types/component_type";
 import { RequestQueryInputInterface }               from "@/types/validation_type";
-import ActivityListUIPropsBuilder                   from "@ui/version_2/props_builder/activity_list_props_builder";
-import { ActivityListUIRenderMethodsinterface }     from "@ui/version_2/types/props_builder_type";
-import { RoleAssignedPermissionInterface }          from "@/types/api_service_type";
-import InputTransformerUtil                         from "@ui/version_2/utils/input_formatter_util";
+import { 
+    PermissionRecordInterface,
+    RoleAssignedPermissionRecordInterface, 
+    RoleRecordInterface, 
+    UpdatedRolePermissionsRecordInterface 
+} from "@/types/api_service_type";
+import { reactive } from "vue";
 
 class AccessControlRolePermissionsViewUIEventHandler extends BaseListViewEventHandler {
 
     constructor(controller: BaseControllerInterface) {
-        super(controller, null, null, null);
+        super(controller, null, null, AccessControlRolePermissionsFormView);
 
         this.form_modal_config = { position: "center", width_class: "w-[60%]" }
     }
@@ -20,22 +28,22 @@ class AccessControlRolePermissionsViewUIEventHandler extends BaseListViewEventHa
         const onSelect  = this.handleOnRecordSelected.bind(this);
 
         const getRecordId = (record: Record<string, any>): string | number => { 
-            const typed_record = (record as RoleAssignedPermissionInterface);
+            const typed_record = (record as RoleAssignedPermissionRecordInterface);
             return typed_record?.permission?.id 
         };
 
         const renderHeaderSection1Content   = (index: number, record: Record<string, any>): string => {
-            const typed_record = (record as RoleAssignedPermissionInterface);
+            const typed_record = (record as RoleAssignedPermissionRecordInterface);
             return `${index + 1}. ${InputTransformerUtil.spaceCamelCase(typed_record?.permission?.module_name)}`;
         };
 
         const renderHeaderSection2Content   = (index: number, record: Record<string, any>): string => {
-            const typed_record = (record as RoleAssignedPermissionInterface)
-            return `${InputTransformerUtil.formatReadableDateTime(typed_record?.created_at)}`;
+            const typed_record = (record as RoleAssignedPermissionRecordInterface)
+            return `${InputTransformerUtil.formatReadableDateTime(typed_record?.created_at ?? "")}`;
         }
 
         const renderBodyContent = (index: number, record: Record<string, any>): string => {
-            const typed_record = (record as RoleAssignedPermissionInterface)
+            const typed_record = (record as RoleAssignedPermissionRecordInterface)
             return `${typed_record?.permission?.description}`;
         }
 
@@ -47,6 +55,9 @@ class AccessControlRolePermissionsViewUIEventHandler extends BaseListViewEventHa
             renderBodyContent
         }
     }
+
+    // Method to handle form action btn click
+    public async handleFormActionBtnClick (event: MouseEvent) { this.handleOpenFormModal(event, this.controller.props.record); }
 
     // Method to handle fetch member activities
     public async handleFetchRecords () {
@@ -85,7 +96,6 @@ class AccessControlRolePermissionsViewUIEventHandler extends BaseListViewEventHa
     // Method to handle buidling activity list props
     public handleBuildActivityListProps () {
         const { records, selected_records } = this.controller;
-
         return ActivityListUIPropsBuilder.getActivityListProps(
             records, 
             selected_records, 
@@ -110,7 +120,7 @@ class AccessControlRolePermissionsViewUIEventHandler extends BaseListViewEventHa
 
         if (!Array.isArray(selected_records)) { return; }
 
-        const typed_record  = (record as RoleAssignedPermissionInterface);
+        const typed_record  = (record as RoleAssignedPermissionRecordInterface);
         const record_value  = typed_record?.permission.id;
 
         if (!record_value) { return; }

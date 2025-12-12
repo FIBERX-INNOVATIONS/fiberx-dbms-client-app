@@ -25,8 +25,6 @@ class MemberTwoFactorInfoViewEventHandler extends BaseEventHandler {
 
             const { record, hard_reset = false } = this.controller.props;
 
-            console.log({ props: this.controller.props})
-
             const { s_state, s_msg, s_data, logout }    = await this.controller.service?.executeFetchMember2FAInfo?.(record?.public_id, hard_reset);
 
             const formatted_api_msg     = this.content_manager?.getAPIResponseValue(s_msg);

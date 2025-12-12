@@ -53,7 +53,7 @@
                         )" 
                     />
 
-                    <span class="text-sm">{{ InputTransformerUtil.toTitleCase(permission_obj?.label_text) }}</span>
+                    <span class="text-sm">{{ transformeter_util_ref.toTitleCase(permission_obj?.label_text) }}</span>
                 </div>
                 
             </div>
@@ -68,10 +68,11 @@ import SchemaAccessSectionUIController      from "./schema_access_section_ui_con
 import InputTransformerUtil                 from "@ui/version_2/utils/input_formatter_util";
 import { SCHEMA_PERMISSIONS_ACTIONS }       from "@/enums/constants.enums";
 
-const props            = defineProps(SchemaAccessSectionUIProps);
-const controller       = new SchemaAccessSectionUIController(props);
-const event_handler    = controller?.event_handler;
-const event_methods    = event_handler.getInputEventMethods.bind(event_handler);
+const transformeter_util_ref        = InputTransformerUtil
+const props                         = defineProps(SchemaAccessSectionUIProps);
+const controller                    = new SchemaAccessSectionUIController(props);
+const event_handler                 = controller?.event_handler;
+const event_methods                 = event_handler.getInputEventMethods.bind(event_handler);
 
 const { state_refs, components }    = controller.getComponentDefinition();
 const { InputGroupUI, ButtonUI }    = components;

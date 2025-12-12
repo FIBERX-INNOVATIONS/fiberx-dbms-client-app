@@ -10,7 +10,8 @@ import ButtonUI                                     from "@ui/version_2/componen
 import PaginationResultAndBulkActionSectionUI       from "@/ui_components/pagination_result_and_bulk_action_section_ui/pagination_result_and_bulk_action_section_ui.vue";
 import PaginationUI                                 from "@ui/version_2/components/NavigationUI/PaginationUI/pagination_ui.vue";
 import ActivityListUI                               from "@ui/version_2/components/ActivityListUI/activity_list_ui.vue";
-
+import ActivityListUIPropsBuilder                   from "@ui/version_2/props_builder/activity_list_props_builder";
+import ClassStyles                                  from "@/enums/class_styles.enums";
 
 
 
@@ -86,7 +87,7 @@ class AccessControlRolePermissionsViewController extends BaseListViewController 
 
             form_action_btn_props: BaseListViewPropsBuilder.getFormActionBtnProps(this.content_field_key, this.event_handler, false, true, "role_permissions_view_ui"),
 
-            activity_list_props: this.event_handler.handleBuildActivityListProps(),
+            activity_list_props: ActivityListUIPropsBuilder.getActivityListProps(this.records, this.selected_records, ClassStyles.activity_list_ui, this.event_handler.getActivityListRenderMethods(), true),
 
             pagination_props: BaseListViewPropsBuilder.getPaginationProps(this.event_handler, this.content_field_key),
         };

@@ -1,12 +1,10 @@
-import InputValidatorUtil from "@ui/version_2/utils/input_validator_util";
+import InputValidatorUtil               from "@ui/version_2/utils/input_validator_util";
+import { DatasourceRecordInterface }    from "@/types/api_service_type";
 import { 
-    DatasourceFormDataInterface
-} from "@/types/api_service_type";
+    ValidationResult,
+    DatasourceFormDataInputInterface
+} from "@/types/validation_type";
 
-interface ValidationResult {
-    v_state: boolean;
-    v_msg: string;
-}
 
 class DatasourceValidator {
 
@@ -31,8 +29,8 @@ class DatasourceValidator {
 
     /** Validate registered app input */
     public static validateDatasourceInput(
-        datasource_input: DatasourceFormDataInterface,
-        old_record: Record<string, any>
+        datasource_input: DatasourceFormDataInputInterface,
+        old_record: DatasourceRecordInterface
     ): ValidationResult {
         const { 
             csrf_token, registered_app_public_id, name, datasource_type,  host, username, database_name, 

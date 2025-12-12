@@ -23,7 +23,7 @@
                 :bulk_action_menu_list_props="state_refs.bulk_action_dropdown_menu_props"
             />
 
-            <ActivityListUI v-bind="activity_list_props" />
+            <ActivityListUI  v-bind="activity_list_props" />
 
 
             <!-- pagination ui -->

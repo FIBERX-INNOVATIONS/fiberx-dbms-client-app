@@ -363,6 +363,8 @@ class BaseListViewEventHandler extends BaseEventHandler {
         // 🟨 2. If we exceed the page size, remove the last record (FIFO behavior)
         if (updated_records.length > size.value) { updated_records.pop(); }
 
+        console.log({ record, updated_records })
+
         this.updateControllerAttributes({ records: updated_records, total_items: updated_total_items, total_pages: updated_total_pages })
         this.logger.log("✅ New record added:", record);
         this.logger.log("📊 Updated pagination:", {
@@ -580,10 +582,10 @@ class BaseListViewEventHandler extends BaseEventHandler {
             const { content_field_key } = this.controller;
             const content_data          = this.content_manager?.get(`content_resource.${content_field_key}.form_view_ui`  );
 
-            const { new_app_title_text, edit_app_title_text }  = content_data;
+            const { new_record_title_text, edit_record_title_text }  = content_data;
 
-            const record_title_value= this.getModalTitleValue(record);
-            const title_content     = record_title_value ? edit_app_title_text.replace("%", record_title_value) : new_app_title_text;
+            const record_title_value= this?.getModalTitleValue?.(record);
+            const title_content     = record_title_value ? edit_record_title_text.replace("%", record_title_value) : new_record_title_text;
             const component         = markRaw(this.form_view_component);
             const component_props   = { record };
 

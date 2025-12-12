@@ -10,9 +10,9 @@ import {
     RequestQueryInputInterface,
     PaginationResponseInterface,
     RoleRecordInterface,
-    RoleAssignedPermissionInterface,
+    RoleAssignedPermissionRecordInterface,
     PermissionRecordInterface,
-    UpdatedRolePermissionsInterface
+    UpdatedRolePermissionsRecordInterface
 } from "@/types/api_service_type";
 
 
@@ -33,7 +33,7 @@ class AccessControlAPIService extends BaseAPIService {
     public async getRoleAssignedPermissions (
         role_id: number | string,
         params: RequestQueryInputInterface
-    ) : Promise<APIResponseInterface<PaginationResponseInterface<RoleAssignedPermissionInterface[]>>> {
+    ) : Promise<APIResponseInterface<PaginationResponseInterface<RoleAssignedPermissionRecordInterface[]>>> {
         const url       = `/access-control/role/${role_id.toString()}/permissions`;
         const config    = { url, params, method: "GET" };
 
@@ -54,7 +54,7 @@ class AccessControlAPIService extends BaseAPIService {
     // Service method to query assign permission to role endpoint
     public async assignPermissionsToRole (
         form_data: RolePermissionsFormDataInputData
-    ) : Promise<APIResponseInterface<PaginationResponseInterface<UpdatedRolePermissionsInterface>>> {
+    ) : Promise<APIResponseInterface<PaginationResponseInterface<UpdatedRolePermissionsRecordInterface>>> {
         const url       = `/access-control/assign`;
         const config    = { url, method: "POST", data: form_data };
 
@@ -64,7 +64,7 @@ class AccessControlAPIService extends BaseAPIService {
     // Service method to query un-assign permission to role endpoint
     public async unAssignPermissionsToRole (
         form_data: RolePermissionsFormDataInputData
-    ) : Promise<APIResponseInterface<PaginationResponseInterface<UpdatedRolePermissionsInterface>>> {
+    ) : Promise<APIResponseInterface<PaginationResponseInterface<UpdatedRolePermissionsRecordInterface>>> {
         const url       = `/access-control/un-assign`;
         const config    = { url, method: "POST", data: form_data };
 

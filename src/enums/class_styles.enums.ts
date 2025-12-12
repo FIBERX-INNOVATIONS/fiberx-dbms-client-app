@@ -335,6 +335,9 @@ const ClassStyles = {
     form_view_ui: {
         section_wrapper_class_style: "w-full block my-2 space-y-6 px-4 h-full max-h-[70vh] overflow-y-auto",
         form_class_style: "space-y-6 py-4 w-full h-full",
+        border_seperated_wrapper_class_style: "p-3 border-b text-black flex items-center justify-start gap-2",
+        label_class_style: "text-xs text-gray-600 capitalize w-full",
+        bold_label_class_style: "font-semibold text-sm uppercase w-full",
         object_input_section_class_styles: {
             wrapper_class_style: "w-full flex flex-col items-center justify-center my-4",
             header_class_style: "w-full flex items-center justify-between",
