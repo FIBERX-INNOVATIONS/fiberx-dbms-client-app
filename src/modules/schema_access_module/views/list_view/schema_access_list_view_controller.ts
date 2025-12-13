@@ -41,6 +41,7 @@ class SchemaAccessListViewController extends BaseListViewController {
         this.record_id_key          = "id";
         this.bulk_action_btn_id     = "SchemaAccessBulkActionBtn";
         this.bulk_action_menu_id    = "SchemaAccessBulkActionMenu";
+        this.show_create_btn        = this.canShowCreateBtn("create_registered_app_schema_access");
     }
 
     // Method to get ui state data

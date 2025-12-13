@@ -41,6 +41,7 @@ class RegisteredAppSchemaListViewController extends BaseListViewController {
         this.record_id_key          = "id";
         this.bulk_action_btn_id     = "RegisteredAppSchemaBulkActionBtn";
         this.bulk_action_menu_id    = "RegisteredAppSchemaBulkActionMenu";
+        this.show_create_btn        = this.canShowCreateBtn("register_new_app_schema");
     }
 
     // Method to get ui state data

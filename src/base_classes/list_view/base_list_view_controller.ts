@@ -55,11 +55,18 @@ class BaseListViewController extends BaseController {
     public content_component_field_key: string = "";
 
     public allowed_update_records: boolean = true;
+    public show_create_btn: boolean = false;
 
     constructor(component_name: string, props: Record<string, any> = {}) {
         super(component_name, props);
         this.router                 = useRouter();
         this.member_auth_manager    = MemberAuthManagerUtil.getInstance();
+    }
+
+    protected canShowCreateBtn (permision_name: string): boolean {
+        const member_perm_key  = LOCAL_STORAGE_FIELDS.MEMBER_PERMISSIONS_KEY;
+
+        return this.member_auth_manager.canMemberAccess(permision_name, member_perm_key);
     }
 
     // Subclasses must implement these methods or values
@@ -139,7 +146,7 @@ class BaseListViewController extends BaseController {
 
             search_field_props: BaseListViewPropsBuilder.getPageSearchInputGroupProps(this.content_field_key, this.event_handler),
 
-            form_action_btn_props: BaseListViewPropsBuilder.getFormActionBtnProps(this.content_field_key, this.event_handler),
+            form_action_btn_props:  this.show_create_btn ? BaseListViewPropsBuilder.getFormActionBtnProps(this.content_field_key, this.event_handler): ref(null),
 
             bulk_action_btn_props: BaseListViewPropsBuilder.getEllipsisBtnProps(this.bulk_action_btn_id, this.event_handler, false),
 

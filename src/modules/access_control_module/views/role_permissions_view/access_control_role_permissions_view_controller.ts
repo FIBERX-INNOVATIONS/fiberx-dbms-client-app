@@ -15,8 +15,6 @@ import ClassStyles                                  from "@/enums/class_styles.e
 import RolePermissionsMenuListConfig                from "@/configs/menu_list_configs/role_permissions_menu_list_config"
 
 
-
-
 class AccessControlRolePermissionsViewController extends BaseListViewController {
     public content_manager: ContentManagerUtil;
 
@@ -35,6 +33,7 @@ class AccessControlRolePermissionsViewController extends BaseListViewController 
         this.record_id_key                  = "id";
         this.bulk_action_btn_id             = "AccessControlRolePermissionsListBulkActionBtn";
         this.bulk_action_menu_id            = "AccessControlRolePermissionsListBulkActionMenu";
+        this.show_create_btn                = this.canShowCreateBtn("assign_permission_to_role");
     }
 
     protected getMenuListConfig() { return RolePermissionsMenuListConfig; }
@@ -88,7 +87,7 @@ class AccessControlRolePermissionsViewController extends BaseListViewController 
                 this.getMenuListConfig()
             ),
 
-            form_action_btn_props: BaseListViewPropsBuilder.getFormActionBtnProps(this.content_field_key, this.event_handler, false, true, "role_permissions_view_ui"),
+            form_action_btn_props: this.show_create_btn ? BaseListViewPropsBuilder.getFormActionBtnProps(this.content_field_key, this.event_handler, false, true, "role_permissions_view_ui") : ref(null),
 
             activity_list_props: ActivityListUIPropsBuilder.getActivityListProps(this.records, this.selected_records, ClassStyles.activity_list_ui, this.event_handler.getActivityListRenderMethods(), true),
 

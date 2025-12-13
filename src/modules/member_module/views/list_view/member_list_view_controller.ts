@@ -2,8 +2,7 @@ import BaseListViewController               from "@/base_classes/list_view/base_
 import MemberListViewEventHandler           from "@/modules/member_module/views/list_view/member_list_view_event_handler";
 import MemberMenuListConfig                 from "@/configs/menu_list_configs/member_menu_list_config";
 import MemberTableColumnConfig              from "@/configs/table_column_config/member_table_column_config";
-import MemberUIService                    from "@/modules/member_module/base_logic/member_ui_service";
-
+import MemberUIService                      from "@/modules/member_module/base_logic/member_ui_service";
 
 class MemberListViewController extends BaseListViewController {
     constructor(props: Record<string, any> = {}) {
@@ -22,6 +21,7 @@ class MemberListViewController extends BaseListViewController {
         this.record_id_key          = "public_id";
         this.bulk_action_btn_id     = "MemberBulkActionBtn";
         this.bulk_action_menu_id    = "MemberBulkActionMenu";
+        this.show_create_btn        = this.canShowCreateBtn("register_new_member_profile");
     }
 }
 
