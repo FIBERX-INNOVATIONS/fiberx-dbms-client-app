@@ -58,19 +58,9 @@ class FiberxDbmsClientApp {
         }
     }
 
-    // Method to get the names of auth routes
-    private getAuthRouteNames(): string[] {
-        const routes        = this.router.getRoutes() ?? [];
-        const auth_routes =  routes
-            .filter(route => route.meta?.is_auth_page === true && route.name)
-            .map(route => route.name as string); // extract the name as string
-        return auth_routes;
-    }
-
     // Method to initialize global properties
     private initializeAppGlobalProperties (): void {
         this.vue_app.config.globalProperties.$ENV           = this.ENV;
-        this.vue_app.config.globalProperties.$AUTH_ROUTES   = this.getAuthRouteNames();
         
         // 🔥 Add error handler immediately after app is created
         this.vue_app.config.errorHandler = this.handleAppError.bind(this)

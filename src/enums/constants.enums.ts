@@ -1,4 +1,6 @@
 
+export const AUTH_ROUTE_NAMES = ["Home", "Login", "TwoFactorLogin", "Logout"];
+
 export const LOCAL_STORAGE_FIELDS = {
     MEMBER_KEY: "84JRJFU",
     MEMBER_PERMISSIONS_KEY: "H84UHFUR8JU",

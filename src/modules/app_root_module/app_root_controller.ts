@@ -2,7 +2,8 @@
 import { ref, getCurrentInstance }     from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 
-import { LOCAL_STORAGE_FIELDS } from "@/enums/constants.enums";
+import { LOCAL_STORAGE_FIELDS, AUTH_ROUTE_NAMES } from "@/enums/constants.enums";
+
 import { EventBus }             from "@/utils/gloabal_event_bus";
 import AppRootPropsBuilder      from "./app_root_props_builder";
 import AppRootEventHandler      from "./app_root_event_handler";
@@ -43,8 +44,7 @@ class AppRootController extends BaseController {
     // Method to get ui computed data
     protected getUIComputedData(): Record<string, () => any> { 
         const route                         = useRoute();
-        const vue_instance                  = getCurrentInstance();
-        const auth_routes_list: string[]    = vue_instance?.proxy?.$AUTH_ROUTES ?? [];
+        const auth_routes_list: string[]    = AUTH_ROUTE_NAMES
 
         return {
             is_auth_route: () => {
@@ -75,7 +75,7 @@ class AppRootController extends BaseController {
     protected async handleOnMountedLogic(): Promise<void> {
         const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
         const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
-        
+
         // Bridge mitt events to Vue template handlers
         this.event_bus.on("isLoading", (val: boolean) => {
             this.event_handler.handleLoading(val);
