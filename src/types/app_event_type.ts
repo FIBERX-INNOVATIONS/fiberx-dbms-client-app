@@ -14,6 +14,7 @@ export type AppEvents = {
     on_new_record_created: NewRecordPayloadInterface;
     on_record_updated: RecordUpdatedPayloadInterface;
     on_record_deleted: RecordDeletedPayloadInterface;
+    on_records_deleted: RecordsDeletedPayloadInterface;
     on_columns_array_updated: ColumnsArrayUpdatedPayloadInterface;
     on_indexes_array_updated: IndexesArrayUpdatedPayloadInterface;
     on_schema_permissions_updated: SchemaPermissionsUpdatedPayloadInterface;
@@ -58,6 +59,11 @@ export interface RecordUpdatedPayloadInterface {
 
 export interface RecordDeletedPayloadInterface {
     record_id: string;
+}
+
+export interface RecordsDeletedPayloadInterface {
+    record_ids: string[] | number[];
+    id_path: string;
 }
 
 export interface ColumnsArrayUpdatedPayloadInterface {

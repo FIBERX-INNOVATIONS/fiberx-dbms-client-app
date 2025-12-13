@@ -7,7 +7,6 @@ import BaseFormViewPropsBuilder                 from "@/base_classes/form_view/b
 import AuthUIService                              from "@/modules/auth_module/base_logic/auth_ui_service";
 import MemberAuthManagerUtil                    from "@ui/version_2/utils/member_auth_manager_util";
 import ContentManagerUtil                       from "@ui/version_2/utils/content_manager_util";
-import InputTransformerUtil                     from "@ui/version_2/utils/input_formatter_util";
 import AuthPropsBuilder                         from "@/modules/auth_module/base_logic/auth_props_builder";
 import InputGroupUI                             from "@ui/version_2/components/InputGroupUI/input_group_ui.vue";
 import ToastAlertUI                             from "@ui/version_2/components/AlertUI/ToastAlertUI/toast_alert_ui.vue";

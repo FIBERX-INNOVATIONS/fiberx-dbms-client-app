@@ -12,6 +12,7 @@ import PaginationUI                                 from "@ui/version_2/componen
 import ActivityListUI                               from "@ui/version_2/components/ActivityListUI/activity_list_ui.vue";
 import ActivityListUIPropsBuilder                   from "@ui/version_2/props_builder/activity_list_props_builder";
 import ClassStyles                                  from "@/enums/class_styles.enums";
+import RolePermissionsMenuListConfig                from "@/configs/menu_list_configs/role_permissions_menu_list_config"
 
 
 
@@ -35,6 +36,8 @@ class AccessControlRolePermissionsViewController extends BaseListViewController 
         this.bulk_action_btn_id             = "AccessControlRolePermissionsListBulkActionBtn";
         this.bulk_action_menu_id            = "AccessControlRolePermissionsListBulkActionMenu";
     }
+
+    protected getMenuListConfig() { return RolePermissionsMenuListConfig; }
 
     // Method to get custom child compnents
     protected getUIComponents(): Record<string, any> { 

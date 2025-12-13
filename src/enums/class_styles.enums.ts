@@ -2,7 +2,7 @@
 const ClassStyles = {
     app_root: {
         screen_loader_ui: {
-            wrapper_class_style: "fixed inset-0 flex items-center justify-center overflow-hidden w-screen h-screen",
+            wrapper_class_style: "fixed inset-0 flex items-center justify-center overflow-hidden w-screen h-screen z-[900]",
             loader_class_style: "flex flex-col items-center justify-center space-y-4 animate-fade-in bg-[#001f3f] z-[100] w-full h-full",
             loader_symbol_class_style: "w-20 h-20 flex items-center justify-center overflow-hidden animate-spin",
             loader_symbol_img_class_style: "object-fit",
@@ -10,7 +10,7 @@ const ClassStyles = {
 
         },
         status_alert_ui: {
-            wrapper_class_style: "fixed inset-0 flex items-start justify-end overflow-hidden bg-[#0d0a0ad6] z-[99]",
+            wrapper_class_style: "fixed inset-0 flex items-start justify-end overflow-hidden bg-[#0d0a0ad6] z-[200]",
             alert_box_class_style: "relative top-6 right-6 max-w-sm w-full flex items-stretch rounded-lg shadow-lg animate-slide-in",
             close_btn_class_style: "absolute -top-3 -left-3 w-8 h-8 flex items-center text-center rounded-full shadow-md cursor-pointer",
             status_icon_wrapper_class_style: "flex items-center justify-center w-2/12  h-full p-2",

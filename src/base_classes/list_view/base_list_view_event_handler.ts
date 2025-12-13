@@ -23,13 +23,15 @@ import {
     OpenNewModalPayloadInterface, 
     RecordDeletedPayloadInterface, 
     RecordUpdatedPayloadInterface, 
-    StatusPayloadOptionsInterface 
+    StatusPayloadOptionsInterface,
+    RecordsDeletedPayloadInterface 
 } from "@/types/app_event_type";
 
 
 
 class BaseListViewEventHandler extends BaseEventHandler {
     private profile_types: string[];
+    private outsideClickHandlers = new Map<string, (e: MouseEvent) => void>();
     public content_manager: ContentManagerUtil;
     protected status_alert_options: StatusPayloadOptionsInterface;
     protected debouncedFetchRecords: () => Promise<void>;
@@ -54,6 +56,29 @@ class BaseListViewEventHandler extends BaseEventHandler {
         this.status_alert_options           = { duration: 3000, close_modal: true };
         this.debouncedFetchRecords          = debounceMethod(this.handleFetchRecords.bind(this), 2000);
         this.profile_types                  = ["registered_app_profile", "schema_profile", "member_profile"];
+    }
+
+    // method to safely resolve nested paths like "role_permission.id"
+    private resolveIdByPath (
+        record: Record<string, any>,
+        id_path?: string,
+        fallback_key?: string
+    ): string | number | null {
+        if (id_path) {
+            const value = id_path
+                .split(".")
+                .reduce((acc: any, key: string) => acc?.[key], record);
+
+            if (value !== undefined && value !== null) {
+                return value;
+            }
+        }
+
+        if (fallback_key && record?.[fallback_key] !== undefined) {
+            return record[fallback_key];
+        }
+
+        return null;
     }
 
     // Method to get modal_title value
@@ -123,22 +148,25 @@ class BaseListViewEventHandler extends BaseEventHandler {
     // method to hide menu on outside click
     private handleOutsideClick = (
         event: MouseEvent,
-        record?: Record<string, any>,
-        record_index?: Number
+        trigger_el: HTMLElement,
+        menu_list_el: HTMLElement,
+        menu_list_id: string
     ) => {
-        const trigger_id            = record ? `TableActionBtn_${record_index}` : this.controller?.bulk_action_btn_id;
-        const menu_list_id          = record ? `TableActionMenu_${record_index}` : this.controller?.bulk_action_menu_id;
-        const trigger_el            = document.getElementById(trigger_id);
-        const menu_list_el          = document.getElementById(menu_list_id);
+        const clicked_el = event.target as HTMLElement;
 
-        if (!trigger_el || !menu_list_el) { return; }
+        if (
+            menu_list_el.contains(clicked_el) ||
+            trigger_el.contains(clicked_el)
+        ) {
+            return;
+        }
 
-        const clicked_element = event.target as HTMLElement;
+        menu_list_el.classList.add("hidden");
 
-        // If click was *outside* both trigger and menu → hide dropdown
-        if (!menu_list_el.contains(clicked_element) && !trigger_el.contains(clicked_element)) {
-            menu_list_el.classList.add("hidden");
-            document.removeEventListener("click", this.handleOutsideClick);
+        const handler = this.outsideClickHandlers.get(menu_list_id);
+        if (handler) {
+            document.removeEventListener("click", handler);
+            this.outsideClickHandlers.delete(menu_list_id);
         }
     };
 
@@ -151,19 +179,23 @@ class BaseListViewEventHandler extends BaseEventHandler {
         record?: Record<string, any>,
         record_index?: Number
     ) {
-        const trigger_id            = record ? `TableActionBtn_${record_index}` : this.controller?.bulk_action_btn_id;
-        const menu_list_id          = record ? `TableActionMenu_${record_index}` : this.controller?.bulk_action_menu_id;
+        const trigger_id            = record ? `ActionBtn_${record_index}` : this.controller?.bulk_action_btn_id;
+        const menu_list_id          = record ? `ActionMenu_${record_index}` : this.controller?.bulk_action_menu_id;
         const trigger_el            = document.getElementById(trigger_id);
         const menu_list_el          = document.getElementById(menu_list_id);
-        const outside_click_method  = (event: MouseEvent) => { this.handleOutsideClick(event, record, record_index); }
-
+        const handler               = this.outsideClickHandlers.get(menu_list_id);
         if(!trigger_el || !menu_list_el) { return }
 
         const is_visible = (menu_list_el.classList.contains("hidden") === false);
 
         if(is_visible) {
             menu_list_el.classList.add("hidden");
-            document.removeEventListener("click", outside_click_method as any);
+
+            if (handler) {
+                document.removeEventListener("click", handler);
+                this.outsideClickHandlers.delete(menu_list_id);
+            }
+
             return;
         }
 
@@ -171,9 +203,15 @@ class BaseListViewEventHandler extends BaseEventHandler {
 
         if(record && Object.keys(record).length) { this.controller.selected_record = record }
 
-        // Delay the listener slightly to avoid immediately closing on this click
+        const outsideClickHandler = (e: MouseEvent) => {
+            this.handleOutsideClick(e, trigger_el, menu_list_el, menu_list_id);
+        };
+
+        this.outsideClickHandlers.set(menu_list_id, outsideClickHandler);
+
+        // Delay prevents immediate close
         setTimeout(() => {
-            document.addEventListener("click", outside_click_method as any);
+            document.addEventListener("click", outsideClickHandler);
         }, 0);
     }
 
@@ -446,6 +484,51 @@ class BaseListViewEventHandler extends BaseEventHandler {
         this.updateControllerAttributes({ records: updated_records, total_items: updated_total_items, total_pages: updated_total_pages });
 
         this.logger.log("🗑️ Deleted record successfully:", record_id);
+    }
+
+    // Method to handle on delete record in recods
+    public async handleOnRecordsDeleted (payload: RecordsDeletedPayloadInterface) { 
+        const { record_ids, id_path } = payload;
+        const {
+            record_id_key,
+            records = [],
+            total_items = 0,
+            size = 12
+        } = this.controller;
+
+        if (!Array.isArray(record_ids) || !record_ids.length) {
+            this.logger.warn("⚠️ No record IDs provided for deletion.");
+            return;
+        }
+
+        // Normalize IDs to string for comparison
+        const ids_to_delete = new Set(record_ids.map(id => id.toString()));
+
+        // Filter records
+        const updated_records = records.filter((record: Record<string, any>) => {
+            const resolved_id = this.resolveIdByPath(record, id_path, record_id_key);
+            return resolved_id === null || !ids_to_delete.has(resolved_id.toString());
+        });
+
+        const deleted_count = records.length - updated_records.length;
+
+        if (deleted_count === 0) {
+            this.logger.warn("⚠️ No matching records found to delete.");
+            return;
+        }
+
+        // Recalculate totals
+        const updated_total_items = Math.max(total_items - deleted_count, 0);
+        const updated_total_pages = Math.ceil(updated_total_items / size);
+
+        // Update controller state
+        this.updateControllerAttributes({
+            records: updated_records,
+            total_items: updated_total_items,
+            total_pages: updated_total_pages
+        });
+
+        this.logger.log(`🗑️ Deleted ${deleted_count} record(s):`, [...ids_to_delete]);
     }
     
     // Method to handle fetching of records

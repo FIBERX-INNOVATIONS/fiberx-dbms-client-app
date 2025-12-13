@@ -250,7 +250,7 @@ class BaseListViewPropsBuilder {
         record_index: Number,
         record: Record<string, any>
     ): ButtonUIPropsInterface {
-        const id                        = `TableActionBtn_${record_index}`;
+        const id                        = `ActionBtn_${record_index}`;
         const class_styles              = ClassStyles?.ellipsis_menu_options_ui ?? {};
         const icon_class_style          = class_styles?.icon_class_style;
         const btn_class_style           = class_styles?.btn_class_style;
@@ -278,8 +278,8 @@ class BaseListViewPropsBuilder {
         record_index: Number,
         record: Record<string, any>
     ): MenuListUIPropsInterface {
-        const id                    = `TableActionMenu_${record_index}`;
-        const parent_id             = `TableActionBtn_${record_index}`;
+        const id                    = `ActionMenu_${record_index}`;
+        const parent_id             = `ActionBtn_${record_index}`;
         const class_styles          = ClassStyles?.list_view_ui?.data_table_ui?.menu_list_item_ui ?? {};
         const menu_list             = menu_list_config.getTableMenuList(event_handler, content_field_key, record, record_index)
 

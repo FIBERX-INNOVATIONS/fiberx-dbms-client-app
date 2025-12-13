@@ -3,25 +3,26 @@ import ClassStyles                                  from "@/enums/class_styles.e
 import BaseListViewEventHandler                     from "@/base_classes/list_view/base_list_view_event_handler";
 import ActivityListUIPropsBuilder                   from "@ui/version_2/props_builder/activity_list_props_builder";
 import InputTransformerUtil                         from "@ui/version_2/utils/input_formatter_util";
-import AccessControlRolePermissionsFormView         from "@/modules/access_control_module/views/role_permissions_form_view/access_control_role_permisssions_form_view.vue"
-import { NewRecordPayloadInterface }                from "@/types/app_event_type";
+import AccessControlRolePermissionsFormView         from "@/modules/access_control_module/views/role_permissions_form_view/access_control_role_permisssions_form_view.vue";
+import AuthAPIService                                from "@/api_services/auth_api_service";
+import { RecordsDeletedPayloadInterface }           from "@/types/app_event_type";
 import { ActivityListUIRenderMethodsinterface }     from "@ui/version_2/types/props_builder_type";
 import { BaseControllerInterface }                  from "@ui/version_2/types/component_type";
 import { RequestQueryInputInterface }               from "@/types/validation_type";
 import { 
-    PermissionRecordInterface,
     RoleAssignedPermissionRecordInterface, 
-    RoleRecordInterface, 
-    UpdatedRolePermissionsRecordInterface 
 } from "@/types/api_service_type";
 import { reactive } from "vue";
 
 class AccessControlRolePermissionsViewUIEventHandler extends BaseListViewEventHandler {
+    public auth_api_service: AuthAPIService;
 
     constructor(controller: BaseControllerInterface) {
         super(controller, null, null, AccessControlRolePermissionsFormView);
 
         this.form_modal_config = { position: "center", width_class: "w-[60%]" }
+
+        this.auth_api_service = new AuthAPIService();
     }
 
     private getActivityListRenderMethods (): ActivityListUIRenderMethodsinterface {
@@ -136,6 +137,63 @@ class AccessControlRolePermissionsViewUIEventHandler extends BaseListViewEventHa
         }
 
         this.updateControllerAttributes({ selected_records: new_selected_records });
+    }
+
+    // Method to handle bulk delete/un-assign action
+    public async handleBulkDeleteActionClick (event: MouseEvent) {
+        const question_name         = this.controller?.selected_records?.length ?? 0;
+        const on_confirm_click      = this.handleUnAssignPermissionsFromRole.bind(this);
+
+        await this.handleOpenConfirmModal ("confirm_delete_modal", question_name, on_confirm_click);
+    }
+
+    // Method to handle un assign permisisons from role
+    public async handleUnAssignPermissionsFromRole (event: MouseEvent) {
+        const { selected_records, props } = this.controller;
+
+        try {
+            const role_id               = props.record?.id;
+            const event_name            = "on_records_deleted";
+            const status_alert_payload  = { status: "error", message: "", options: this.status_alert_options };
+            const { data }              =  await this?.auth_api_service?.getFormCSRFToken("ACCESS_CONTROL");
+            const csrf_token            = data?.token;
+
+            if(!csrf_token) {
+                status_alert_payload.message = this.content_manager?.getAPIResponseValue("invalid_csrf_token");
+                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            }
+
+            if(!selected_records?.length) {
+                status_alert_payload.message = this.content_manager?.getAPIResponseValue("invalid_input_permissions_do_not_exist");
+                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            }
+
+            if(!this.controller?.service) { return }
+
+            const form_data                     = { csrf_token, role_id, permission_ids: selected_records };
+            const { s_state, s_msg, logout }    = await this.controller.service?.executeDelettePermissionRecords(form_data);
+            const formmated_status_msg          = this.content_manager?.getAPIResponseValue(s_msg);
+
+            if(logout) { return await this.controller.router.push("/logout"); }
+
+            if(!s_state) {
+                status_alert_payload.message = formmated_status_msg;
+                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            }
+
+            status_alert_payload.status                          = "success";
+            status_alert_payload.message                         = formmated_status_msg
+            const event_payload: RecordsDeletedPayloadInterface  = { record_ids: selected_records, id_path: "permission.id" };
+
+            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit(event_name, event_payload);
+
+            this.updateControllerAttributes({ selected_records: []})
+            return;
+        }
+        catch(error: unknown) {
+            this.logger.error(`Failed to delete records`, { error })
+        }
     }
 
 }

@@ -23,7 +23,8 @@ import {
 import { 
     NewRecordPayloadInterface, 
     RecordDeletedPayloadInterface, 
-    RecordUpdatedPayloadInterface 
+    RecordUpdatedPayloadInterface,
+    RecordsDeletedPayloadInterface
 } from "@/types/app_event_type";
 
 
@@ -203,6 +204,10 @@ class BaseListViewController extends BaseController {
 
             this.event_bus.on("on_record_deleted", async (payload: RecordDeletedPayloadInterface) => {
                 this.event_handler?.handleOnRecordDeleted?.(payload);
+            });
+
+            this.event_bus.on("on_records_deleted", async (payload: RecordsDeletedPayloadInterface) => {
+                this.event_handler?.handleOnRecordsDeleted?.(payload);
             });
         }
     }
