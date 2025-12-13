@@ -47,7 +47,7 @@ class DatasourceListViewEventHandler extends BaseListViewEventHandler {
 
             if(!record_id) {
                 status_alert_payload.message = this.content_manager?.getAPIResponseValue("invalid_record_not_found");
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             if(!this.controller?.service) { return }
@@ -59,14 +59,14 @@ class DatasourceListViewEventHandler extends BaseListViewEventHandler {
 
             if(!s_state) {
                 status_alert_payload.message = formmated_status_msg
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             status_alert_payload.status     = "success";
             status_alert_payload.message    = formmated_status_msg
             const event_payload             = { record_id, record: { is_created: true } };
 
-            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             this.controller.event_bus.emit(event_name, event_payload);
             return;
         }
@@ -87,7 +87,7 @@ class DatasourceListViewEventHandler extends BaseListViewEventHandler {
 
             if(!record_id) {
                 status_alert_payload.message = this.content_manager?.getAPIResponseValue("invalid_record_not_found");
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             if(!this.controller?.service) { return }
@@ -99,14 +99,14 @@ class DatasourceListViewEventHandler extends BaseListViewEventHandler {
 
             if(!s_state) {
                 status_alert_payload.message = formmated_status_msg
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             status_alert_payload.status     = "success";
             status_alert_payload.message    = formmated_status_msg
             const event_payload             = { record_id, record: { is_created: false } };
 
-            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             this.controller.event_bus.emit(event_name, event_payload);
             return;
         }

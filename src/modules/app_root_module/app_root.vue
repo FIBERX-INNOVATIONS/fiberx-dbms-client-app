@@ -3,7 +3,7 @@
         <!-- loader -->
         <ScreenLoaderUI v-bind="state_refs.screen_loader_props" @isLoading="event_handler.handleLoading" />
         <!-- alert -->
-        <StatusAlertUI v-bind="state_refs.status_alert_props" @statusChanged="event_handler.handleStatusChanged" />
+        <StatusAlertUI v-bind="state_refs.status_alert_props" @alert_status_updated="event_handler.handleStatusChanged" />
         <!-- Auth View -->
         <AuthBaseView v-if="computed_refs.is_auth_route.value" />
         <!-- Dashboard View -->

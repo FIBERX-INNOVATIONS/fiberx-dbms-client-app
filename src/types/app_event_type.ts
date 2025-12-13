@@ -8,7 +8,7 @@ import {
 
 export type AppEvents = {
     isLoading: boolean;
-    statusChanged: StatusChangedPayloadInterface;
+    alert_status_updated: StatusChangedPayloadInterface;
     open_new_modal: OpenNewModalPayloadInterface;
     close_modal: CloseModalPayloadInterface;
     on_new_record_created: NewRecordPayloadInterface;

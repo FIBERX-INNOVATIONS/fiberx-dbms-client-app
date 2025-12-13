@@ -81,7 +81,7 @@ class AccessControlRolePermissionsViewUIEventHandler extends BaseListViewEventHa
 
             else if(!s_state) {
                 status_alert_payload.status = "error";
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             const { current_page, records, total_items, total_pages } = s_data;
@@ -160,12 +160,12 @@ class AccessControlRolePermissionsViewUIEventHandler extends BaseListViewEventHa
 
             if(!csrf_token) {
                 status_alert_payload.message = this.content_manager?.getAPIResponseValue("invalid_csrf_token");
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             if(!selected_records?.length) {
                 status_alert_payload.message = this.content_manager?.getAPIResponseValue("invalid_input_permissions_do_not_exist");
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             if(!this.controller?.service) { return }
@@ -178,14 +178,14 @@ class AccessControlRolePermissionsViewUIEventHandler extends BaseListViewEventHa
 
             if(!s_state) {
                 status_alert_payload.message = formmated_status_msg;
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             status_alert_payload.status                          = "success";
             status_alert_payload.message                         = formmated_status_msg
             const event_payload: RecordsDeletedPayloadInterface  = { record_ids: selected_records, id_path: "permission.id" };
 
-            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             this.controller.event_bus.emit(event_name, event_payload);
 
             this.updateControllerAttributes({ selected_records: []})

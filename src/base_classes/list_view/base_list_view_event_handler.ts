@@ -450,7 +450,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
 
             else if(!s_state) {
                 status_alert_payload.status = "error";
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             const payload = { record_id, record: { is_active: new_state_value } };
@@ -552,7 +552,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
 
             else if(!s_state) {
                 status_alert_payload.status = "error";
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             const { current_page, records, total_items, total_pages } = s_data;
@@ -561,7 +561,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
             
             if(!this.records_initially_fetched) {
                 status_alert_payload.status = "success";
-                this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
                 this.records_initially_fetched = true;
             }
             
@@ -621,7 +621,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
         catch(error: unknown) {
             const formatted_api_msg     = this.content_manager?.getAPIResponseValue("app_record_not_found");
             const status_alert_payload  = { status: "error", message: formatted_api_msg, options: this.status_alert_options };
-            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
         }
 
     }
@@ -652,7 +652,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
         catch(error: unknown) {
             const formatted_api_msg     = this.content_manager?.getAPIResponseValue("app_record_not_found");
             const status_alert_payload  = { status: "error", message: formatted_api_msg, options: this.status_alert_options };
-            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
         }
 
     }
@@ -681,7 +681,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
         catch(error: unknown) {
             const formatted_api_msg     = this.content_manager?.getAPIResponseValue("form_open_failed_refresh_page");
             const status_alert_payload  = { status: "error", message: formatted_api_msg, options: { duration: 0 } };
-            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             return;
         }
     }
@@ -732,7 +732,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
         catch(error: unknown) {
             const formatted_api_msg     = this.content_manager?.getAPIResponseValue("form_open_failed_refresh_page");
             const status_alert_payload  = { status: "error", message: formatted_api_msg, options: this.status_alert_options };
-            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
         }
     }
 
@@ -748,7 +748,7 @@ class BaseListViewEventHandler extends BaseEventHandler {
 
             if(!record_id) {
                 status_alert_payload.message = this.content_manager?.getAPIResponseValue("invalid_record_not_found");
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             if(!this.controller?.service) { return }
@@ -760,14 +760,14 @@ class BaseListViewEventHandler extends BaseEventHandler {
 
             if(!s_state) {
                 status_alert_payload.message = formmated_status_msg;
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             status_alert_payload.status     = "success";
             status_alert_payload.message    = formmated_status_msg
             const event_payload             = { record_id };
 
-            this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             this.controller.event_bus.emit(event_name, event_payload);
             return;
         }

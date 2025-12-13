@@ -122,7 +122,7 @@ class MemberActivityViewUIEventHandler extends BaseEventHandler {
 
             else if(!s_state) {
                 status_alert_payload.status = "error";
-                return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+                return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
             }
 
             const { current_page, records, total_items, total_pages } = s_data;

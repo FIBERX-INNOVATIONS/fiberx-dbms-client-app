@@ -74,7 +74,7 @@ class AppRootController extends BaseController {
             this.event_handler.handleLoading(val);
         });
 
-        this.event_bus.on("statusChanged", async (payload: StatusChangedPayloadInterface) => {
+        this.event_bus.on("alert_status_updated", async (payload: StatusChangedPayloadInterface) => {
             await this.event_handler.handleStatusChanged(payload);
         });
 

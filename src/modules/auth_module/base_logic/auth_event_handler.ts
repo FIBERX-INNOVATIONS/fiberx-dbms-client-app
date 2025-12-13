@@ -107,11 +107,11 @@ class AuthEventhandler extends BaseEventHandler {
                 return this.showErrorAlert("error", error_msg)
             }
 
-            this.logger.log("Login successful, triggering statusChanged event", { s_msg });
+            this.logger.log("Login successful, triggering alert_status_updated event", { s_msg });
             const status_alert_options  = { duration: 3000, redirect_url: "/two-factor-login"}
             const status_alert_payload  = { status: "success", message: formmated_status_msg, options: status_alert_options };
 
-            return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
         }
         catch(error: unknown) {
             this.logger.error(`Failed to submit form`, { error })
@@ -147,11 +147,11 @@ class AuthEventhandler extends BaseEventHandler {
                 return this.showErrorAlert("error", error_msg)
             }
 
-            this.logger.log("Two factor Login successful, triggering statusChanged event", { s_msg });
+            this.logger.log("Two factor Login successful, triggering alert_status_updated event", { s_msg });
             const status_alert_options  = { duration: 3000, redirect_url: "/dashboard"}
             const status_alert_payload  = { status: "success", message: formmated_status_msg, options: status_alert_options };
 
-            return this.controller.event_bus.emit("statusChanged", status_alert_payload);
+            return this.controller.event_bus.emit("alert_status_updated", status_alert_payload);
         }
         catch(error: unknown) {
             this.logger.error(`Failed to submit form`, { error })

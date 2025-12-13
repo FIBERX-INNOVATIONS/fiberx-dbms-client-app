@@ -106,7 +106,7 @@ class BaseFormViewEventHandler extends BaseEventHandler {
             const payload           = { status: "success", message: formatted_msg, options: this.status_alert_options };
             const event_payload     = { record_id, record: s_data };
 
-            this.controller.event_bus.emit("statusChanged", payload);
+            this.controller.event_bus.emit("alert_status_updated", payload);
             this.controller.event_bus.emit(event_name, event_payload);
         } 
         catch (error) {
