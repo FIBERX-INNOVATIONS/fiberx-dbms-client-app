@@ -2,9 +2,11 @@
 import { ref, getCurrentInstance }     from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 
+import { LOCAL_STORAGE_FIELDS } from "@/enums/constants.enums";
 import { EventBus }             from "@/utils/gloabal_event_bus";
 import AppRootPropsBuilder      from "./app_root_props_builder";
 import AppRootEventHandler      from "./app_root_event_handler";
+import MemberAuthManagerUtil    from "@ui/version_2/utils/member_auth_manager_util";
 import BaseController           from "@ui/version_2/base_classes/base_controller";
 import ScreenLoaderUI           from "@ui/version_2/components/LoaderUI/ScreenLoaderUI/screen_loader_ui.vue";
 import StatusAlertUI            from "@ui/version_2/components/AlertUI/StatusAlertUI/status_alert_ui.vue";
@@ -23,12 +25,14 @@ class AppRootController extends BaseController {
     public event_handler: AppRootEventHandler;
     public event_bus = EventBus;
     public router: Router;
+    public member_auth_manager: MemberAuthManagerUtil;
 
     constructor(props: Record<string, any> = {}) {
         super("app_root", props);
 
-        this.router         = useRouter();
-        this.event_handler  = new AppRootEventHandler(this);
+        this.router                 = useRouter();
+        this.event_handler          = new AppRootEventHandler(this);
+        this.member_auth_manager    = MemberAuthManagerUtil.getInstance();
     }
 
     // Method to get ui components
@@ -69,6 +73,9 @@ class AppRootController extends BaseController {
 
     // Method to handle on mount logic
     protected async handleOnMountedLogic(): Promise<void> {
+        const is_fully_authenticated        = this.member_auth_manager.isMemberFullyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
+        const is_partially_authenticated    = this.member_auth_manager.isMemberPartiallyLoggedIn(LOCAL_STORAGE_FIELDS.MEMBER_KEY);
+        
         // Bridge mitt events to Vue template handlers
         this.event_bus.on("isLoading", (val: boolean) => {
             this.event_handler.handleLoading(val);
@@ -85,6 +92,10 @@ class AppRootController extends BaseController {
         this.event_bus.on("close_modal", async (payload: CloseModalPayloadInterface) => {
             this.event_handler.handleCloseModal(payload);
         });
+
+        if(is_fully_authenticated || is_partially_authenticated) {
+            this.event_handler.startInactivityTracking();
+        }
     }
 
 

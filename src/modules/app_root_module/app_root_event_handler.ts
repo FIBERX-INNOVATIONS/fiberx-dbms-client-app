@@ -12,8 +12,96 @@ import {
 
 
 class AppRootEventHandler extends BaseEventHandler {
+    private inactivity_warning_timeout?: number;
+    private inactivity_logout_timeout?: number;
+    private inactivity_countdown_interval?: number;
+    private is_inactivity_warning_visible: boolean = false;
+
+    private readonly WARNING_TIME_MS = 4 * 60 * 1000; // 4 mins
+    private readonly LOGOUT_TIME_MS  = 5 * 60 * 1000; // 5 mins
+
     constructor(controller: BaseControllerInterface) {
         super(controller, controller.component_name);
+    }
+
+    // Method to show in-activtiy warning
+    private showInactivityWarning () {
+        this.is_inactivity_warning_visible = true;
+        let remaining_seconds = 60; // 1 min countdown
+
+        const emitWarning = () => {
+            const payload = {
+                status: "error",
+                message: `You have been inactive. Logging out in ${remaining_seconds}s`,
+                options: { duration: 0 }
+            };
+
+            this.controller.event_bus.emit("alert_status_updated", payload);
+        };
+
+        emitWarning();
+
+        this.inactivity_countdown_interval = window.setInterval(() => {
+            remaining_seconds--;
+
+            if (remaining_seconds <= 0) {
+                clearInterval(this.inactivity_countdown_interval);
+                return;
+            }
+
+            emitWarning();
+        }, 1000);
+    }
+
+    // Method to clear in-activty timers
+    private clearInactivityTimers () {
+        if (this.inactivity_warning_timeout) {
+            clearTimeout(this.inactivity_warning_timeout);
+            this.inactivity_warning_timeout = undefined;
+        }
+
+        if (this.inactivity_logout_timeout) {
+            clearTimeout(this.inactivity_logout_timeout);
+            this.inactivity_logout_timeout = undefined;
+        }
+
+        if (this.inactivity_countdown_interval) {
+            clearInterval(this.inactivity_countdown_interval);
+            this.inactivity_countdown_interval = undefined;
+        }
+
+        if (this.is_inactivity_warning_visible) {
+            const new_status_alert_props    = AppRootPropsBuilder.getStatusAlertProps(this, false);
+
+            Object.assign(this.controller.state_refs.status_alert_props, new_status_alert_props);
+        }
+    }
+
+    // Method to trigger logout
+    private async triggerLogout () {
+        this.clearInactivityTimers();
+
+        this.controller.event_bus.emit("alert_status_updated", {
+            status: "error",
+            message: "Session expired due to inactivity",
+            options: {
+                duration: 1500,
+                redirect_url: "/logout"
+            }
+        });
+    }
+
+    // Method to schedule in activity timers
+    private scheduleInactivityTimers () {
+        // ⚠️ Warning timer
+        this.inactivity_warning_timeout = window.setTimeout(() => {
+            this.showInactivityWarning();
+        }, this.WARNING_TIME_MS);
+
+        // 🚪 Logout timer
+        this.inactivity_logout_timeout = window.setTimeout(() => {
+            this.triggerLogout();
+        }, this.LOGOUT_TIME_MS);
     }
 
     // Method to handle on click event
@@ -92,6 +180,22 @@ class AppRootEventHandler extends BaseEventHandler {
         this.controller.state_refs.modals?.value.splice(valid_modal_index, 1)[0];
         return true;
     }
+
+    // Method to start inactivity tracking
+    public startInactivityTracking () {
+        const resetTimers = () => {
+            this.clearInactivityTimers();
+            this.scheduleInactivityTimers();
+        };
+
+        // Track common user activity
+        ["mousemove", "mousedown", "keydown", "scroll", "touchstart"].forEach(evt =>
+            window.addEventListener(evt, resetTimers)
+        );
+
+        this.scheduleInactivityTimers();
+    }
+
 }
 
 export default AppRootEventHandler;
