@@ -34,7 +34,7 @@ class RegisteredAppValidator {
         registered_app_input: RegisteredAppFormDataInputInterface,
         old_record: RegisteredAppRecordInterface
     ): ValidationResult {
-        const { csrf_token, name, prefix, base_url, logo_url, description, social_links = {} } = registered_app_input;
+        const { csrf_token, name, prefix, base_url, logo_url, description, social_links = {}, urls = [] } = registered_app_input;
 
         const keys_to_check     = ["name", "description", "base_url", "logo_url", "social_links"]
         const has_input_changed = old_record?.public_id ? InputValidatorUtil.hasInputChanged(registered_app_input, old_record, keys_to_check) : true;
@@ -85,6 +85,20 @@ class RegisteredAppValidator {
         if(invalid_social_links.length) {
 			return { v_state: false, v_msg: "invalid_input_app_social_links_must_be_valid_links" };
 		}
+
+        if(urls && urls.length) {
+            if(!Array.isArray(urls)) {
+                return { v_state: false, v_msg: "invalid_input_app_urls" };
+            }
+
+            const invalid_urls = urls?.filter((url_value: string) => {
+                return ( !InputValidatorUtil.isValidURL(url_value) )
+            })
+
+            if(invalid_urls.length) {
+                return { v_state: false, v_msg: "invalid_input_app_urls_must_be_valid_links" };
+            }
+        }
 
         return { v_state: true, v_msg: "valid_input" };
     }

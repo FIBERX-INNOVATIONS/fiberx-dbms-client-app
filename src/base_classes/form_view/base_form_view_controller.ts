@@ -98,7 +98,7 @@ class BaseFormViewController extends BaseController {
 
         const on_change                 = this.event_handler.handleOnInputchanged.bind(this.event_handler);
         const event_methods             = { on_change };
-        const options                   = this.event_handler.getSelectOptions(options_key);
+        const options                   = options_key ? this.event_handler.getSelectOptions(options_key) : undefined;
 
         
 

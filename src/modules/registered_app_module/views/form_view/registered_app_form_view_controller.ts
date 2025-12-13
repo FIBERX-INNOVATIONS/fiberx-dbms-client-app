@@ -1,7 +1,7 @@
 
 import { ref } from "vue";
 import BaseFormViewController               from "@/base_classes/form_view/base_form_view_controller";
-import RegisteredAppUIService                 from "@/modules/registered_app_module/base_logic/registered_app_ui_service";
+import RegisteredAppUIService               from "@/modules/registered_app_module/base_logic/registered_app_ui_service";
 import RegisteredAppFormViewEventHandler    from "./registered_app_form_view_event_handler";
 import { CSRF_TOKEN_FOR }                   from "@/enums/constants.enums";
 
@@ -27,14 +27,14 @@ class RegisteredAppFormViewController extends BaseFormViewController {
     // Method to get ui form state data
     protected getFormUIStateData (): Record<string, any> { 
         const { record = {} } = this.props;
-        const { name = "", prefix = "", base_url = "", logo_url = "", description, social_links = {} } =  record
+        const { name = "", prefix = "", base_url = "", logo_url = "", description, social_links = {}, urls = [] } =  record
 
         const social_link_array         = this.event_handler.buildSocialLinkArray(social_links);
         const prefix_read_only_state    = prefix ? true : false;
         const on_change                 = this.event_handler.handleOnInputchanged.bind(this.event_handler);
         const event_methods             = { on_change };
 
-        this.form_data                  = { name, prefix, base_url, logo_url, description, social_links, social_link_array };
+        this.form_data                  = { name, prefix, base_url, logo_url, description, social_links, social_link_array, urls };
         this.event_handler.form_data    = JSON.parse(JSON.stringify(this.form_data));
 
         return {
@@ -55,6 +55,8 @@ class RegisteredAppFormViewController extends BaseFormViewController {
             app_description_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "description", description, "text_area", false, record, event_methods),
 
             add_social_link_btn_props: this.props_builder.getObjectAddNewFieldBtnProps(this.event_handler),
+
+            app_urls_input_group_prop: this.props_builder.getInputGroupProps(this.form_content_data, "urls_string", urls.join(","), "text_area", false, record, event_methods),
 
         }
 

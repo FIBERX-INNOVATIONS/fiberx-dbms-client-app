@@ -44,6 +44,8 @@
                 </div>
             </div>
 
+            <InputGroupUI v-bind="app_urls_input_group_prop" /> 
+
             <ToastAlertUI v-bind="toast_alert_props" />
             <ButtonUI v-bind="btn_props" />
         </form>
@@ -72,6 +74,7 @@ const {
     social_links_label_text,
     app_description_input_group_prop,
     add_social_link_btn_props,
+    app_urls_input_group_prop,
     toast_alert_props,
     btn_props
 } = state_refs

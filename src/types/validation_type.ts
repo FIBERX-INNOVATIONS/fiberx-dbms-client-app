@@ -41,6 +41,8 @@ export interface RegisteredAppFormDataInputInterface {
   base_url?: string; 
   logo_url?: string; 
   social_links?: Record<string, string>; 
+  urls_string?: string;
+  urls?: string[];
   social_links_array: { key: string, value: string }[]
 }
 

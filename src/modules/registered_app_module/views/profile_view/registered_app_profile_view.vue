@@ -33,6 +33,18 @@
                 v-html="social_link"></span>
         </div>
 
+        <!-- URLS -->
+        <div :class="props.social_links_wrapper_class_style">
+            <span :class="props.key_text_class_style">
+                {{ content_data?.urls_key_text }}:
+            </span>
+            <span 
+                v-for="(url, url_index) in formatted_urls"
+                :key="url_index"
+                :class="props.social_link_item_class_style" 
+                v-html="url"></span>
+        </div>
+
         <!-- timestamps -->
         <div :class="props.timestamp_section_wrapper_class_style">
             <span :class="props.key_text_class_style">
@@ -98,6 +110,7 @@ const { content_data, img_avatar_ui_props } = state_refs;
 const {
     formatted_base_url,
     formatted_social_links,
+    formatted_urls,
     formatted_created_at,
     formatted_updated_at,
     formatted_creator,

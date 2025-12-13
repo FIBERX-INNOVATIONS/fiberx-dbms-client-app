@@ -23,7 +23,9 @@ class RegisteredAppProfileViewController extends BaseProfileViewController {
     protected getCustomChildComputedData (): Record<string, () => any> { 
         const { 
             base_url = "" , 
-            social_links = {}
+            social_links = {},
+            urls = [],
+            combined_urls = []
         } = this.props.record ?? {};
 
         return {
@@ -36,7 +38,17 @@ class RegisteredAppProfileViewController extends BaseProfileViewController {
                         return InputTransformerUtil.formatURLToAnchorHtml(social_key, social_links[social_key]); 
                     }
             )},
+
+            formatted_urls: () => { 
+                const _urls = combined_urls || urls;
+                return _urls
+                .map(
+                    (url_value: string) => { 
+                        return InputTransformerUtil.formatURLToAnchorHtml(url_value, url_value); 
+                    }
+            )},
         }; 
+        
     }
 }
 

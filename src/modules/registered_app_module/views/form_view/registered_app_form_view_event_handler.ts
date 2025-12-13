@@ -1,5 +1,6 @@
 
 import BaseFormViewEventHandler                 from "@/base_classes/form_view/base_form_view_event_handler";
+import { RegisteredAppRecordInterface } from "@/types/api_service_type";
 import { RegisteredAppFormDataInputInterface }   from "@/types/validation_type";
 import RegisteredAppValidator                   from "@/validators/regsitered_app_validator";
 
@@ -27,8 +28,10 @@ class RegisteredAppFormViewEventHandler extends BaseFormViewEventHandler {
         this.controller.state_refs.social_links_array.value = [ ...this.form_data?.social_links_array ]
     }
 
-    protected validateFormData(form_data: RegisteredAppFormDataInputInterface, record: Record<string, any>) {
+    protected validateFormData(form_data: RegisteredAppFormDataInputInterface, record: RegisteredAppRecordInterface) {
         form_data.social_links = this.buildSocialLinksObject(form_data?.social_links_array || []);
+
+        form_data.urls = form_data?.urls_string ? form_data?.urls_string?.split(",").map(url => url.trim()) ?? [] : [];
 
         const validation_result = RegisteredAppValidator.validateRegisteredAppInput(form_data, record);
 
