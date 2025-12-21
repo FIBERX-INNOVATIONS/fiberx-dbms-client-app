@@ -52,6 +52,8 @@
     --text-lg--line-height: calc(1.75 / 1.125);
     --text-2xl: 1.5rem;
     --text-2xl--line-height: calc(2 / 1.5);
+    --text-4xl: 2.25rem;
+    --text-4xl--line-height: calc(2.5 / 2.25);
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
@@ -310,9 +312,6 @@
   .z-\[90\] {
     z-index: 90;
   }
-  .z-\[99\] {
-    z-index: 99;
-  }
   .z-\[100\] {
     z-index: 100;
   }
@@ -333,6 +332,9 @@
   }
   .m-0 {
     margin: calc(var(--spacing) * 0);
+  }
+  .mx-1 {
+    margin-inline: calc(var(--spacing) * 1);
   }
   .mx-auto {
     margin-inline: auto;
@@ -458,6 +460,9 @@
   .h-\[85\%\] {
     height: 85%;
   }
+  .h-\[184px\] {
+    height: 184px;
+  }
   .h-auto {
     height: auto;
   }
@@ -527,9 +532,6 @@
   .w-5 {
     width: calc(var(--spacing) * 5);
   }
-  .w-5\/12 {
-    width: calc(5/12 * 100%);
-  }
   .w-6 {
     width: calc(var(--spacing) * 6);
   }
@@ -566,9 +568,6 @@
   .w-48 {
     width: calc(var(--spacing) * 48);
   }
-  .w-\[2\%\] {
-    width: 2%;
-  }
   .w-\[3\%\] {
     width: 3%;
   }
@@ -580,18 +579,6 @@
   }
   .w-\[45\%\] {
     width: 45%;
-  }
-  .w-\[47\%\] {
-    width: 47%;
-  }
-  .w-\[48\%\] {
-    width: 48%;
-  }
-  .w-\[49\%\] {
-    width: 49%;
-  }
-  .w-\[50\%\] {
-    width: 50%;
   }
   .w-\[52\%\] {
     width: 52%;
@@ -713,6 +700,9 @@
   }
   .flex-wrap {
     flex-wrap: wrap;
+  }
+  .items-baseline {
+    align-items: baseline;
   }
   .items-center {
     align-items: center;
@@ -1166,6 +1156,10 @@
     font-size: var(--text-2xl);
     line-height: var(--tw-leading, var(--text-2xl--line-height));
   }
+  .text-4xl {
+    font-size: var(--text-4xl);
+    line-height: var(--tw-leading, var(--text-4xl--line-height));
+  }
   .text-lg {
     font-size: var(--text-lg);
     line-height: var(--tw-leading, var(--text-lg--line-height));
@@ -1486,6 +1480,13 @@
       }
     }
   }
+  .hover\:underline {
+    &:hover {
+      @media (hover: hover) {
+        text-decoration-line: underline;
+      }
+    }
+  }
   .hover\:opacity-100 {
     &:hover {
       @media (hover: hover) {
@@ -1661,6 +1662,26 @@
   .lg\:grid-cols-4 {
     @media (width >= 64rem) {
       grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .xl\:mx-2 {
+    @media (width >= 80rem) {
+      margin-inline: calc(var(--spacing) * 2);
+    }
+  }
+  .xl\:inline {
+    @media (width >= 80rem) {
+      display: inline;
+    }
+  }
+  .xl\:flex-row {
+    @media (width >= 80rem) {
+      flex-direction: row;
+    }
+  }
+  .xl\:gap-3 {
+    @media (width >= 80rem) {
+      gap: calc(var(--spacing) * 3);
     }
   }
   .rtl\:space-x-reverse {

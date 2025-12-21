@@ -52,7 +52,6 @@ class ColumnsSectionUIController extends BaseController {
     protected getUIWatchers(): Record<string, (new_val: any, old_val: any) => void> { 
         return {
             columns_model: (new_val) => { 
-                console.log("Columns Model Updated:", new_val);
                 new_val.forEach(this?.cleanColumnModel.bind(this)); 
                 this.event_bus.emit("on_columns_array_updated", { columns_array: new_val});
             },

@@ -49,7 +49,8 @@ export interface MemberActiviityRecordInterface {
         permission_name: string;
         description: string;
         created_at: string;
-        updated_at: string | null
+        updated_at: string | null;
+        creator?: MemberRecordInterface
 }
 
 export interface MemberTwoFactorRecordInterface {
@@ -173,4 +174,19 @@ export interface RoleAssignedPermissionRecordInterface {
 export interface UpdatedRolePermissionsRecordInterface {
     role: RoleRecordInterface;
     permissions: PermissionRecordInterface[];
+}
+
+export type MetricKeyType = keyof SystemMetricObjectinterface;
+
+export type MetricLookupType = Record<string, number>;
+
+export interface SystemMetricObjectinterface {
+  registered_apps_in_active: number;
+  registered_apps_active: number;
+  schemas: number;
+  datasources_in_active: number;
+  datasources_active: number;
+  members_in_active: number;
+  members_active: number;
+  [key: string]: number;
 }
